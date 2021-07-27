@@ -1,7 +1,7 @@
 ---
 title: "Seagrant ME-NH trawl survey <br> Objectve 2: Nonmetric Multidimensional Scaling"
 author: "Jerelle Jesse"
-date: "7/21"
+date: "7/2021"
 output: html_document
 ---
 
@@ -10,7 +10,10 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8) 
 ```
 
-## NMDS for functional groups based on NOAA Integrated Ecosystem Assessment feeding guilds
+## Data
+* functional groups based on [NOAA IEA feeding guilds](https://noaa-edab.github.io/tech-doc/aggroups.html)
+* average across depth strata using the [NOAA IEA procedure](https://noaa-edab.github.io/tech-doc/inshoresurvdat.html#data-analysis-29)
+
 ```{r echo=FALSE, message=FALSE}
 
 #load packages
@@ -21,6 +24,7 @@ library(ggforce)
 library(ggnewscale)
 library(ggthemes)
 library(here)
+library(rmarkdown)
 
 
 #set up ggplot theme
@@ -37,15 +41,20 @@ theme_set(theme(axis.text.y = element_text(colour = "black", size = 12, face = "
 #load in data
 trawl_data_arrange<-read.csv(here("Data/group_biomass_matrix.csv"))[-1]
 
+paged_table(head(trawl_data_arrange))
 ```
 
 ### Set up data for NMDS
-split community matrix into two dataframes- one for grouping variables and one for species biomass 
+* split community matrix into two dataframes- one for grouping variables and one for species biomass 
+* calculate dissimilarity matrix with Bray-Curtis distances
 
 ```{r }
 #set up final grouping data into dataframe
-ME_group_data<-trawl_data_arrange[, c(1,2,8,9,10,11)]
-ME_NMDS_data<-as.matrix(trawl_data_arrange[,4:7])
+ME_group_data<-trawl_data_arrange[, c(1,2,3,9,10,11,12,13)]
+ME_NMDS_data<-as.matrix(trawl_data_arrange[,4:8])
+
+#calculate distance matrix
+ME_NMDS_distance<- vegdist(ME_NMDS_data, method="bray")
 
 ```
 
@@ -55,8 +64,9 @@ ME_NMDS_data<-as.matrix(trawl_data_arrange[,4:7])
 * stress < 0.2 is good, < 0.1 is great, <0.05 is excellent representation in reduced dimensions
 
 ```{r}
-ME_NMDS=metaMDS(ME_NMDS_data, # Our community-by-species matrix
+ME_NMDS=metaMDS(ME_NMDS_distance, # Our community-by-species matrix
                 k=2, # The number of reduced dimensions
+                method="bray",
                 trymax=200) #increase iterations
 
 #extract NMDS scores for ggplot
