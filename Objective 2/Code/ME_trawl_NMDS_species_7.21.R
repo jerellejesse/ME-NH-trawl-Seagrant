@@ -4,9 +4,6 @@
 #objective 2: functional groups
 #Nonmetric multidimensional scaling 
 
-#set directory
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Objective 2")
-
 #load packages
 library(tidyverse)
 library(vegan)
@@ -14,9 +11,10 @@ library(ggrepel)
 library(ggforce)
 library(ggnewscale)
 library(ggthemes)
+library(here)
 
 #updated trawl data
-trawl_data<-read.csv("MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv")
+trawl_data<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
 
 #filter out 2020 because it is only spring no fall
 trawl_data<-filter(trawl_data, Year<2020)
@@ -159,8 +157,11 @@ ME_NMDS_data<-as.matrix(trawl_data_arrange[,4:53])
 
 
 ##### run the NMDS #####
-ME_NMDS=metaMDS(ME_NMDS_data, # Our community-by-functional group matrix
+ME_NMDS_distance<-vegdist(ME_NMDS_data, method="bray")
+
+ME_NMDS=metaMDS(ME_NMDS_distance, # Our community-by-functional group matrix
                 k=2, # The number of reduced dimensions
+                method="bray",
                 trymax=200) #increase iterations
 
 #extract NMDS scores for ggplot

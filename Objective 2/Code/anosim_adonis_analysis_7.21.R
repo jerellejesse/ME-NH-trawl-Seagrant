@@ -11,8 +11,6 @@ library(pairwiseAdonis)
 library(indicspecies)
 library(here)
 
-
-
 #bring in species matrix for analysis
 trawl_data_arrange<-read.csv(here("Data/species_biomass_matrix.csv"))[-1]
 
