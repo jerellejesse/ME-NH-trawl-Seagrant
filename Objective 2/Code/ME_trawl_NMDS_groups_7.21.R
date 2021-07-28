@@ -4,9 +4,6 @@
 #objective 2: functional groups
 #Nonmetric multidimensional scaling 
 
-#set directory
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Objective 2")
-
 #load packages
 library(tidyverse)
 library(vegan)
@@ -14,18 +11,17 @@ library(ggrepel)
 library(ggforce)
 library(ggnewscale)
 library(ggthemes)
+library(here)
 
 #bring in the data for functional groups
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/ID grouping")
-groups<-read.csv("species_groups.csv")
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Objective 2")
-trawl<-read.csv("full_me_dmr_expcatch.csv")
+groups<-read.csv(here("Data/species_groups.csv"))
+trawl<-read.csv(here("Data/full_me_dmr_expcatch.csv"))
 groups<-full_join(groups,trawl,by="COMMON_NAME")%>%
   select(COMMON_NAME,SCIENTIFIC_NAME,functional_group)%>%
   distinct()
 
 #updated trawl data
-trawl_data<-read.csv("MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv")
+trawl_data_update<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
 
 #joining groups and group fixes
 trawl_data<-left_join(trawl_data_update, groups, by="COMMON_NAME") #state of the ecosystem groups
@@ -144,8 +140,11 @@ ME_NMDS_data<-as.matrix(trawl_data_arrange[,4:7])
 
 
 ##### run the NMDS #####
-ME_NMDS=metaMDS(ME_NMDS_data, # Our community-by-functional group matrix
+ME_NMDS_distance<-vegdist(ME_NMDS_data, method="bray")
+
+ME_NMDS=metaMDS(ME_NMDS_distance, # Our community-by-functional group matrix
                 k=2, # The number of reduced dimensions
+                method="bray",
                 trymax=200) #increase iterations
 
 #extract NMDS scores for ggplot
