@@ -38,7 +38,7 @@
 * raw data from [Maine DMR portal](https://mainedmr.shinyapps.io/MaineDMR_Trawl_Survey_Portal/) (MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv)
 * old data (full-me-dmr-expcatch.csv) 
 * species with feeding guild designation (species_groups.csv)
-* community matrices for top species and functional groups (biomass and abundance) - output from ME_trawl_NMDS_species_7.21.R and ME_trawl_NMDS_groups_7.21.R saved for future use in Rmarkdowns or NMDS so you don't have to run beginning cleaning code
+* 4 community matrices for top 50 species and functional groups (biomass and abundance) - output from ME_trawl_NMDS_species_7.21.R and ME_trawl_NMDS_groups_7.21.R saved for future use in Rmarkdowns or NMDS so you don't have to run beginning cleaning code
 
 #### Scripts
 * set up with here function, so directory paths should work on any computer
@@ -58,6 +58,9 @@
 ### Objective 4
 
 * Evaluate how ecosystem changes align with shifts in diversity and composition of fishery landings over time in ports along Maine's coastline
+
+#### Analysis
+
 
 #### Data
 * Landings data from [DMR portal](https://mainedmr.shinyapps.io/Landings_Portal/) 

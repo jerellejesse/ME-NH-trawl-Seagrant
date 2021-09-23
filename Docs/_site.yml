@@ -1,0 +1,24 @@
+---
+name: "Seagrant Website"
+
+navbar:
+  title: "Seagrant: ME-NH inshore trawl survey"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "NMDS"
+      menu:
+        - text: "Top 50 species biomass"
+          href: NMDS_species_biomass_7.21.html
+        - text: "Top 50 species abundance"
+          href: NMDS_species_abundance_7.21.html
+        - text: "Functional group biomass"
+          href: NMDS_group_biomass_7.21.html
+        - text: "Functional group abundance"
+          href: NMDS_group_abundance_7.21.html
+    - text: "Anosim/ Adonis"
+      href: anosim_adonis_analysis_7.21.html
+
+---
+
+
