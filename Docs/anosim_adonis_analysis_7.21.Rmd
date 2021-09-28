@@ -2,7 +2,6 @@
 pagetitle: 'Seagrant ME-NH trawl survey <br> Objective 2: Analysis of similarity and Analysis
   of variance'
 author: "Jerelle Jesse"
-date: "7/14/2021"
 output:
   html_document: 
     toc: true
@@ -137,6 +136,8 @@ pair
 * Could get false significant results from differences in variance instead of mean
 * adonis is less affected by heterogeneity for *balanced designs* 
 * PRIMER can deal with dispersion issues, but vegan does not yet
+* tests null hypothesis that there is no difference in dispersion between groups
+* p-value <0.05 means difference is significant
 
 ### Region
 ```{r}

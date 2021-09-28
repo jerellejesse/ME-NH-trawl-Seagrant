@@ -78,9 +78,10 @@ knitr::opts_chunk$set(echo = TRUE)
 #### Data
 
 -   Landings data from [DMR portal](https://mainedmr.shinyapps.io/Landings_Portal/)
--   In data folder MaineDMR_Landings_Time_Series_Data_2021-07-09.csv
+-   In data folder MaineDMR_Modern_Landings_Data_All.csv
 -   County and species specific landings 2008-2020
--   Request in with Rob Watts ([rob.watts\@maine.gov](mailto:rob.watts@maine.gov)) for older data
+-   2006-2007 data from Rob Watts excel sheet JerelleJesse_06-07_Non-ConfidentialSpeciesByCounty_8-20-2021
+-   reformatted for csv MaineDMR_2006_2007_Landings.csv ([rob.watts\@maine.gov](mailto:rob.watts@maine.gov))
 
 #### Scripts
 

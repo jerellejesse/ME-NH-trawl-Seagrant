@@ -1,7 +1,6 @@
 ---
 pagetitle: "Seagrant ME-NH trawl survey <br> Objectve 2: Nonmetric Multidimensional Scaling"
 author: "Jerelle Jesse"
-date: "7/2021"
 output: 
   html_document: default
 

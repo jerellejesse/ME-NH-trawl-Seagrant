@@ -1,7 +1,6 @@
 ---
 pagetitle: "Seagrant ME-NH trawl survey <br> Objectve 2: Nonmetric Multidimensional Scaling"
 author: "Jerelle Jesse"
-date: "7/2021"
 output: 
   html_document: default
 
@@ -100,6 +99,7 @@ p1 <- ggplot() +
   #geom_mark_ellipse(data=data.scores_region,aes(x=NMDS1,y=NMDS2,color=factor(Region_new)), size=1, alpha=0.15)+
   stat_ellipse(data=data.scores_region, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   scale_color_colorblind()+
+  geom_text_repel(data= data.scores_region, aes(x= NMDS1, y=NMDS2, label= Year))+
   labs(x = "NMDS1", colour = "Region", y = "NMDS2", shape = "Year", title="Spring")
 
 #Fall

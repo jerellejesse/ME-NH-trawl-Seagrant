@@ -1,9 +1,6 @@
 #plots for ME-NH trawl
 #JJ
 
-#set directory
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Objective 2")
-
 #load packages
 library(tidyverse)
 library(vegan)
@@ -11,11 +8,12 @@ library(ggrepel)
 library(ggforce)
 library(ggnewscale)
 library(ggthemes)
+library(here)
 
 #read in data (functional groups were added in Biodiversity_metrics_groups.R)
-trawl_data<-read.csv("ME_trawl_NMDS_data.csv")[,c(2:17, 20)]
+trawl_data<-read.csv(here("Data/ME_trawl_NMDS_data.csv"))[,c(2:17, 20)]
 #updated data
-trawl_data_update<-read.csv("MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv")
+trawl_data_update<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
 
 
 all_catch<-filter(trawl_data_update, Season=="Fall")%>%
@@ -42,13 +40,13 @@ species<-filter(trawl_data, COMMON_NAME %in% c("menhaden atlantic","herring atla
 
 species_update<-group_by(trawl_data_update, Year,Season)%>%
   mutate(tows=n_distinct(Tow_Number))%>%
-  group_by(Year,Common_Name,Season,tows)%>%
+  group_by(Year,COMMON_NAME,Season,tows)%>%
   summarise(weight=sum(Expanded_Weight_kg,na.rm=TRUE), catch=sum(Expanded_Catch,na.rm=TRUE))%>%
-  mutate(weight_tow=weight/tows, catch_tow=catch/tows)%>%
-  filter(Season=="Fall")%>%
-  filter(Common_Name %in% c("Herring Atlantic","Menhaden Atlantic"))
+  mutate(weight_tow=weight/tows, catch_tow=catch/tows)#%>%
+  filter(Season=="Fall")#%>%
+  filter(COMMON_NAME %in% c("herring atlantic","menhaden atlantic"))
 
-ggplot(species_update)+geom_line(aes(y=weight_tow, x=Year, group=Common_Name,color=Common_Name),size=1)+
+ggplot(species_update)+geom_line(aes(y=weight_tow, x=Year, group=COMMON_NAME,color=COMMON_NAME),size=1)+
   labs(x="Year", y="CPUE")+
   #scale_x_continuous(breaks=seq(2000,2019,by=1),labels=c("2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"))+
   #scale_color_manual(values=c("navy","grey25"),name="Species", labels=c("Herring", "Menhaden"))+
@@ -64,7 +62,7 @@ name.labs<-c("Herring","Menhaden")
 names(name.labs)<-c("Herring Atlantic","Menhaden Atlantic")
 ggplot(species_update)+geom_line(aes(y=catch_tow, x=Year),size=1)+
   labs(x="Year", y="CPUE")+
-  facet_grid(rows=vars(Common_Name),scales="free", labeller = labeller(Common_Name=name.labs))+
+  facet_grid(rows=vars(COMMON_NAME),scales="free", labeller = labeller(COMMON_NAME=name.labs))+
   theme(strip.text.x=element_text(size=20), strip.text.y=element_text(size=20))+
   #scale_x_continuous(breaks=seq(0,17,by=1),labels=c("2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017"))+
   #scale_color_manual(values=c("navy","dark grey"),name="Species", labels=c("Herring", "Menhaden"))+
@@ -76,7 +74,8 @@ ggplot(species_update)+geom_line(aes(y=catch_tow, x=Year),size=1)+
         legend.title = element_text(size = 22, colour = "black"), 
         panel.background = element_blank(), panel.border = element_rect(colour = "black", fill = NA, size = 0.5))
 
-cpue_species<-group_by(trawl_3_groups,Year,Season)%>%
+
+cpue_species<-group_by(trawl_data_update,Year,Season)%>%
   mutate(tows=n_distinct(Tow_Number))%>%
   group_by(COMMON_NAME,Year,Season)%>%
   mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%>%
