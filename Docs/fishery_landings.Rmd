@@ -221,7 +221,7 @@ order<-group_by(undefined, COMMON_NAME)%>%
   arrange(desc(avg_weight))
 
 top_10<-order[1:8,1]
-undefined_top<-inner_join(undefined, top_10)
+undefined_top<-inner_join(undefined, top_10) 
 
 group_undefined<-group_by(undefined_top,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(weight, na.rm=TRUE))
