@@ -63,6 +63,16 @@ plot(ano_region) #regions don't look very different in plot though...confidence 
 
 ```
 
+### Region grouped
+```{r warning=FALSE}
+#region
+ano_region_groups<- anosim(trawl_dist, trawl_data_arrange$REGION_NEW, permutations = 999)
+ano_region_groups #regions are statistically different communities 
+summary(ano_region_groups)
+plot(ano_region_groups) #
+
+```
+
 ### Year
 ```{r}
 #Time
@@ -107,6 +117,15 @@ adonis
 summary(adonis)
 ```
 
+
+### Region groups and year block
+```{r}
+#with year blocks
+adonis<-adonis2(trawl_dist~REGION_NEW*YEAR_GROUPS, data=ME_group_data, by="terms", permutations = 9999)
+adonis
+summary(adonis)
+```
+
 ## Pairwise
 
 * Vegan does not have a function for this, but I found a wrapper that seems frequently used on github
@@ -117,6 +136,15 @@ summary(adonis)
 ```{r}
 #pair-wise test to see what is different
 pair<-pairwise.adonis2(trawl_dist~Region, data=ME_group_data, by="terms", permutations = 9999)
+summary(pair)
+pair #shows all the regions are significantly different except 3 and 4
+
+```
+
+### Region groups
+```{r}
+#pair-wise test to see what is different
+pair<-pairwise.adonis2(trawl_dist~REGION_NEW, data=ME_group_data, by="terms", permutations = 9999)
 summary(pair)
 pair #shows all the regions are significantly different except 3 and 4
 

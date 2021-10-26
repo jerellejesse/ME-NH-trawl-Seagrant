@@ -1,6 +1,6 @@
 ---
 name: "Seagrant Website"
-
+output_dir: docs
 navbar:
   title: "Seagrant: ME-NH inshore trawl survey"
   left:
