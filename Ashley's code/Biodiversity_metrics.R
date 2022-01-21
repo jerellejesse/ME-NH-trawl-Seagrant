@@ -7,7 +7,6 @@
 ####################################################################################
 
 # AEW may want to calculate metrics by classification higher than spp level
-# JJ adds in trophic groupings code- Feb 2021
 
 ### Notes;
 ### Latest report (2015);
@@ -17,7 +16,7 @@
 ### did not start sampling depth 4 until 2003
 
 #setwd("J:/Research/Kerr Lab/ME_SEAG_2018/ME NH trawl data")
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/ME NH data for GMRI")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
 trawl <- read.csv("EXPCATCH_forGMRI.csv", header = TRUE) #ME-NH trawl survey catch data
 
 
@@ -55,18 +54,18 @@ trawl_2$GMRI_INDICATOR <-  cumsum(!duplicated(trawl_2[1:3]))
 
 #write.csv(trawl_2, "trawl_2.csv")
 
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/ID grouping")
-library(dplyr)
-
-trophic_groups<-read.csv("trophicgrps.csv")
-trophic_groups<-rename(trophic_groups, SCIENTIFIC_NAME=Scientfic.name, functional_group=fhdbs.functional.group)
-trawl_2_groups<-left_join(trawl_2, trophic_groups, by="SCIENTIFIC_NAME")
-  #not all species are included in a functional group
-  #mostly invertebrates that are not classified
-trawl_2_groups$GMRI_INDICATOR <-  cumsum(!duplicated(group_by(trawl_2_groups, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER, functional_group)))
-
-trawl_2_groups<-group_by(trawl_2_groups, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER, functional_group)%>%
-  mutate(INDICATOR=cur_group_id())
+# setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/ID grouping")
+# library(dplyr)
+# 
+# trophic_groups<-read.csv("trophicgrps.csv")
+# trophic_groups<-rename(trophic_groups, SCIENTIFIC_NAME=Scientfic.name, functional_group=fhdbs.functional.group)
+# trawl_2_groups<-left_join(trawl_2, trophic_groups, by="SCIENTIFIC_NAME")
+#   #not all species are included in a functional group
+#   #mostly invertebrates that are not classified
+# trawl_2_groups$GMRI_INDICATOR <-  cumsum(!duplicated(group_by(trawl_2_groups, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER, functional_group)))
+# 
+ trawl_2<-group_by(trawl_2, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER)%>%
+   mutate(INDICATOR=cur_group_id())
 
 ## calculate species richness, Shannon-Weiner diversity index, Simpson's diversity index, and Simpson's evenness index by haul
 diff_hauls <- matrix(NA)
@@ -77,13 +76,13 @@ spp_prop <- NULL
 H_index <- NULL  
 D_index <- NULL 
 E_index <- NULL 
-hauls <- unique(trawl_2_groups$INDICATOR) # haul within each unique year/season 
+hauls <- unique(trawl_2$INDICATOR) # haul within each unique year/season 
 N_hauls <- length(hauls) # number of hauls
-N_functional_groups<-length(unique(trawl_2_groups$functional_group))
+#N_functional_groups<-length(unique(trawl_2_groups$functional_group))
 
 
   for (i in 1:N_hauls) { #loop through each haul within year/season
-  diff_hauls <- trawl_2_groups[which(trawl_2_groups$INDICATOR==i),] #subset unique hauls
+  diff_hauls <- trawl_2[which(trawl_2$INDICATOR==i),] #subset unique hauls
   N_species[i] <- length(unique(diff_hauls$SCIENTIFIC_NAME))# count the number of unique species
   N_each_spp <- diff_hauls$W_NUM
   total_spp <- sum(N_each_spp)
@@ -103,7 +102,7 @@ print(E_index)  #Simpsons evenness index for each haul (0-1, 1 = complete evenne
 
 
 # add indices to haul by haul information file
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/ME NH data for GMRI")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
 tow <- read.csv("TowInformation.csv")
 tow <- tow[-3419,] # remove blank row for spring 2018
 indices <- bind_cols(N_species, H_index, D_index, E_index)
@@ -112,9 +111,9 @@ setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Res
 write.csv(ind_by_haul, "ind_by_haul.csv")
 
 
-trawl_groups_3<-group_by(trawl_2_groups, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER, functional_group)%>%
+trawl_3<-group_by(trawl_2, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER)%>%
   summarise()
-ind_by_group_haul<-bind_cols(trawl_groups_3, indices)%>%
+ind_by_haul<-bind_cols(trawl_3, indices)%>%
   rename(N_species=...4, H_index=...5, D_index=...6, E_index=...7)
   
 
@@ -157,11 +156,13 @@ write.csv(specific, "phylo.csv")
 phylo<-read.csv("phylo.csv")
 
 # loop through trawl survey to expand each sample based on above taxonomic information
-setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results")
+#setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
+
 trawl_2 <- read.csv("trawl_2.csv", header = TRUE)
 trawl_2 <- trawl_2[,-1]
 phylo <- read.csv("phylo.csv", header = TRUE)
-phylo <- as.data.frame(phylo)
+phylo <- as.data.frame(phylo)[-1]
 sci_name <- as.vector(trawl_2$SCIENTIFIC_NAME)  
 expand_all <- matrix(NA, nrow = nrow(trawl_2), ncol = 6)
 for (i in 1:nrow(trawl_2)) {
@@ -182,18 +183,15 @@ write.csv(trawl_3, "trawl_phylo.csv", row.names = FALSE)
 
 ####################### now that survey data is reformatted calculate taxonomic diversity indices
 #setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
+
 ext_trawl <- read.csv("trawl_phylo.csv", header = TRUE)
 
-#add functional groups to phylo trawl data
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/ID grouping")
-trophic_groups<-read.csv("trophicgrps.csv")
-trophic_groups<-rename(trophic_groups, SCIENTIFIC_NAME=Scientfic.name, functional_group=fhdbs.functional.group)
-ext_trawl_2<-left_join(ext_trawl, trophic_groups, by="SCIENTIFIC_NAME")
-ext_trawl_groups<-group_by(ext_trawl_2, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER, functional_group)%>%
+ext_trawl2<-group_by(ext_trawl, DMR_TRIP_IDENTIFIER, DMR_EFFORT_IDENTIFIER)%>%
   mutate(INDICATOR=cur_group_id())
 library(mgcv)
 
-hauls <- unique(ext_trawl_groups$INDICATOR)   
+hauls <- unique(ext_trawl2$INDICATOR)   
 N_hauls <- length(hauls) # number of hauls
 N_species <- NULL #N species
 sub_species <- NULL # N_species-1
@@ -276,11 +274,12 @@ write.csv(ind_by_haul, "diversity_ind_by_haul.csv")
 
 ############################### Visualizing metrics #######################################
 #setwd("C:/Users/aweston/Box/Ashley Weston (System Account)/Seagrant/Results")
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Results")
-ind_by_haul <- read.csv("diversity_ind_by_haul.csv")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
+ind_by_haul <- read.csv("diversity_ind_by_haul.csv")[-1]
 
+ind_by_haul2 <- tidyr::separate(ind_by_haul,DMR_TRIP_IDENTIFIER, into=c("SEASON", "YEAR"), sep=2)
 ## aggregate over years 
-fall_inds <- subset(ind_by_haul, SEASON == "FL")
+fall_inds <- subset(ind_by_haul2, SEASON == "FL")
 library('matrixStats')
 
 diff_year <- matrix(NA) 
@@ -331,7 +330,7 @@ for (i in 1:length(yr)) { #loop through each haul within year/season
 
 
 ## spring  
-spring_inds <- subset(ind_by_haul, SEASON == "SP")
+spring_inds <- subset(ind_by_haul2, SEASON == "SP")
 
 diff_year_2 <- matrix(NA) 
 N_sample_2 <- NULL
@@ -475,12 +474,15 @@ polygon(c(seq(1:18), rev(seq(1:18))), c(deltav_quants_2[,1], rev(deltav_quants_2
 
 ### aggregating average indices by region over time 
 #setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
 ind_by_haul <- read.csv("diversity_ind_by_haul.csv", header = TRUE)
+ind_by_haul2 <- tidyr::separate(ind_by_haul,DMR_TRIP_IDENTIFIER, into=c("SEASON", "YEAR"), sep=2)
+
 library(tidyr)
 #ind_by_haul_2 <- separate(ind_by_haul, EFFORT_START_DATE, c("month", "day", "year"))
 
 #fall
-fall_inds <- subset(ind_by_haul, SEASON == "FL")
+fall_inds <- subset(ind_by_haul2, SEASON == "FL")
 
 diff_year <- matrix(NA) 
 N_sample <- NULL
@@ -518,7 +520,7 @@ for (i in 1:length(yr)) { #loop through each haul within year/season
 
 
 ## spring  
-spring_inds <- subset(ind_by_haul, SEASON == "SP")
+spring_inds <- subset(ind_by_haul2, SEASON == "SP")
 
 diff_year_2 <- matrix(NA) 
 N_sample_2 <- NULL
@@ -626,12 +628,16 @@ lines(reg_E_2[,5], type = 'l', col = cols[6])
 
 
 ########################### aggregating average indices by stratum over time 
-setwd("C:/Users/aweston/Box/Ashley Weston (System Account)/Seagrant/Results")
+#setwd("C:/Users/aweston/Box/Ashley Weston (System Account)/Seagrant/Results")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
+
+
 ind_by_haul <- read.csv("ind_by_haul.csv", header = TRUE)
+
 library(tidyr)
 
 #fall
-fall_inds <- subset(ind_by_haul, SEASON == "FL")
+fall_inds <- subset(ind_by_haul2, SEASON == "FL")
 
 diff_year <- matrix(NA) 
 N_sample <- NULL

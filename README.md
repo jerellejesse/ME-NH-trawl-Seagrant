@@ -60,16 +60,22 @@
 * Evaluate how ecosystem changes align with shifts in diversity and composition of fishery landings over time in ports along Maine's coastline
 
 #### Analysis
-
+* Biodiversity metrics for landings data (by county and grouped into year)
+* calculated with catch weight not abundance
+* richness, shannon-weiner diversity, simpson's evenness, average taxonomic distinctness
+* compare to new trawl biodiversity metrics calculated as fall and spring combined and with weight for most relevant comparison to landings metrics
+* Functional groups defined for landings and plots based on NOAA IEA feeding guilds
+* want to look at trawl region definitions for landings comparison next
 
 #### Data
 * Landings data from [DMR portal](https://mainedmr.shinyapps.io/Landings_Portal/) 
 * In data folder MaineDMR_Landings_Time_Series_Data_2021-07-09.csv
 * County and species specific landings 2008-2020
-* Request in with Rob Watts (rob.watts@maine.gov) for older data
+*  Rob Watts (rob.watts@maine.gov) supplied older data (2006-2007)
 
 #### Scripts
-* leverage objective 1 code to start
+* fishery_landings.Rmd for landings biodiversity and functional group plots
+* biodiversity.Rmd for new trawl biodiversity metrics calculated for comparison
 
 ### Contact
 

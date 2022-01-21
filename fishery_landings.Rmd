@@ -5,6 +5,8 @@ output:
   html_document: 
     toc: true
     toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -95,7 +97,7 @@ ggplot()+ geom_line(data=richness, aes(year, richness))+
 richness<-group_by(landings_total, year)%>%
   summarise(richness=length(unique(species)))
 
-ggplot()+ geom_line(data=richness, aes(year, richness))
+rich<-ggplot()+ geom_line(data=richness, aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 ```
 
@@ -115,7 +117,7 @@ shannon<-group_by(landings_total, year,species)%>%
   mutate(total=sum(species_total),prop=species_total/total)%>%
   summarise(shannon=-1*(sum(prop*log(prop))))
 
-ggplot()+geom_line(data=shannon, aes(year, shannon))
+diversity<-ggplot()+geom_line(data=shannon, aes(year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 ```
 
@@ -136,8 +138,9 @@ simpson<-group_by(landings_total, year,species)%>%
   mutate(prop=species_total/total)%>%
   summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
    
-ggplot()+geom_line(data=simpson, aes(year, simpsonD))
-ggplot()+geom_line(data=simpson, aes(year, simpsonE))
+ggplot()+geom_line(data=simpson, aes(year, simpsonD))+theme_classic()
+
+evenness<-ggplot()+geom_line(data=simpson, aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 
 ```
@@ -247,7 +250,27 @@ delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
 d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
 colnames(d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
 
-ggplot()+geom_line(data=d, aes(year, delta_plus))
+write.csv(d, here("Data/tax_metrics.csv"))
+
+tax.distinct<-ggplot()+geom_line(data=d, aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                                                                     
+
+```
+
+Combo plot
+```{r}
+library(reshape2)
+library(gridExtra)
+
+all_metrics<-full_join(richness,shannon, by="year")%>%
+  full_join(simpson)%>%
+  full_join(d)
+
+all_melt<-melt(all_metrics, id="year")
+
+ggplot()+geom_line(data=all_melt, aes(year,value))+facet_grid(rows = vars(variable), scales="free")+theme_bw()
+
+grid.arrange(rich, diversity, evenness,tax.distinct, nrow=4)
 
 ```
 
@@ -280,7 +303,7 @@ ggplot(year_group)+
 
 ggplot(year_group_prop)+
   geom_bar(aes(x=year, y=mean_prop, fill=functional_group), position="fill", stat = "identity")+
-  scale_fill_colorblind(name="Functional Group")+ theme_classic()
+  scale_fill_colorblind(name="Functional Group")+ theme_classic()+ ylab("Proportion of biomass (kg)")+theme(text=element_text(size=18))
 
 
 ```

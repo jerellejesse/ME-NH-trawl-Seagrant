@@ -2,8 +2,15 @@
 title: Building joint species distribution models to investigate predator-prey relationships
   within coastal Gulf of Maine waters
 author: "Andrew Allyn"
-date: "9/27/2021"
-output: html_document
+date: "Updated on: `r Sys.Date()`"
+output: 
+  html_document:
+    toc: TRUE
+    toc_float:
+        collapsed: TRUE
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -16,9 +23,33 @@ library(gmRi)
 library(tidyverse)
 library(lubridate)
 library(here)
+library(devtools)
+library(VAST)
+library(stringr)
+library(splines)  
+library(effects)  
+library(patchwork)
+library(akima)
+library(lubridate)
+library(PresenceAbsence)
+library(MLmetrics)
+library(forecast)
+library(gmRi)
+library(transformr)
+library(gganimate)
+library(corrplot)
+
 # Sourcing a few functions from SDM workflow and the TargetsSDM functions
-devtools::source_url("https://raw.githubusercontent.com/gulfofmaine/sdm_workflow/main/scratch/aja/TargetsSDM/R/combo_functions.R?token=ABTDHL7LKYMIDVZBGDT2JJTBLL5WK")
-devtools::source_url("https://raw.githubusercontent.com/aallyn/NASA-FaCeT/master/tools/enhance_r/enhance_r_funcs.R?token=ABTDHL3RLEMPOEWLOCHRM63BLRW7M")
+devtools::source_url("https://raw.githubusercontent.com/aallyn/TargetsSDM/main/R/combo_functions.R")
+devtools::source_url("https://raw.githubusercontent.com/aallyn/TargetsSDM/main/R/vast_functions.R")
+devtools::source_url("https://raw.githubusercontent.com/aallyn/TargetsSDM/main/R/enhance_r_funcs.R")
+devtools::source_url("https://raw.githubusercontent.com/aallyn/TargetsSDM/main/R/SDM_PredValidation_Functions.R")
+
+# Path to "RES_Data"
+shapefile_root<- gmRi::research_access_paths()$res 
+
+# Eval?
+eval_use<- FALSE
 ```
 
 ```{r, echo = FALSE}
@@ -28,35 +59,59 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 
 # Overview
 
-In this project, our third objective is to analyze community and functional group distributions, with a particular focus on joint distributions of key predator-prey species for American lobster and Atlantic cod. To meet this objective, we will use joint species distribution models (JSDMs) to assess changes in species co-occurrence patterns. JSDMs will be fit using the vector auto-regressive spatio-temporal (VAST) modeling structure. Within the modeling structure, we will include a suite of environmental variables (e.g., sea surface and bottom temperature, salinity), along with trying to account for unmeasured spatial and spatio-temporal variability using Gaussian Markov Random Fields. Finally, given our interest on community structure and predator-prey relationships, we will try to include American lobster, Atlantic cod, and a few of their key predator and prey species. Specifically, for American lobster predators, we will have Atlantic cod, spiny dogfish, smooth dogfish, little skate, longhorn sculpin, red hake, haddock, cunner, scup, tautog and black sea bass within a single JSDM. For Atlantic cod prey species, we will include key forage species like herring, sand lance, hakes and other, smaller groundfish. 
+In this project, our third objective is to analyze community and functional group distributions, with a particular focus on potential changes in overlap of key predator-prey species for American lobster and Atlantic cod. There are a variety of ways to investigate predator-prey overlap, including building single species distribution models and then calculating a suite of overlap metrics from single species model predictions, as well as fitting a "joint" species distribution model and analyzing variance-covariance matrices. Here, we start with looking at single species distribution models and then follow [Carroll et al. 2019](https://doi.org/10.1111/geb.12984) to calculate a numeric of different metrics to understand changes in spatial overlap between focal predator/prey species. 
 
 # Workflow
 Damarius Zurrell has a really nice and simple [diagram](https://damariszurell.github.io/SDM-Intro/) outlining the general species distribution modeling workflow and the key stages of conceptualization, data preparation, model fitting, model assessment and then making predictions using the fitted model in space and time. We will follow a similar process to complete this objective.
 
 ## Data preparation
-With this model, like other parts of the project, we are especially interested in making use of the Maine-New Hampshire inshore trawl survey data. These data are in the project repository Data folder ("MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"). For the preliminary processing, we will be filtering to species of interest (and sizes?), making sure that we have a full occupancy dataset with imputed absences when species were not caught, etc. From this dataset, we will then grab just unique tow locations (time, lat, lon) and extract environmental characteristics at these locations. In the end, we will have a "tidy" model occupancy dataset that includes species catch information as well as the environmental conditions at tow locations. 
+With this model, like other parts of the project, we are especially interested in making use of the Maine-New Hampshire inshore trawl survey data. The biological catch data are in the project repository Data folder ("MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv") as well as the tow data ("MaineDMR_Trawl_Survey_tow_Data_2021-05-14"). For the preliminary processing, we will be filtering to species of interest (and sizes?), making sure that we have a full occupancy dataset with imputed absences when species were not caught, etc. From this dataset, we will then grab just unique tow locations (time, lat, lon) and extract environmental characteristics at these locations. In the end, we will have a "tidy" model occupancy dataset that includes species catch information as well as the environmental conditions at tow locations. 
 
 ### Biological data
-```{r}
+As mentioned above, we will use the Maine-New Hampshire inshore trawl data for this analysis. During the survey, "absences" are not recorded so we need to input them manually -- assuming that if the species was there it would have been caught by the trawl. We input these absences by creating a full grid of unique tow locations with the suite of species of interest. For this component, we focus on lobster and a few of its key predator species, which we likely have enough data to support fitting a species distribution model. 
+```{r, eval = eval_use}
 # Load in the data
-raw_catch_dat<- read.csv(here("Data", "MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
-raw_tows_dat<- read.csv(here("Data", "MaineDMR_Trawl_Survey_Tow_Data_2021-05-14.csv"))
+raw_catch_dat<- read.csv(here::here("Data", "MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
+raw_tows_dat<- read.csv(here::here("Data", "MaineDMR_Trawl_Survey_Tow_Data_2021-05-14.csv"))
 
 # Getting a unique tows dataset, some column renaming
-tows_dat<- raw_dat %>%
-  distinct(DMR_TRIP_IDENTIFIER, latitude, longitude, time) %>%
-  rename(., "SeasonYear" = DMR_TRIP_IDENTIFIER, "DECDEG_BEGLAT" = latitude, "DECDEG_BEGLON" = longitude, "Time" = time)
+tows_dat<- raw_tows_dat %>%
+    distinct(Survey, Season, Year, Tow_Number, Start_Latitude, Start_Longitude, Start_Date, Tow_LengthNM, Region) %>%
+  mutate(., "UniqueID" = paste(Survey, Season, Year, Tow_Number, sep = "_")) %>%
+  rename(., "DECDEG_BEGLAT" = Start_Latitude, "DECDEG_BEGLON" = Start_Longitude, "Date" = Start_Date)
 
 # Unique ID?
-tows_dat$ID<- paste(tows_dat$SeasonYear, seq(from = 1, to = nrow(tows_dat)), sep = "_")
+tows_dat$ID<- paste(paste(tows_dat$Survey, tows_dat$Year, sep = "_"), seq(from = 1, to = nrow(tows_dat)), sep = "_")
 
 # Work with the date column...
 tows_dat<- tows_dat %>%
-  mutate(., "Date" = as.Date(format(Time), "%Y-%m-%d"))
+  mutate(., "Date" = as.Date(format(Date), "%Y-%m-%d"))
 
-# Creating absences
+# Creating absences 
+species_keep<- c("cod atlantic", "dogfish spiny", "skate winter", "skate little", "sculpin longhorn", "lobster american")
 
-# Full sample data set
+presence_data<- raw_catch_dat %>%
+  mutate(., "UniqueID" = paste(Survey, Season, Year, Tow_Number, sep = "_")) %>%
+  dplyr::filter(COMMON_NAME %in% species_keep) %>% 
+  dplyr::group_by(UniqueID, COMMON_NAME) %>% 
+  dplyr::summarise(BIOMASS = sum(Expanded_Weight_kg)) %>% 
+  dplyr::mutate(PRESENCE = ifelse(BIOMASS > 0, 1, 0)) %>% #should all be 1s
+  #presence = 1 if abundance >=1, presence = 0 if abundance = 0
+  dplyr::select(UniqueID, COMMON_NAME, PRESENCE, BIOMASS) %>%
+  ungroup()
+    
+# Create a dataframe of all possible survey ID/species combinations
+all_ID_SPEC_possibilities<- tibble::tibble(UniqueID = rep(tows_dat$UniqueID, length(unique(species_keep)))) %>% 
+  dplyr::arrange(UniqueID) %>% 
+  mutate(COMMON_NAME = rep(unique(species_keep), length(tows_dat$UniqueID))) 
+  
+# Create full presence absence dataset
+mesg_tidy_occu<- all_ID_SPEC_possibilities %>% 
+  dplyr::left_join(presence_data, by = c("UniqueID", "COMMON_NAME")) %>%                           
+  #populate "possibilities" dataset with presence data                       
+  mutate(PRESENCE = ifelse(is.na(PRESENCE) == T, 0, PRESENCE)) %>%     
+  mutate(BIOMASS = ifelse(is.na(BIOMASS) == T, 0.000, BIOMASS)) %>%  
+  dplyr::select(UniqueID, COMMON_NAME, PRESENCE, BIOMASS)
 ```
 
 ### Environmental data
@@ -66,14 +121,13 @@ To access these data, I am going to use some code provided by [Robert Schlegal](
 
 Another thing worth mentioning here is that this is next section of code is where I think "reproducibility" across labs becomes more complicated. Up until now, all of the code and data we needed has been stored within this GitHub repo and associated R project. Now, though, I am going to be accessing some files that are hosted on Box. While there is a `shared.paths` function in the `gmRi` package to facilitate working through this situation, it will be interesting to see when that breaks and if we need to find more robust solutions, especially as the amount of data increases beyond GitHub's data storage limits. 
 
-```{r}
-# Rather than extracting ALL of the GLORYs data, I am going to subset things spatially. We could also further subset things temporally, but in this case, I am interested in all the monthly availavble data from 1993 to present. 
+```{r, eval = eval_use}
+# Rather than extracting ALL of the GLORYs data, I am going to subset things spatially. We could also further subset things temporally, but in this case, I am interested in all the monthly available data from 1993 to present. 
 
 # Getting our spatial subset from an existing Gulf of Maine polygon shapefile
-# Path to "RES_Data"
-shapefile_root<- gmRi::research_access_paths()$res
-# Read in the shapefile
+# Read in the shapefiles -- Gulf of Maine to get GLORYs data, menh to use as strata, land to use for plotting
 gom_sf<- st_read(paste0(shapefile_root, "Shapefiles/GulfofMainePhysioRegions/PhysioRegions_WGS84.shp"))
+
 # Grab the extent to use later on
 extent_gom<- st_bbox(gom_sf)
 
@@ -135,7 +189,7 @@ download_GLORYS <- function(date_choice, extent_bbox = extent_gom, out_dir_use =
 ```
 
 Now, checking to see if we actually need to download and collect the GLORYs data, or, if this has already been done. If we do need to download and collect GLORYs data for a particular variable, this next chunk might take a bit of time to run.
-```{r}
+```{r, eval = eval_use}
 # Vector of variables we are interested in getting. Check netcdf file to see other potential available variables.
 variables_all<- c("thetao", "bottomT", "so")
 
@@ -198,7 +252,7 @@ if(glorys_extract){
 ```
 
 After completing the initial data downloading and processing, we can now extract the environmental variables of interest at a given temporal scale for all of the unique tow locations. To do this, I am going to use a few functions that I have written already that are housed in the FaCeT repository. In particularly, I'll use a `static_extract` function to get depth at each tow location and then a `dynamic_2d_extract` function to get sea surface temperature, bottom temperature and salinity at all tow locations. 
-```{r}
+```{r, eval = eval_use}
 # Convert our tows data object, with just unique tow locations, into a sf points object
 tows_sf<- st_as_sf(tows_dat, coords = c("DECDEG_BEGLON", "DECDEG_BEGLAT"), crs = st_crs(gom_sf), remove = FALSE)
 
@@ -217,27 +271,529 @@ for(i in seq_along(dynamic_covariates_files)){
 }
 
 # Run the dynamic_2d_extract_wrapper function. How is this going to work given daily observations and MONTHLY data...
-tows_out<- dynamic_2d_extract_wrapper(dynamic_covariates_list = dynamic_covariates_list_use, t_summ = "monthly", t_position = NULL, sf_points = tows_sf, date_col_name = "Date", df_sf = "df", out_dir = NULL)
+tows_out<- dynamic_2d_extract_wrapper(dynamic_covariates_list = dynamic_covariates_list_use, t_summ = "seasonal", t_position = NULL, sf_points = tows_sf, date_col_name = "Date", df_sf = "df", out_dir = here::here("", "Data"))
 ```
 
-With the enhancing completed, can do a quick gut check of seasonal averages through time to see if the general patterns make sense.
-```{r}
+With the enhancing completed, we can do a quick gut check of seasonal averages through time to see if the general patterns make sense.
+```{r, eval = eval_use}
 # Quick gut checks...
 var_checks<- tows_out %>%
-  group_by(., SeasonYear) %>%
-  summarize_at(., c("BottomTemp_monthly", "Salinity_monthly", "SST_monthly"), .funs = c(mean), na.rm = TRUE) %>%
-  mutate(., "SeasonYearFactor" = factor(SeasonYear, levels = c("FL00", "SP01", "FL01", "SP02", "FL02", "SP03", "FL03", "SP04", "FL04", "SP05", "FL05", "SP06", "FL06", "SP07", "FL07", "SP08", "FL08", "SP09", "FL09", "SP10", "FL10", "SP11", "FL11", "SP12", "FL12", "SP13", "FL13", "SP14", "FL14", "SP15", "FL15", "SP16", "FL16", "SP17", "FL17")),
+  group_by(., Survey) %>%
+  summarize_at(., c("BottomTemp_seasonal", "Salinity_seasonal", "SST_seasonal"), .funs = c(mean), na.rm = TRUE) %>%
+  mutate(., "SeasonYearFactor" = factor(Survey, levels = c("FL00", "SP01", "FL01", "SP02", "FL02", "SP03", "FL03", "SP04", "FL04", "SP05", "FL05", "SP06", "FL06", "SP07", "FL07", "SP08", "FL08", "SP09", "FL09", "SP10", "FL10", "SP11", "FL11", "SP12", "FL12", "SP13", "FL13", "SP14", "FL14", "SP15", "FL15", "SP16", "FL16", "SP17", "FL17", "SP18", "FL18", "SP19", "FL19")),
          "TimePlot" = as.numeric(SeasonYearFactor))
 
 var_checks_plot_dat<- var_checks %>%
-  pivot_longer(., -c(SeasonYear, SeasonYearFactor, TimePlot), "Variable", "Value")
+  pivot_longer(., -c(Survey, SeasonYearFactor, TimePlot), "Variable", "Value")
 ```
 
-```{r, include = TRUE}
+```{r, eval = eval_use}
 var_checks_plot<- ggplot() +
   geom_point(data = var_checks_plot_dat, aes(x = TimePlot, y = value, color = Variable)) +
   geom_line(data = var_checks_plot_dat, aes(x = TimePlot, y = value, color = Variable))
 var_checks_plot
 ```
 
-All looks good there. The final step is join the tow data back to the observational data to get our full "tidy" occurence dataset, ready to fit with a species distribution model or joint species distribution model.
+All looks good there. The final step is join the tow data back to the observational data to get our full "tidy" occurence dataset, ready to fit with a species distribution model or joint species distribution model. Here, we also cut things back a bit. First, we use tow data from before 2020. Given all the complications with 2020 in general, we aren't quite sure how comparable the 2020 survey was to the rest of the years. In addition, we focus on the fall season. This decision was made for two main reasons. First, on the ecology side, the fall community is slightly more stable and in less transition than the spring season (**refs**). Second, on the practical modeling side, our previous work suggests that distribution models generally have higher predictive skill during the fall season than the spring season (**refs**). that in general we have better distribution model skill. 
+```{r, eval = eval_use}
+# Subsetting season and years
+season_run<- "Fall"
+year_cut<- 2020
+tows_run<- tows_out %>%
+  dplyr::filter(., Year < year_cut & Season == season_run)
+
+# Rescale to help with model convergence
+tows_run$Depth_scale<- covariate_rescale_func(tows_run$Depth, type = "AJA", center = TRUE, scale = TRUE)
+tows_run$BottomTemp_seasonal_scale<- covariate_rescale_func(tows_run$BottomTemp_seasonal, type = "AJA", center = TRUE, scale = TRUE)
+tows_run$SST_seasonal_scale<- covariate_rescale_func(tows_run$SST_seasonal, type = "AJA", center = TRUE, scale = TRUE)
+
+tows_run<- tows_run %>%
+  drop_na(., Tow_LengthNM, Depth_scale:SST_seasonal_scale)
+
+# Combine tow and sample data, then filter
+tidy_mod_data<- tows_run %>% 
+  left_join(., mesg_tidy_occu) 
+
+# Finally, rename "Region" column to "STRATA"
+tidy_mod_data<- tidy_mod_data %>%
+  dplyr::rename(., "STRATA" = "Region")
+```
+
+## Model fitting, single species
+We now have the data we need to fit some species distribution models! We are going to start with some single species vector autoregressive spatio-temporal models ([Thorson and Barnett 2017](https://doi.org/10.1093/icesjms/fsw193), [Thorson 2019](https://doi.org/10.1016/j.fishres.2018.10.013)). This approach has a number of advantages and one way of thinking about these advantages is to think of VAST as a species distribution model with additional bells and whistles. Specifically, at the core of the VAST mdoeling approach is an "environment-only" species distribution model. In our case, we use many of the usual suspects for covariates within this component, in particular bottom depth, a seasonal average sea surface temperature and a seasonal average bottom temperature. Along with this "environment-only" distribution model, we also leverage VAST's capacity to account for unmeasured, persistent spatial variability and unmeasured, ephemeral spatio-temporal variability. These two components, which are estimated as Guassian Markov random field random effects, are essentially trying to soak up the variability that can't be explained by the environment covariates. This variability with an "environment-only" model would be assumed by the model residuals, creating statistical issues with residual spatial (spatio-temporal) autocorrelation and conceptual issues acknowledging that we are not doing anything "extra" while acknowledging that there is no way we are able to account for all of the environmental or biological variables structuring species occurrence patterns. Finally, we also use the model's autoregressive capabilities by attempting to account for temporal autocorrelation in the model intercepts (i.e., average probability of occurrence or positive biomass across the entire spatial domain) and the spatio-temporal model component with a random walk autoregressive model. 
+
+### VAST core objects and model settings
+The beginning VAST prep components involve setting up our extrapolation grid and a few of the core model settings. Internally, VAST operates at the level of the knots. By proposing an extrapolation grid, we can easily interpolate values estimated or calculated at the knots to a regular grid that we control. To do this, we need a few shapefiles. We end up using a domain that is a convex hull around the survey grid and then proposing sub-regions (East of the Penobscot Bay, Penobscot Bay, and then West of the Penobscot Bay) to use when calculating stratified biomass indices. 
+
+```{r, eval = eval_use}
+# Some helpful spatial files
+menh_shp<- st_read(paste0(shapefile_root, "Shapefiles/MaineDMR_Inshore_Trawl_Survey_Grid/MaineDMR_Inshore_Trawl_Survey_Grid.shp"))
+menh_chull<- menh_shp %>%
+  st_union() %>%
+  st_convex_hull()
+menh_chull<- st_as_sf(data.frame(Region = "MENH"), geometry=st_geometry(menh_chull))
+
+land<- st_read(paste0(shapefile_root, "Shapefiles/US_County_Boundaries/US_County_Boundaries.shp")) %>%
+  st_simplify(., dTolerance = 0.005)
+
+# Setting up strata limits -- focusing on an eastern vs. western GoM boundary divide...with regions 1 and 2 = west of penobscot bay, region 3 as Penobscot Bay, and regions 4 and 5 and east of penobscot bay
+menh_regions<- menh_shp %>%
+  group_by(region_id) %>%
+  summarize()
+
+for(i in seq_along(menh_regions$region_id)){
+  region_temp<- st_as_sf(data.frame(Region = menh_regions$region_id[i]), geometry = st_geometry(menh_regions[i,])) %>%
+    group_by(Region) %>%
+    summarize()
+  if(i == 1){
+    menh_regions_out<- region_temp
+  } else {
+    menh_regions_out<- bind_rows(menh_regions_out, region_temp)
+  }
+}
+
+# Finally add an all region
+menh_all<- menh_shp %>%
+  st_combine() 
+menh_all<- st_as_sf(data.frame(Region = 6), geometry = st_geometry(menh_all)) 
+menh_regions_out<- bind_rows(menh_regions_out, menh_all)
+
+# Renaming regions...
+menh_regions_out$Region<- c("West_of_Penobscot_Bay", "West_of_Penobscot_Bay", "Penobscot_Bay", "East_of_Penobscot_Bay", "East_of_Penobscot_Bay", "All")
+
+# Explicitly defining the strata
+strata_use<- data.frame("STRATA" = c("West_of_Penobscot_Bay", "Penobscot_Bay", "East_of_Penobscot_Bay", "All"))
+
+# Making the extrapolation grid and visualizing the sub regions
+vast_extrap_grid<- vast_make_extrap_grid(region_shapefile = menh_chull, index_shapes = menh_regions_out, strata.limits = strata_use, cell_size = 5000) %>%
+  drop_na(., STRATA)
+vast_grid_sf<- st_as_sf(vast_extrap_grid, coords = c("Lon", "Lat"), crs = 4326, remove = FALSE) 
+
+vast_grid_regions<- vast_grid_sf %>%
+  dplyr::filter(., Region != "All")
+ggplot() +
+    geom_sf(data = vast_grid_regions, aes(color = Region)) +
+    theme_bw()
+```
+
+Now, onto the model settings. Here is where we can turn on or off some of the VAST "bells and whistles" -- mainly whether we want to estimate persistent spatial variability (`Omega`), or ephemeral spatio-temporal variability (`Epsilon`), and if we want to have an autoregressive structure on the model intercepts (`Beta`) or `Epsilon`. For this application, we are mostly going to be interested in understanding observed patterns in species occurrence, and more specifically, overlap with focal species and their predator/prey species. Given those objectives, we turn on `Omega` and `Epsilon` for both linear predictors as we hope this will allow us to fit models with more explanatory power. Finally, we add a random walk autoregressive component to `Beta1` and `Beta2` to try to capture carry over, course scale patterns in species occurrence (probability of presence and positive biomass) across the entire study domain. 
+```{r, eval = eval_use}
+# First, the field and rho configuration settings. Field config sets up the spatial/spatio-temporal components and how many factors should be estimated. Rho config sets up autoregressive structure on intercepts and spatio-temporal components.
+field_config<- c("Omega1" = 1, "Epsilon1" = 1, "Omega2" = 1, "Epsilon2" = 1)
+rho_config<- c("Beta1" = 2, "Beta2" = 2, "Epsilon1" = 0, "Epsilon2" = 0)
+    
+# Now, call the settings function 
+vast_settings<- vast_make_settings(extrap_grid = vast_extrap_grid, n_knots = 400, FieldConfig = field_config, RhoConfig = rho_config, OverdispersionConfig = c(0, 0), bias.correct = FALSE, knot_method = "samples", inla_method = "Mesh", Options = c("Calculate_Range" = TRUE), strata.limits = strata_use)
+```
+
+
+### VAST dataset prep and model fitting
+Finally here, the model fitting stage! I've set this up as a loop to run over species named in `species_keep` earlier. For each of the species there, we fit gather the corresponding sample and covariate dataframes. Then, we fit the VAST model. Finally, we run some functions to summarize the results. This includes calculating a few core sumamry statistics to look at "predictive" skill to 2017, 2018 and 2019 hold out, testing years. After the predictive skill check, we then make some inferences from the fitted model by plotting species-covariate fitted relationships, predicted density over a regular grid, stratified biomass indices within larger spatial areas and changes in center of gravity within the entire domain.  
+```{r, eval = eval_use}
+out_dir_use<- paste0(gmRi::research_access_paths()$mills, "Projects/ME-NH-trawl-Seagrant/Objective 3/Temp_Results/") # Box path update!!!!!
+pred_stats_out<- data.frame("Species" = species_keep, "CorrCoeff_Presence" = NA, "AUC" = NA, "RMSE_Presence" = NA, "CorrCoeff_Biomass" = NA, "RMSE_Biomass" = NA, "MASE_Biomass" = NA)
+
+for(i in seq_along(species_keep)){
+  
+  # Text file to print progress
+  progress_out<- "Starting"
+  write(progress_out, file = paste(out_dir_use, species_keep[i],  "_progress.txt", sep = ""), append = FALSE)
+  
+  # Filter tidy model data to keep only one species of interest 
+  spp_run<- species_keep[i]
+  nice_category_names<- spp_run
+  tidy_mod_data_run<- tidy_mod_data %>%
+    dplyr::filter(., COMMON_NAME == spp_run)
+  
+  # Prep the sample dataframe, we also include a "Pred_TF" column -- when Pred_TF == 1, the observation is only included in the predictions and NOT in the model fitting. This is a helpful way to do some model validation.
+  pred_year_start<- 2017
+  vast_sample_data<- data.frame("Year" = tidy_mod_data_run$Year, "Lat" = tidy_mod_data_run$DECDEG_BEGLAT, "Lon" = tidy_mod_data_run$DECDEG_BEGLON, "Biomass" = tidy_mod_data_run$BIOMASS, "Swept" = tidy_mod_data_run$Tow_LengthNM, "Pred_TF" = ifelse(vast_sample_data$Year < pred_year_start, 0, 1))
+  
+  # Predictions...
+  vast_sample_data$Pred_TF<- ifelse(vast_sample_data$Year < pred_year_start, 0, 1)
+
+  # We will need a covariate data frame
+  vast_covariate_data<- data.frame("Year" = tidy_mod_data_run$Year, "Depth" = tidy_mod_data_run$Depth_scale, "SST_seasonal" = tidy_mod_data_run$SST_seasonal_scale, "BT_seasonal" = tidy_mod_data_run$BottomTemp_seasonal_scale, "Lat" = tidy_mod_data_run$DECDEG_BEGLAT, "Lon" = tidy_mod_data_run$DECDEG_BEGLON)
+  
+  # Model formula
+  gam_degree<- 3
+  hab_formula<- ~ bs(Depth, degree = 3, intercept = FALSE) + bs(SST_seasonal, degree = 3, intercept = FALSE) + bs(BT_seasonal, degree = 3, intercept = FALSE) 
+  hab_env_coeffs_n<- length(attributes(terms.formula(hab_formula))$term.labels)
+  
+  vast_coveff_habcovs<- vast_make_coveff(X1_coveff_vec = rep(rep(1, gam_degree), hab_env_coeffs_n), X2_coveff_vec = rep(rep(1, gam_degree), hab_env_coeffs_n), Q1_coveff_vec = NULL, Q2_coveff_vec = NULL)
+  
+  # Build the base model
+  vast0_hab_covs<- vast_build_sdm(settings = vast_settings, extrap_grid = vast_extrap_grid, sample_data = vast_sample_data, covariate_data = vast_covariate_data, X1_formula = hab_formula, X2_formula = hab_formula, Q1_formula = NULL, Q2_formula = NULL, Xconfig_list = vast_coveff_habcovs, X_contrasts = NULL, index_shapes = menh_regions_out, spatial_info_dir = here::here(""))
+  
+  # Fit
+  vast_fitted_hab_covs<- try(vast_fit_sdm(vast_build_adjust = vast0_hab_covs, nice_category_names = nice_category_names, index_shapes = menh_regions_out, spatial_info_dir = here::here(""), out_dir = out_dir_use), silent = TRUE)
+  
+  # Check fit...
+  if(class(vast_fitted_hab_covs) == "fit_model" && (max(abs(vast_fitted_hab_covs$parameter_estimates$diagnostics$final_gradient)) <= 0.01)){
+    progress_new<- "Excellent, model converged"
+    write(progress_new, file = paste(out_dir_use, species_keep[i],  "_progress.txt", sep = ""), append = TRUE)
+    
+    # Results work
+    # Sample design
+    if(i == 1){
+      spat_grid<- raster("~/GitHub/TargetsSDM/data/supporting/Rast0.25grid.grd")
+      design_plots<- vast_plot_design(vast_fit = vast_fitted_hab_covs, land = land, spat_grid = spat_grid, xlim = xlim_use, ylim = ylim_use, land_color = "#f0f0f0", out_dir = out_dir_use)
+    }
+
+    # species-environment relationships
+    vast_habcovs_effs<- get_vast_covariate_effects(vast_fit = vast_fitted_hab_covs, params_plot = c("Depth", "SST_seasonal", "BT_seasonal"), params_plot_levels = 100, effects_pad_values = c(), nice_category_names = nice_category_names, out_dir = out_dir_use)
+    vast_habcovs_plot<- plot_vast_covariate_effects(vast_covariate_effects = vast_habcovs_effs, vast_fit = vast_fitted_hab_covs, nice_category_names = nice_category_names, out_dir = out_dir_use)
+    vast_habcovs_plot
+    
+    # Model predictive skill
+    obs_pred0<- vast_get_point_preds(vast_fit = vast_fitted_hab_covs, use_PredTF_only = TRUE, nice_category_names = nice_category_names, out_dir = out_dir_use)
+    obs_pred0<- obs_pred0 %>%
+      dplyr::rename(., "year" = "Year")
+    
+    pred_stats_out$CorrCoeff_Presence[i]<- cor(obs_pred0$Predicted_ProbPresence, obs_pred0$Presence)
+    pred_stats_out$AUC[i]<- round(AUC(y_pred = obs_pred0$Predicted_ProbPresence, y_true = obs_pred0$Presence), 2)
+    pred_stats_out$RMSE_Presence[i]<- round(accuracy(obs_pred0$Predicted_ProbPresence, obs_pred0$Presence)[,'RMSE'], 2)
+    pred_stats_out$CorrCoeff_Biomass[i]<- cor(obs_pred0$Predicted_Biomass, obs_pred0$Biomass)
+    pred_stats_out$RMSE_Biomass[i]<- round(accuracy(obs_pred0$Predicted_Biomass, obs_pred0$Biomass)[,'RMSE'], 2)
+    pred_stats_out$MASE_Biomass[i]<- round(mase_func_simp(df = obs_pred0, obs = "Biomass", mod = "Predicted_Biomass"), 2)
+    
+    # A Taylor Diagram to look at predictive skill in biomass
+    taylor_diag0<- taylor_diagram_func(dat = obs_pred0, obs = "Biomass", mod = "Predicted_Biomass", pt.col = "#d95f02", out.file = paste0(out_dir_use, nice_category_names, "_TaylorDiagram.jpg"))
+    
+    # Extracting and plotting predicted density at knot locations, smoothed over a regular grid
+    xlim_use<- c(as.numeric(st_bbox(menh)$xmin), as.numeric(st_bbox(menh)$xmax))
+    ylim_use<- c(as.numeric(st_bbox(menh)$ymin), as.numeric(st_bbox(menh)$ymax))
+    vast_density_plot<- vast_fit_plot_spatial(vast_fit = vast_fitted_hab_covs, spatial_var = "D_gct", nice_category_names = nice_category_names, mask = menh_chull, all_times = as.character(unique(vast_sample_data$Year)), plot_times = NULL, land_sf = land, xlim = xlim_use, ylim = ylim_use, x_dim_length = 715, y_dim_length = 733, lab_lon = -67.5, lab_lat = 43, panel_or_gif = "panel", out_dir = out_dir_use, land_color = "#d9d9d9", panel_cols = 4, panel_rows = 5)
+  
+    # Extracting stratified biomass indices and plotting as a time series
+    biomass_indices<- get_vast_index_timeseries(vast_fit = vast_fitted_hab_covs, all_times = unique(vast_sample_data$Year), nice_category_names = nice_category_names, index_scale = c("raw"), out_dir = out_dir_use)
+    
+    plot_vast_index_timeseries(index_res_df = biomass_indices, index_scale = "raw", nice_category_names = nice_category_names, nice_xlab = "Year", nice_ylab= "Biomass index (metric tons)", paneling = "none", color_pal = NULL, out_dir = out_dir_use)
+    
+    # Extracting center of gravity
+    vast_cog_plot<- vast_plot_cog(vast_fit = vast_fitted_hab_covs, all_times = unique(vast_sample_data$Year), summarize = TRUE, land_sf = land, xlim = xlim_use, ylim = ylim_use, nice_category_names = nice_category_names, land_color = "#d9d9d9", color_pal = NULL, out_dir = out_dir_use)
+  } else {
+    progress_new<- "Model failed"
+    write(progress_new, file = paste(out_dir_use, species_keep[i],  "_progress.txt", sep = ""), append = TRUE)
+    
+    # Edits....
+    field_config_new<- c("Omega1" = 0, "Epsilon1" = 0, "Omega2" = 0, "Epsilon2" = 0)
+    rho_config_new<- c("Beta1" = 2, "Beta2" = 2, "Epsilon1" = 0, "Epsilon2" = 0)
+        
+    # Now, call the settings function 
+    vast_settings<- vast_make_settings(extrap_grid = vast_extrap_grid, n_knots = 400, FieldConfig = field_config_new, RhoConfig = rho_config_new, OverdispersionConfig = c(0, 0), bias.correct = FALSE, knot_method = "samples", inla_method = "Mesh", Options = c("Calculate_Range" = TRUE), strata.limits = strata_use)
+    
+    # Build the base model
+    vast0_hab_covs<- vast_build_sdm(settings = vast_settings, extrap_grid = vast_extrap_grid, sample_data = vast_sample_data, covariate_data = vast_covariate_data, X1_formula = hab_formula, X2_formula = hab_formula, Q1_formula = NULL, Q2_formula = NULL, Xconfig_list = vast_coveff_habcovs, X_contrasts = NULL, index_shapes = menh_regions_out, spatial_info_dir = here::here(""))
+  
+    # Fit
+    vast_fitted_hab_covs<- vast_fit_sdm(vast_build_adjust = vast0_hab_covs, nice_category_names = nice_category_names, index_shapes = menh_regions_out, spatial_info_dir = here::here(""), out_dir = out_dir_use)
+    
+     # species-environment relationships
+    vast_habcovs_effs<- get_vast_covariate_effects(vast_fit = vast_fitted_hab_covs, params_plot = c("Depth", "SST_seasonal", "BT_seasonal"), params_plot_levels = 100, effects_pad_values = c(), nice_category_names = nice_category_names, out_dir = out_dir_use)
+    vast_habcovs_plot<- plot_vast_covariate_effects(vast_covariate_effects = vast_habcovs_effs, vast_fit = vast_fitted_hab_covs, nice_category_names = nice_category_names, out_dir = out_dir_use)
+    vast_habcovs_plot
+    
+    # Model predictive skill
+    obs_pred0<- vast_get_point_preds(vast_fit = vast_fitted_hab_covs, use_PredTF_only = TRUE, nice_category_names = nice_category_names, out_dir = out_dir_use)
+    obs_pred0<- obs_pred0 %>%
+      dplyr::rename(., "year" = "Year")
+    
+    pred_stats_out$CorrCoeff_Presence[i]<- cor(obs_pred0$Predicted_ProbPresence, obs_pred0$Presence)
+    pred_stats_out$AUC[i]<- round(AUC(y_pred = obs_pred0$Predicted_ProbPresence, y_true = obs_pred0$Presence), 2)
+    pred_stats_out$RMSE_Presence[i]<- round(accuracy(obs_pred0$Predicted_ProbPresence, obs_pred0$Presence)[,'RMSE'], 2)
+    pred_stats_out$CorrCoeff_Biomass[i]<- cor(obs_pred0$Predicted_Biomass, obs_pred0$Biomass)
+    pred_stats_out$RMSE_Biomass[i]<- round(accuracy(obs_pred0$Predicted_Biomass, obs_pred0$Biomass)[,'RMSE'], 2)
+    pred_stats_out$MASE_Biomass[i]<- round(mase_func_simp(df = obs_pred0, obs = "Biomass", mod = "Predicted_Biomass"), 2)
+    
+    # A Taylor Diagram to look at predictive skill in biomass
+    taylor_diag0<- taylor_diagram_func(dat = obs_pred0, obs = "Biomass", mod = "Predicted_Biomass", pt.col = "#d95f02", out.file = paste0(out_dir_use, nice_category_names, "_TaylorDiagram.jpg"))
+    
+    # Extracting and plotting predicted density at knot locations, smoothed over a regular grid
+    xlim_use<- c(as.numeric(st_bbox(menh)$xmin), as.numeric(st_bbox(menh)$xmax))
+    ylim_use<- c(as.numeric(st_bbox(menh)$ymin), as.numeric(st_bbox(menh)$ymax))
+    vast_density_plot<- vast_fit_plot_spatial(vast_fit = vast_fitted_hab_covs, spatial_var = "D_gct", nice_category_names = nice_category_names, mask = menh_chull, all_times = as.character(unique(vast_sample_data$Year)), plot_times = NULL, land_sf = land, xlim = xlim_use, ylim = ylim_use, x_dim_length = 715, y_dim_length = 733, lab_lon = -67.5, lab_lat = 43, panel_or_gif = "panel", out_dir = out_dir_use, land_color = "#d9d9d9", panel_cols = 4, panel_rows = 5)
+  
+    # Extracting stratified biomass indices and plotting as a time series
+    biomass_indices<- get_vast_index_timeseries(vast_fit = vast_fitted_hab_covs, all_times = unique(vast_sample_data$Year), nice_category_names = nice_category_names, index_scale = c("raw"), out_dir = out_dir_use)
+    
+    plot_vast_index_timeseries(index_res_df = biomass_indices, index_scale = "raw", nice_category_names = nice_category_names, nice_xlab = "Year", nice_ylab= "Biomass index (metric tons)", paneling = "none", color_pal = NULL, out_dir = out_dir_use)
+    
+    # Extracting center of gravity
+    vast_cog_plot<- vast_plot_cog(vast_fit = vast_fitted_hab_covs, all_times = unique(vast_sample_data$Year), summarize = TRUE, land_sf = land, xlim = xlim_use, ylim = ylim_use, nice_category_names = nice_category_names, land_color = "#d9d9d9", color_pal = NULL, out_dir = out_dir_use)
+  }
+}
+
+# Write out prediction stats table
+write.csv(pred_stats_out, paste0(out_dir_use, "PredictionStatsTable.csv"))
+```
+
+### Species overlap metrics
+After fitting the models to our focal species, we can analyze the model predictions to better understand changes in the spatial overlap between focal predator and prey species. To do this, we first extract predictions from fitted model objects. We then run through a suite of 10 metrics [Carroll et al. 2019](https://doi.org/10.1111/geb.12984), which collectively describe species overlap and co-occurrence patterns for both the presence/absence of a species as well as the local density. In combination, these metrics help us better understand changing species interactions within the Maine-New Hampshire survey domain across multiple spatial and temporal scales.
+
+```{r, eval = eval_use}
+# First, we need to get the information we need from each of the fitted model objects. 
+mod_fits<- list.files(path = out_dir, pattern = "fitted_vast.rds", full.names = TRUE)
+
+for(i in seq_along(mod_fits)){
+  # Load fitted model
+  mod_temp<- readRDS(mod_fits[[i]])
+  
+  # First, presence/absence piece then biomass
+  pred_prey_pres_df_temp<- vast_prep_overlap_data(vast_fit = mod_temp, response = "R1_gct")
+  names_new<- c(paste(sub("_fitted_vast.rds", "", sub(".*/", "", mod_fits[[i]])), "R1_gct", sep = "_"),
+                paste(sub("_fitted_vast.rds", "", sub(".*/", "", mod_fits[[i]])), "Presence_Absence", sep = "_"))
+  colnames(pred_prey_pres_df_temp)[c(3, 5)]<- names_new
+  
+  # Biomass
+  pred_prey_bio_df_temp<- vast_prep_overlap_data(vast_fit = mod_temp, response = "D_gct")
+  names_new<- c(paste(sub("_fitted_vast.rds", "", sub(".*/", "", mod_fits[[i]])), "D_gct", sep = "_"),
+                paste(sub("_fitted_vast.rds", "", sub(".*/", "", mod_fits[[i]])), "Density", sep = "_"))
+  colnames(pred_prey_bio_df_temp)[c(3, 5)]<- names_new
+  
+  if(i == 1){
+    pred_prey_pres_df<- pred_prey_pres_df_temp
+    pred_prey_bio_df<- pred_prey_bio_df_temp
+  } else {
+    pred_prey_pres_df<- pred_prey_pres_df %>%
+      left_join(., pred_prey_pres_df_temp)
+    pred_prey_bio_df<- pred_prey_bio_df %>%
+      left_join(., pred_prey_bio_df_temp)
+  }
+}
+
+# Armed with that, we can now calculate the different metrics...
+str(pred_prey_bio_df)
+str(pred_prey_pres_df)
+
+# Biomass metrics -- local index of collocation (loc_collocfn), assymetrical alpha (asymmalpha_overlapfn), biomass overlap (biomass_overlapfn), Hurlbert's overlap (hurlbert_overlapfn), Schoener's D (schoeners_overlapfn), Bhattacharyya's coefficient (bhatta_coeffn), AB ratio (AB_overlapfn). This is terrifyingly ugly for now, but going with function over beauty for now!!
+pred_prey_bio_out<- pred_prey_bio_df %>%
+  group_by(year) %>%
+  mutate(., Lob_Cod_LocalColloc = loc_collocfn(prey = `lobster american_Density`, pred = `cod atlantic_Density`),
+         Lob_SpinyDog_LocalColloc = loc_collocfn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`),
+         Lob_Sculpin_LocalColloc = loc_collocfn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`),
+         Lob_LittleSkate_LocalColloc = loc_collocfn(prey = `lobster american_Density`, pred = `skate little_Density`),
+         Lob_WinterSkate_LocalColloc = loc_collocfn(prey = `lobster american_Density`, pred = `skate winter_Density`),
+         Lob_Cod_Alpha = asymmalpha_overlapfn(prey = `lobster american_Density`, pred = `cod atlantic_Density`),
+         Lob_SpinyDog_Alpha = asymmalpha_overlapfn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`),
+         Lob_Sculpin_Alpha = asymmalpha_overlapfn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`),
+         Lob_LittleSkate_Alpha = asymmalpha_overlapfn(prey = `lobster american_Density`, pred = `skate little_Density`),
+         Lob_WinterSkate_Alpha = asymmalpha_overlapfn(prey = `lobster american_Density`, pred = `skate winter_Density`),
+         Lob_Cod_BioOvr = biomass_overlapfn(prey = `lobster american_Density`, pred = `cod atlantic_Density`),
+         Lob_SpinyDog_BioOvr = biomass_overlapfn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`),
+         Lob_Sculpin_BioOvr = biomass_overlapfn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`),
+         Lob_LittleSkate_BioOvr = biomass_overlapfn(prey = `lobster american_Density`, pred = `skate little_Density`),
+         Lob_WinterSkate_BioOvr = biomass_overlapfn(prey = `lobster american_Density`, pred = `skate winter_Density`),
+         Lob_Cod_SchoBio = schoeners_overlapfn(prey = `lobster american_Density`, pred = `cod atlantic_Density`),
+         Lob_SpinyDog_SchoBio = schoeners_overlapfn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`),
+         Lob_Sculpin_SchoBio = schoeners_overlapfn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`),
+         Lob_LittleSkate_SchoBio = schoeners_overlapfn(prey = `lobster american_Density`, pred = `skate little_Density`),
+         Lob_WinterSkate_SchoBio = schoeners_overlapfn(prey = `lobster american_Density`, pred = `skate winter_Density`),
+         Lob_Cod_Bhatta = bhatta_coeffn(prey = `lobster american_Density`, pred = `cod atlantic_Density`),
+         Lob_SpinyDog_Bhatta = bhatta_coeffn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`),
+         Lob_Sculpin_Bhatta = bhatta_coeffn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`),
+         Lob_LittleSkate_Bhatta = bhatta_coeffn(prey = `lobster american_Density`, pred = `skate little_Density`),
+         Lob_WinterSkate_Bhatta = bhatta_coeffn(prey = `lobster american_Density`, pred = `skate winter_Density`),
+         Lob_Cod_AB = AB_overlapfn(prey = `lobster american_Density`, pred = `cod atlantic_Density`),
+         Lob_SpinyDog_AB = AB_overlapfn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`),
+         Lob_Sculpin_AB = AB_overlapfn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`),
+         Lob_LittleSkate_AB = AB_overlapfn(prey = `lobster american_Density`, pred = `skate little_Density`),
+         Lob_WinterSkate_AB = AB_overlapfn(prey = `lobster american_Density`, pred = `skate winter_Density`),
+         Lob_Cod_Hurlbert = hurlbert_overlapfn(prey = `lobster american_Density`, pred = `cod atlantic_Density`, area = area),
+         Lob_SpinyDog_Hurlbert = hurlbert_overlapfn(prey = `lobster american_Density`, pred = `dogfish spiny_Density`, area = area),
+         Lob_Sculpin_Hurlbert = hurlbert_overlapfn(prey = `lobster american_Density`, pred = `sculpin longhorn_Density`, area = area),
+         Lob_LittleSkate_Hurlbert = hurlbert_overlapfn(prey = `lobster american_Density`, pred = `skate little_Density`, area = area),
+         Lob_WinterSkate_Hurlbert = hurlbert_overlapfn(prey = `lobster american_Density`, pred = `skate winter_Density`, area = area)) %>% 
+  group_by(., year) %>%
+  summarize_at(., vars(Lob_Cod_LocalColloc:Lob_WinterSkate_Hurlbert), mean, na.rm = TRUE)
+
+# Gather and plot?
+pred_prey_plot_df<- pred_prey_bio_out %>%
+  pivot_longer(., -year, names_to = "OverlapSpeciesMetric", values_to = "Value")
+pred_prey_plot_df$Metric<- sub(".*_", "", pred_prey_plot_df$OverlapSpeciesMetric)
+pred_prey_plot_df$SpeciesComp<- sub("_[^_]+$", "", pred_prey_plot_df$OverlapSpeciesMetric)
+
+bio_ovr_plots<- ggplot() +
+  geom_point(data = pred_prey_plot_df, aes(x = year, y = Value, color = SpeciesComp, group = SpeciesComp)) +
+  geom_line(data = pred_prey_plot_df, aes(x = year, y = Value, color = SpeciesComp, group = SpeciesComp)) +
+  scale_color_manual(name = "Lobster - predator interaction", values = c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00')) +
+  facet_wrap(~Metric, scales = "free_y") +
+  theme_bw()
+ggsave(bio_ovr_plots, file = paste(out_dir, "BiomassOverlapSummaries", ".jpg", sep = ""))
+
+# Presence metrics -- area overlap (area_overlapfn), range overlap (range_overlapfn), Schoener's D (schoeners_overlapfn), Bhattacharyya's coefficient (bhatta_coeffn)
+pred_prey_pres_out<- pred_prey_pres_df %>%
+  group_by(year) %>%
+  mutate(., Lob_Cod_AreaOvr = area_overlapfn(prey = `lobster american_Presence_Absence`, pred = `cod atlantic_Presence_Absence`, area = area),
+         Lob_SpinyDog_AreaOvr = area_overlapfn(prey = `lobster american_Presence_Absence`, pred = `dogfish spiny_Presence_Absence`, area = area),
+         Lob_Sculpin_AreaOvr = area_overlapfn(prey = `lobster american_Presence_Absence`, pred = `sculpin longhorn_Presence_Absence`, area = area),
+         Lob_LittleSkate_AreaOvr = area_overlapfn(prey = `lobster american_Presence_Absence`, pred = `skate little_Presence_Absence`, area = area),
+         Lob_WinterSkate_AreaOvr = area_overlapfn(prey = `lobster american_Presence_Absence`, pred = `skate winter_Presence_Absence`, area = area),
+         Lob_Cod_RangeOvr = range_overlapfn(prey = `lobster american_Presence_Absence`, pred = `cod atlantic_Presence_Absence`, area = area),
+         Lob_SpinyDog_RangeOvr = range_overlapfn(prey = `lobster american_Presence_Absence`, pred = `dogfish spiny_Presence_Absence`, area = area),
+         Lob_Sculpin_RangeOvr = range_overlapfn(prey = `lobster american_Presence_Absence`, pred = `sculpin longhorn_Presence_Absence`, area = area),
+         Lob_LittleSkate_RangeOvr = range_overlapfn(prey = `lobster american_Presence_Absence`, pred = `skate little_Presence_Absence`, area = area),
+         Lob_WinterSkate_RangeOvr = range_overlapfn(prey = `lobster american_Presence_Absence`, pred = `skate winter_Presence_Absence`, area = area),
+         Lob_Cod_SchoPres = schoeners_overlapfn(prey = `lobster american_Presence_Absence`, pred = `cod atlantic_Presence_Absence`),
+         Lob_SpinyDog_SchoPres = schoeners_overlapfn(prey = `lobster american_Presence_Absence`, pred = `dogfish spiny_Presence_Absence`),
+         Lob_Sculpin_SchoPres = schoeners_overlapfn(prey = `lobster american_Presence_Absence`, pred = `sculpin longhorn_Presence_Absence`),
+         Lob_LittleSkate_SchoPres = schoeners_overlapfn(prey = `lobster american_Presence_Absence`, pred = `skate little_Presence_Absence`),
+         Lob_WinterSkate_SchoPres = schoeners_overlapfn(prey = `lobster american_Presence_Absence`, pred = `skate winter_Presence_Absence`),
+         Lob_Cod_BhattaPres = bhatta_coeffn(prey = `lobster american_Presence_Absence`, pred = `cod atlantic_Presence_Absence`),
+         Lob_SpinyDog_BhattaPres = bhatta_coeffn(prey = `lobster american_Presence_Absence`, pred = `dogfish spiny_Presence_Absence`),
+         Lob_Sculpin_BhattaPres = bhatta_coeffn(prey = `lobster american_Presence_Absence`, pred = `sculpin longhorn_Presence_Absence`),
+         Lob_LittleSkate_BhattaPres = bhatta_coeffn(prey = `lobster american_Presence_Absence`, pred = `skate little_Presence_Absence`),
+         Lob_WinterSkate_BhattaPres = bhatta_coeffn(prey = `lobster american_Presence_Absence`, pred = `skate winter_Presence_Absence`)) %>% 
+  group_by(., year) %>%
+  summarize_at(., vars(Lob_Cod_AreaOvr:Lob_WinterSkate_BhattaPres), mean, na.rm = TRUE)
+
+# Gather and plot?
+pred_prey_plot_df<- pred_prey_pres_out %>%
+  pivot_longer(., -year, names_to = "OverlapSpeciesMetric", values_to = "Value")
+pred_prey_plot_df$Metric<- sub(".*_", "", pred_prey_plot_df$OverlapSpeciesMetric)
+pred_prey_plot_df$SpeciesComp<- sub("_[^_]+$", "", pred_prey_plot_df$OverlapSpeciesMetric)
+
+pres_ovr_plots<- ggplot() +
+  geom_point(data = pred_prey_plot_df, aes(x = year, y = Value, color = SpeciesComp, group = SpeciesComp)) +
+  geom_line(data = pred_prey_plot_df, aes(x = year, y = Value, color = SpeciesComp, group = SpeciesComp)) +
+  scale_color_manual(name = "Lobster - predator interaction", values = c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00')) +
+  facet_wrap(~Metric, scales = "free_y") +
+  theme_bw()
+ggsave(pres_ovr_plots, file = paste(out_dir, "PresenceOverlapSummaries", ".jpg", sep = ""))
+```
+
+## Joint species model
+Rather than fitting species distribution model to each species of interest independently, we might also use more recent "joint species distribution modeling" techniques to fit one, collective model, and then analyze the results to look for potential co-occurrence patterns and evidence of species interactions. There are a number of different approaches to fit these JSDMs and we elected to continue with the VAST modeling approach, which also supports joint species distribution modeling. VAST implements these JSDMs by trying to estimate dominant persistent spatial and ephemeral spatio-temporal variability patterns and then the loadings for how each individual species influences the shared or dominant pattern. More formally, this is referred to as a spatial dynamic factor analysis technique [Thorson et al. 2016](https://doi:10.1111/geb.12464).
+
+## Data prep
+```{r, eval = eval_use}
+# Remembering what data we have...
+if(FALSE){
+  tidy_mod_data<- readRDS(here::here("", "Data/tidy_mod_data.rds"))
+}
+str(tidy_mod_data)
+
+# Filtering to species we want
+species_keep<- c("cod atlantic", "dogfish spiny", "skate winter", "skate little", "sculpin longhorn", "lobster american")
+jsdm_dat<- tidy_mod_data %>%
+  filter(., COMMON_NAME %in% species_keep) %>%
+  mutate(., COMMON_NAME_Fac = factor(COMMON_NAME, levels = species_keep))
+
+# Setting up VAST model
+# First, the field and rho configuration settings. Field config sets up the spatial/spatio-temporal components and how many factors should be estimated. Rho config sets up autoregressive structure on intercepts and spatio-temporal components.
+field_config<- c("Omega1" = 2, "Epsilon1" = 2, "Omega2" = 2, "Epsilon2" = 2)
+rho_config<- c("Beta1" = 3, "Beta2" = 3, "Epsilon1" = 0, "Epsilon2" = 0)
+    
+# Now, call the settings function 
+vast_settings<- vast_make_settings(extrap_grid = vast_extrap_grid, n_knots = 400, FieldConfig = field_config, RhoConfig = rho_config, OverdispersionConfig = c(0, 0), bias.correct = FALSE, knot_method = "samples", inla_method = "Mesh", Options = c("Calculate_Range" = TRUE), strata.limits = strata_use)
+
+# Prep the sample dataframe, we also include a "Pred_TF" column -- when Pred_TF == 1, the observation is only included in the predictions and NOT in the model fitting. This is a helpful way to do some model validation.
+pred_year_start<- 2020
+vast_sample_data<- data.frame("Year" = jsdm_dat$Year, "Lat" = jsdm_dat$DECDEG_BEGLAT, "Lon" = jsdm_dat$DECDEG_BEGLON, "Spp" = jsdm_dat$COMMON_NAME_Fac, "Biomass" = jsdm_dat$BIOMASS, "Swept" = jsdm_dat$Tow_LengthNM, "Pred_TF" = ifelse(jsdm_dat$Year < pred_year_start, 0, 1))
+
+# We will need a covariate data frame
+vast_covariate_data<- data.frame("Year" = jsdm_dat$Year, "Depth" = jsdm_dat$Depth_scale, "SST_seasonal" = jsdm_dat$SST_seasonal_scale, "BT_seasonal" = jsdm_dat$BottomTemp_seasonal_scale, "Lat" = jsdm_dat$DECDEG_BEGLAT, "Lon" = jsdm_dat$DECDEG_BEGLON)
+  
+# Model formula
+gam_degree<- 3
+hab_formula<- ~ bs(Depth, degree = 3, intercept = FALSE) + bs(SST_seasonal, degree = 3, intercept = FALSE) + bs(BT_seasonal, degree = 3, intercept = FALSE) 
+hab_env_coeffs_n<- length(attributes(terms.formula(hab_formula))$term.labels)
+  
+vast_coveff_habcovs<- vast_make_coveff(X1_coveff_vec = rep(rep(1, gam_degree), hab_env_coeffs_n), X2_coveff_vec = rep(rep(1, gam_degree), hab_env_coeffs_n), Q1_coveff_vec = NULL, Q2_coveff_vec = NULL)
+
+# Build the base model
+vast_jsdm<- fit_model_aja("settings" = vast_settings, "Method" = vast_settings$Method, "input_grid" = vast_extrap_grid, "Lat_i" = vast_sample_data[, 'Lat'], "Lon_i" = vast_sample_data[, 'Lon'], "t_i" = vast_sample_data[, 'Year'], "c_i" = as.numeric(vast_sample_data$Spp)-1, "b_i" = vast_sample_data[, 'Biomass'], "a_i" = vast_sample_data[, 'Swept'], "PredTF_i" = vast_sample_data[, 'Pred_TF'], "X1config_cp" = NULL, "X2config_cp" = NULL, "covariate_data" = vast_covariate_data, "X1_formula" = hab_formula, "X2_formula" = hab_formula, "X_contrasts" = NULL, "catchability_data" = NULL, "Q1_formula" = NULL, "Q2_formula" = NULL, "Q1config_k" = vast_coveff_habcovs[['Q1config_k']], "Q2config_k" = vast_coveff_habcovs[['Q2config_k']], "newtonsteps" = 1, "getsd" = TRUE, "getReportCovariance" = TRUE, "run_model" = FALSE, "test_fit" = FALSE,  "Use_REML" = FALSE, "getJointPrecision" = TRUE, "index_shapes" = menh_regions_out, "DirPath" = here::here(""))
+
+# Check estimatability of the model parameters before moving forward
+TMBhelper::check_estimability(vast_jsdm$tmb_list$Obj)
+names(vast_jsdm$tmb_list$Lower)
+
+# Fit the model
+vast_jsdm_fit<- fit_model_aja("settings" = vast_settings, "Method" = vast_settings$Method, "input_grid" = vast_extrap_grid, "Lat_i" = vast_sample_data[, 'Lat'], "Lon_i" = vast_sample_data[, 'Lon'], "t_i" = vast_sample_data[, 'Year'], "c_i" = as.numeric(vast_sample_data$Spp)-1, "b_i" = vast_sample_data[, 'Biomass'], "a_i" = vast_sample_data[, 'Swept'], "PredTF_i" = vast_sample_data[, 'Pred_TF'], "X1config_cp" = NULL, "X2config_cp" = NULL, "covariate_data" = vast_covariate_data, "X1_formula" = hab_formula, "X2_formula" = hab_formula, "X_contrasts" = NULL, "catchability_data" = NULL, "Q1_formula" = NULL, "Q2_formula" = NULL, "Q1config_k" = vast_coveff_habcovs[['Q1config_k']], "Q2config_k" = vast_coveff_habcovs[['Q2config_k']], "newtonsteps" = 1, "getsd" = TRUE, "getReportCovariance" = TRUE, "run_model" = TRUE, "test_fit" = FALSE,  "Use_REML" = FALSE, "getJointPrecision" = TRUE, "index_shapes" = menh_regions_out, "DirPath" = here::here(""))
+
+results = plot( vast_jsdm_fit,
+  plot_set = c(3,16,17),
+  category_names = species_keep )
+
+Cov_omega1 = vast_jsdm_fit$Report$L_omega1_cf %*% t(vast_jsdm_fit$Report$L_omega1_cf)
+colnames(Cov_omega1)<- species_keep
+rownames(Cov_omega1)<- species_keep
+corr_omega1_plot<- plot(corrplot.mixed( cov2cor(Cov_omega1) ))
+plot(corr_omega1_plot), file = paste(out_dir_use, "PersistentSpatialCorrelationEncounters", ".jpg", sep = ""))
+
+
+Cov_omega2 = vast_jsdm_fit$Report$L_omega2_cf %*% t(vast_jsdm_fit$Report$L_omega2_cf)
+colnames(Cov_omega2)<- species_keep
+rownames(Cov_omega2)<- species_keep
+corrplot.mixed( cov2cor(Cov_omega2) )
+
+Cov_epsilon1 = vast_jsdm_fit$Report$L_epsilon1_cf %*% t(vast_jsdm_fit$Report$L_epsilon1_cf)
+colnames(Cov_epsilon1)<- species_keep
+rownames(Cov_epsilon1)<- species_keep
+corrplot( cov2cor(Cov_epsilon1), method="pie", type="lower")
+corrplot.mixed( cov2cor(Cov_epsilon1) )
+
+Cov_epsilon2 = vast_jsdm_fit$Report$L_epsilon2_cf %*% t(vast_jsdm_fit$Report$L_epsilon2_cf)
+colnames(Cov_epsilon2)<- species_keep
+rownames(Cov_epsilon2)<- species_keep
+corrplot( cov2cor(Cov_epsilon2), method="pie", type="lower")
+corrplot.mixed( cov2cor(Cov_epsilon2) )
+
+out_dir_use<- paste0(gmRi::research_access_paths()$mills, "Projects/ME-NH-trawl-Seagrant/Objective 3/Temp_Results/") # Box path update!!!!!
+ # Extracting stratified biomass indices and plotting as a time series
+biomass_indices<- get_vast_index_timeseries(vast_fit = vast_jsdm_fit, all_times = unique(vast_sample_data$Year), nice_category_names = species_keep, index_scale = c("raw"), out_dir = out_dir_use)
+    
+plot_vast_index_timeseries(index_res_df = biomass_indices, index_scale = "raw", nice_category_names = species_keep, nice_xlab = "Year", nice_ylab= "Biomass index (metric tons)", paneling = "none", color_pal = NULL, out_dir = out_dir_use)
+    
+xlim_use<- c(as.numeric(st_bbox(menh_chull)$xmin), as.numeric(st_bbox(menh_chull)$xmax))
+ylim_use<- c(as.numeric(st_bbox(menh_chull)$ymin), as.numeric(st_bbox(menh_chull)$ymax))
+vast_density_plot<- vast_fit_plot_spatial(vast_fit = vast_jsdm_fit, spatial_var = "D_gct", nice_category_names = paste0(species_keep, "_jsdm"), mask = menh_chull, all_times = as.character(unique(vast_sample_data$Year)), plot_times = NULL, land_sf = land, xlim = xlim_use, ylim = ylim_use, x_dim_length = 715, y_dim_length = 733, lab_lon = -67.5, lab_lat = 43, panel_or_gif = "panel", out_dir = out_dir_use, land_color = "#d9d9d9", panel_cols = 4, panel_rows = 5)
+
+
+
+
+
+
+
+plot.new()
+Q = plot_quantile_diagnostic(TmbData = vast_jsdm_fit$data_list, Report = vast_jsdm_fit$tmb_list$Obj$report(), FileName_PP = "Posterior_Predictive", FileName_Phist = "Posterior_Predictive-Histogram", FileName_QQ = "Q-Q_plot", FileName_Qhist = "Q-Q_hist")
+
+Cor_List = summarize_covariance( Report=Report, ParHat=Obj$env$parList(), Data=TmbData, SD=SDr, plot_cor=TRUE,figname = "Cor", category_names=levels(dat$spp), plotdir=fp, mgp=c(2,0.5,0), tck=-0.02, oma=c(0,5,2,2) )
+Cov_List = summarize_covariance( Report=Report, ParHat=Obj$env$parList(), Data=TmbData, SD=SDr, plot_cor=FALSE,figname = "Cov", category_names=levels(dat$spp), plotdir=fp, mgp=c(2,0.5,0), tck=-0.02, oma=c(0,5,2,2) )
+
+# Jim's ordination example for trouble shooting...
+example = load_example( data_set="five_species_ordination" )
+
+# Make settings
+settings = make_settings( n_x = 50, 
+  Region = example$Region, 
+  purpose = "ordination",
+  strata.limits = example$strata.limits, 
+  n_categories = 2 )
+
+# Modify settings to allow model to run faster for demo 
+settings$FieldConfig['Beta',] = "IID"
+settings$FieldConfig['Epsilon',] = 0
+settings$RhoConfig[] = 0
+
+# Run model
+fit = fit_model( settings = settings, 
+  Lat_i = example$sampling_data[,'Lat'], 
+  Lon_i = example$sampling_data[,'Lon'],
+  t_i = example$sampling_data[,'Year'], 
+  c_i = as.numeric(example$sampling_data[,"species_number"])-1,
+  b_i = example$sampling_data[,'Catch_KG'], 
+  a_i = example$sampling_data[,'AreaSwept_km2'],
+  newtonsteps = 0,
+  getsd = FALSE )
+
+# Plot results
+results = plot( fit,
+  plot_set = c(3,16,17),
+  category_names = c("pollock", "cod", "arrowtooth", "snow_crab", "yellowfin") )
+
+# Plot correlations (showing Omega1 as example)
+require(corrplot)
+Cov_omega1 = fit$Report$L_omega1_cf %*% t(fit$Report$L_omega1_cf)
+corrplot( cov2cor(Cov_omega1), method="pie", type="lower")
+corrplot.mixed( cov2cor(Cov_omega1) )
