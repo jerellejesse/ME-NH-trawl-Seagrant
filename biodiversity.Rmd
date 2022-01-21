@@ -1,14 +1,16 @@
 ---
-title: "Untitled"
+pagetitle: "Trawl Biodiversity Metrics for Landings Comparison"
 author: "Jerelle Jesse"
-date: "1/20/2022"
-output: html_document
+output:
+  html_document: 
+    toc: true
+    toc_float: true
 editor_options: 
   chunk_output_type: console
 ---
 
 ## Diveristy metrics
-```{r}
+```{r setup, include=FALSE}
 library(here)
 library(ggplot2)
 library(dplyr)
@@ -204,7 +206,7 @@ tax.distinct
 ```
 
 Combo plot
-```{r}
+```{r echo=FALSE, message=FALSE}
 library(reshape2)
 library(gridExtra)
 
