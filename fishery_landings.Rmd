@@ -97,7 +97,7 @@ ggplot()+ geom_line(data=richness, aes(year, richness))+
 richness<-group_by(landings_total, year)%>%
   summarise(richness=length(unique(species)))
 
-rich<-ggplot()+ geom_line(data=richness, aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+rich<-ggplot()+ geom_line(data=subset(richness, year<2020), aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 ```
 
@@ -117,7 +117,7 @@ shannon<-group_by(landings_total, year,species)%>%
   mutate(total=sum(species_total),prop=species_total/total)%>%
   summarise(shannon=-1*(sum(prop*log(prop))))
 
-diversity<-ggplot()+geom_line(data=shannon, aes(year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+diversity<-ggplot()+geom_line(data=subset(shannon, year<2020), aes(year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 ```
 
@@ -140,7 +140,7 @@ simpson<-group_by(landings_total, year,species)%>%
    
 ggplot()+geom_line(data=simpson, aes(year, simpsonD))+theme_classic()
 
-evenness<-ggplot()+geom_line(data=simpson, aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+evenness<-ggplot()+geom_line(data=subset(simpson, year<2020), aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 
 ```
@@ -252,7 +252,7 @@ colnames(d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
 
 write.csv(d, here("Data/tax_metrics.csv"))
 
-tax.distinct<-ggplot()+geom_line(data=d, aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+tax.distinct<-ggplot()+geom_line(data=subset(d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
                                                                                      
 
 ```

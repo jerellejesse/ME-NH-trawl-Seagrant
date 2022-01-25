@@ -86,6 +86,32 @@ data.scores$Region_new=trawl_data_arrange$REGION_NEW
 data.scores$Region_year=trawl_data_arrange$REGION_YEAR
 data.scores$Season_year=trawl_data_arrange$SEASON_YEAR
 
+
+
+#calculate center of ellipse for each region/year grouping
+data.scores_2<-group_by(data.scores, Region_new, Year_groups, Season)%>%
+   mutate(indicator=cur_group_id())
+id<-select(data.scores_2, Region_new, Year_groups,Season, indicator)
+id<-unique(id)
+
+ctr<-NULL
+Ncombo<-length(unique(data.scores_2$indicator))
+
+for (i in 1:Ncombo) {
+ combos<- filter(data.scores_2, indicator==i)%>%
+   ungroup()%>%
+   select(1:2)
+ 
+  ctr[[i]]<-MASS::cov.trob(combos)$center
+  
+}
+
+d<-as.data.frame(ctr)
+d<-as.data.frame(t(d))
+d$indicator<-seq(1:24)
+rownames(d)<-NULL
+centers<-full_join(d,id)
+
 ```
 
 ### Plots
@@ -96,23 +122,74 @@ data.scores$Season_year=trawl_data_arrange$SEASON_YEAR
 data.scores_region<-filter(data.scores,Region_new!="Penobscot Bay")%>%
   filter(Season=="Spring")
 
+#calculate center of ellipse for each region/year grouping
+data.scores_2<-group_by(data.scores_region, Region_new, Year_groups, Season)%>%
+   mutate(indicator=cur_group_id())
+id<-select(data.scores_2, Region_new, Year_groups,Season, indicator)
+id<-unique(id)
+
+ctr<-NULL
+Ncombo<-length(unique(data.scores_2$indicator))
+
+for (i in 1:Ncombo) {
+ combos<- filter(data.scores_2, indicator==i)%>%
+   ungroup()%>%
+   select(1:2)
+ 
+  ctr[[i]]<-MASS::cov.trob(combos)$center
+  
+}
+
+d<-as.data.frame(ctr)
+d<-as.data.frame(t(d))
+d$indicator<-seq(1:8)
+rownames(d)<-NULL
+centers<-full_join(d,id)
+
 p1 <- ggplot() + 
   geom_point(data=data.scores_region, aes(x = NMDS1, y = NMDS2, shape=factor(Year_groups),color=factor(Region_new)),size = 3)+ 
   #geom_mark_ellipse(data=data.scores_region,aes(x=NMDS1,y=NMDS2,color=factor(Region_new)), size=1, alpha=0.15)+
   stat_ellipse(data=data.scores_region, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   scale_color_colorblind()+
-  labs(x = "NMDS1", colour = "Region", y = "NMDS2", shape = "Year", title="Spring")
+  labs(x = "NMDS1", colour = "Region", y = "NMDS2", shape = "Year", title="Spring")+
+  geom_point(data=centers, aes(NMDS1, NMDS2, shape=Year_groups, color=Region_new), size=7)
 
 #Fall
 data.scores_region<-filter(data.scores,Region_new!="Penobscot Bay")%>%
   filter(Season=="Fall")
+
+#calculate center of ellipse for each region/year grouping
+data.scores_2<-group_by(data.scores_region, Region_new, Year_groups, Season)%>%
+   mutate(indicator=cur_group_id())
+id<-select(data.scores_2, Region_new, Year_groups,Season, indicator)
+id<-unique(id)
+
+ctr<-NULL
+Ncombo<-length(unique(data.scores_2$indicator))
+
+for (i in 1:Ncombo) {
+ combos<- filter(data.scores_2, indicator==i)%>%
+   ungroup()%>%
+   select(1:2)
+ 
+  ctr[[i]]<-MASS::cov.trob(combos)$center
+  
+}
+
+d<-as.data.frame(ctr)
+d<-as.data.frame(t(d))
+d$indicator<-seq(1:8)
+rownames(d)<-NULL
+centers<-full_join(d,id)
+
 
 p2 <- ggplot() + 
   geom_point(data=data.scores_region, aes(x = NMDS1, y = NMDS2, shape=factor(Year_groups),color=factor(Region_new)),size = 3)+ 
   #geom_mark_ellipse(data=data.scores_region,aes(x=NMDS1,y=NMDS2,color=factor(Region_new)), size=1, alpha=0.15)+
   stat_ellipse(data=data.scores_region, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   scale_color_colorblind()+
-  labs(x = "NMDS1", colour = "Region", y = "NMDS2", shape = "Year",title="Fall")
+  labs(x = "NMDS1", colour = "Region", y = "NMDS2", shape = "Year",title="Fall")+
+  geom_point(data=centers, aes(NMDS1, NMDS2, shape=Year_groups, color=Region_new), size=7)
 
 
 #Spring
@@ -165,6 +242,9 @@ p2
 p3
 p4
 
+
+
+
 ```
 
 #### Time
@@ -173,25 +253,87 @@ p4
 data.scores_region<-filter(data.scores,Region_new!="Penobscot Bay")%>%
   filter(Season=="Spring")
 
+#centers for year plots
+data.scores_2<-group_by(data.scores_region, Year_groups, Season)%>%
+   mutate(indicator=cur_group_id())
+id<-select(data.scores_2, Year_groups,Season, indicator)
+id<-unique(id)
+
+ctr<-NULL
+Ncombo<-length(unique(data.scores_2$indicator))
+
+for (i in 1:Ncombo) {
+ combos<- filter(data.scores_2, indicator==i)%>%
+   ungroup()%>%
+   select(1:2)
+ 
+  ctr[[i]]<-MASS::cov.trob(combos)$center
+  
+}
+
+d<-as.data.frame(ctr)
+d<-as.data.frame(t(d))
+d$indicator<-seq(1:4)
+rownames(d)<-NULL
+centers<-full_join(d,id)
+
+
+
 p1 <- ggplot() + 
   geom_point(data=data.scores_region, aes(x = NMDS1, y = NMDS2,color=factor(Year_groups), shape=factor(Region_new)),size = 3)+ 
   #geom_mark_ellipse(data=data.scores_region,aes(x=NMDS1,y=NMDS2,color=factor(Year_groups)), size=1, alpha=0.15)+
   stat_ellipse(data=data.scores_region, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   scale_color_colorblind()+
-  labs(x = "NMDS1", colour = "Year", y = "NMDS2", shape = "Region", title="Spring")
+  labs(x = "NMDS1", colour = "Year", y = "NMDS2", shape = "Region", title="Spring")+
+  geom_point(data=centers, aes(NMDS1, NMDS2, color=Year_groups), size=5)
+
 
 #Fall
 data.scores_region<-filter(data.scores,Region_new!="Penobscot Bay")%>%
   filter(Season=="Fall")
+
+#centers for year plots
+data.scores_2<-group_by(data.scores_region, Year_groups, Season)%>%
+   mutate(indicator=cur_group_id())
+id<-select(data.scores_2, Year_groups,Season, indicator)
+id<-unique(id)
+
+ctr<-NULL
+Ncombo<-length(unique(data.scores_2$indicator))
+
+for (i in 1:Ncombo) {
+ combos<- filter(data.scores_2, indicator==i)%>%
+   ungroup()%>%
+   select(1:2)
+ 
+  ctr[[i]]<-MASS::cov.trob(combos)$center
+  
+}
+
+d<-as.data.frame(ctr)
+d<-as.data.frame(t(d))
+d$indicator<-seq(1:4)
+rownames(d)<-NULL
+centers<-full_join(d,id)
 
 p2 <- ggplot() + 
   geom_point(data=data.scores_region, aes(x = NMDS1, y = NMDS2,color=factor(Year_groups), shape=factor(Region_new)),size = 3)+ 
   #geom_mark_ellipse(data=data.scores_region,aes(x=NMDS1,y=NMDS2,color=factor(Year_groups)), size=1, alpha=0.15)+
   stat_ellipse(data=data.scores_region, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   scale_color_colorblind()+
-  labs(x = "NMDS1", colour = "Year", y = "NMDS2", shape = "Region", title="Fall")
+  labs(x = "NMDS1", colour = "Year", y = "NMDS2", shape = "Region", title="Fall")+
+  geom_point(data=centers, aes(NMDS1, NMDS2, color=Year_groups), size=5)
+  
+
 p1
 p2
+
+
+
+
+
+
+
 ```
 
 #### Season

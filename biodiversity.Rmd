@@ -16,6 +16,8 @@ library(ggplot2)
 library(dplyr)
 data<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
 
+
+
 ```
 
 ### Species richness
@@ -28,7 +30,7 @@ ggplot()+ geom_line(data=richness, aes(Year, richness))+facet_grid(rows = vars(S
 richness<-group_by(data, Year)%>%
   summarise(richness=length(unique(COMMON_NAME)))
 
-rich<-ggplot()+ geom_line(data=subset(richness,Year>2005), aes(Year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+rich<-ggplot()+ geom_line(data=subset(richness,Year>2005 & Year<2020), aes(Year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 rich
 ```
@@ -51,7 +53,7 @@ shannon<-group_by(data, Year,COMMON_NAME)%>%
   mutate(total=sum(species_total),prop=(species_total/total))%>%
   summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))
 
-diversity<-ggplot()+geom_line(data=subset(shannon,Year>2005), aes(Year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+diversity<-ggplot()+geom_line(data=subset(shannon,Year>2005 & Year <2020), aes(Year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 diversity
 
@@ -81,7 +83,7 @@ simpson<-group_by(data, Year,COMMON_NAME)%>%
    
 ggplot()+geom_line(data=simpson, aes(Year, simpsonD))+theme_classic()
 
-evenness<-ggplot()+geom_line(data=subset(simpson,Year>2005), aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+evenness<-ggplot()+geom_line(data=subset(simpson,Year>2005 & Year <2020), aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 evenness
 
@@ -200,7 +202,7 @@ colnames(d)<-c("Year", "delta", "delta_star", "delta_plus","delta_var")
 
 #write.csv(d, here("Data/tax_metrics.csv"))
 
-tax.distinct<-ggplot()+geom_line(data=subset(d,Year>2005), aes(Year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+tax.distinct<-ggplot()+geom_line(data=subset(d,Year>2005 & Year <2020), aes(Year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
                                                                                      
 tax.distinct
 ```
