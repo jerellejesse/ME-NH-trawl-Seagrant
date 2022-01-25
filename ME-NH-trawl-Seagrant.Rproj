@@ -13,4 +13,4 @@ RnwWeave: Sweave
 LaTeX: pdfLaTeX
 
 BuildType: Website
-WebsitePath: docs
+WebsitePath: C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant
