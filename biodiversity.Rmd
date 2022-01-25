@@ -25,7 +25,7 @@ data<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
 richness<-group_by(data, Year,Season)%>%
   summarise(richness=length(unique(COMMON_NAME)))
 
-ggplot()+ geom_line(data=richness, aes(Year, richness))+facet_grid(rows = vars(Season))
+ggplot()+ geom_line(data=richness, aes(Year, richness))+facet_grid(rows = vars(Season))+theme_bw()
 
 richness<-group_by(data, Year)%>%
   summarise(richness=length(unique(COMMON_NAME)))
@@ -45,7 +45,7 @@ shannon<-group_by(data, Year,Season,COMMON_NAME)%>%
   summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))
 
 ggplot()+geom_line(data=shannon, aes(Year, shannon))+ 
-  facet_grid(rows=vars(Season))
+  facet_grid(rows=vars(Season))+theme_bw()
 
 shannon<-group_by(data, Year,COMMON_NAME)%>%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
@@ -71,7 +71,7 @@ simpson<-group_by(data, Year, Season, COMMON_NAME)%>%
 # this code is not working properly, very high simpson's d and e??
 
 ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
-  facet_grid(rows=vars(Season))
+  facet_grid(rows=vars(Season))+theme_bw()
 
 simpson<-group_by(data, Year,COMMON_NAME)%>%
   summarise(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>% #aggregate to get yearly species totals
