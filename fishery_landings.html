@@ -420,7 +420,7 @@ div.tocify {
 </div>
 <div id="shannon-weiner-diversity" class="section level3">
 <h3>Shannon-Weiner diversity</h3>
-<p>Based on weight not abundance of species <img src="fishery_landings_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 </div>
 <div id="simpsons-diversity-and-evenness" class="section level3">
 <h3>Simpson’s diversity and evenness</h3>
@@ -428,8 +428,6 @@ div.tocify {
 </div>
 <div id="average-taxinomic-distinctness" class="section level3">
 <h3>Average taxinomic distinctness</h3>
-<pre><code>## Warning: package &#39;taxize&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.1.2</code></pre>
 <pre><code>## ==  42 queries  ==============
 ## v  Found:  Gadus morhua
 ## v  Found:  Cancer irroratus
@@ -480,48 +478,112 @@ div.tocify {
 ## * Not Found: 0</code></pre>
 <p><img src="fishery_landings_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>Combo plot</p>
-<pre class="r"><code>library(reshape2)
-library(gridExtra)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;gridExtra&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+</div>
+</div>
+<div id="regional-landings-diveristy" class="section level2">
+<h2>Regional landings diveristy</h2>
+<p>Landings assigned to survey regions based on county lines.</p>
+<p><img src="trawl_survey.PNG" alt="Trawl survey regions with counties outlined" /> <img src="ME_counties.png" alt="Maine counties" /></p>
+<div id="species-richness-1" class="section level3">
+<h3>Species richness</h3>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="shannon-weiner-diversity-1" class="section level3">
+<h3>Shannon-Weiner diversity</h3>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="simpsons-diversity-and-evenness-1" class="section level3">
+<h3>Simpson’s diversity and evenness</h3>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="average-taxinomic-distinctness-1" class="section level3">
+<h3>Average taxinomic distinctness</h3>
+<pre><code>## ==  42 queries  ==============
+## v  Found:  Gadus morhua
+## v  Found:  Cancer irroratus
+## v  Found:  Cancer borealis
+## v  Found:  Brosme brosme
+## v  Found:  Anguilla rostrata
+## v  Found:  Glyptocephalus cynoglossus
+## v  Found:  Pseudopleuronectes americanus
+## v  Found:  Melanogrammus aeglefinus
+## v  Found:  Urophycis tenuis
+## v  Found:  Hippoglossus hippoglossus
+## v  Found:  Clupea harengus
+## v  Found:  Homarus americanus
+## v  Found:  Lophius americanus
+## v  Found:  Hippoglossoides platessoides
+## v  Found:  Pollachius virens
+## v  Found:  Sebastes fasciatus
+## v  Found:  Placopecten magellanicus
+## v  Found:  Pandalus borealis
+## v  Found:  Anarhichas lupus
+## v  Found:  Mytilus edulis
+## v  Found:  Strongylocentrotus droebachiensis
+## v  Found:  Crassostrea virginica
+## v  Found:  Mercenaria mercenaria
+## v  Found:  Limanda ferruginea
+## v  Found:  Merluccius bilinearis
+## v  Found:  Scomber scombrus
+## v  Found:  Cucumaria frondosa
+## v  Found:  Pomatomus saltatrix
+## v  Found:  Brevoortia tyrannus
+## v  Found:  Arctica islandica
+## v  Found:  Ensis directus
+## v  Found:  Squalus acanthias
+## v  Found:  Myxine glutinosa
+## v  Found:  Ostrea edulis
+## v  Found:  Littorina littorea
+## v  Found:  Loligo pealeii
+## v  Found:  Thunnus thynnus
+## v  Found:  Xiphias gladius
+## v  Found:  Buccinum undatum
+## v  Found:  Illex illecebrosus
+## v  Found:  Thunnus obesus
+## v  Found:  Spisula solidissima
+## ==  Results  =================
 ## 
-##     combine</code></pre>
-<pre class="r"><code>all_metrics&lt;-full_join(richness,shannon, by=&quot;year&quot;)%&gt;%
-  full_join(simpson)%&gt;%
-  full_join(d)</code></pre>
-<pre><code>## Joining, by = &quot;year&quot;</code></pre>
-<pre><code>## Joining, by = &quot;year&quot;</code></pre>
-<pre class="r"><code>all_melt&lt;-melt(all_metrics, id=&quot;year&quot;)
-
-ggplot()+geom_line(data=all_melt, aes(year,value))+facet_grid(rows = vars(variable), scales=&quot;free&quot;)+theme_bw()</code></pre>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<pre class="r"><code>grid.arrange(rich, diversity, evenness,tax.distinct, nrow=4)</code></pre>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+## * Total: 42 
+## * Found: 42 
+## * Not Found: 0</code></pre>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="east-of-penobscot-bay" class="section level3">
+<h3>East of Penobscot Bay</h3>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="west-of-penobscot-bay" class="section level3">
+<h3>West of Penobscot Bay</h3>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="penobscot-bay" class="section level3">
+<h3>Penobscot Bay</h3>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 </div>
 <div id="functional-groups" class="section level2">
 <h2>Functional Groups</h2>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-18-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
 <div id="benthivore" class="section level3">
 <h3>Benthivore</h3>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-11-2.png" width="672" /> <br></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-19-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-19-2.png" width="672" /> <br></p>
 </div>
 <div id="benthos" class="section level3">
 <h3>Benthos</h3>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-12-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-12-2.png" width="672" /> <br></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-20-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-20-2.png" width="672" /> <br></p>
 </div>
 <div id="piscivore" class="section level3">
 <h3>Piscivore</h3>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-13-2.png" width="672" /> <br></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-21-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-21-2.png" width="672" /> <br></p>
 </div>
 <div id="planktivore" class="section level3">
 <h3>Planktivore</h3>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-14-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-14-2.png" width="672" /> <br></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-22-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-22-2.png" width="672" /> <br></p>
 </div>
 <div id="undefined" class="section level3">
 <h3>Undefined</h3>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-15-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-23-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-23-2.png" width="672" /></p>
 </div>
 </div>
 </div>

@@ -78,8 +78,8 @@ knitr::opts_chunk$set(echo = TRUE)
 - calculated with catch weight not abundance
 - richness, shannon-weiner diversity, simpson's evenness, average taxonomic distinctness
 - compare to new trawl biodiversity metrics calculated as fall and spring combined and with weight for most relevant comparison to landings metrics
+- trawl region definitions applied to landings data for comparison
 - Functional groups defined for landings and plots based on NOAA IEA feeding guilds
-- want to look at trawl region definitions for landings comparison next
 
 #### Data
 

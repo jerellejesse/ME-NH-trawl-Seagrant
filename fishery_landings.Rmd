@@ -103,7 +103,6 @@ rich
 ```
 
 ### Shannon-Weiner diversity
-Based on weight not abundance of species
 ```{r echo=FALSE, message=FALSE}
 shannon<-group_by(landings_total, year,county)%>%
   mutate(total=sum(weight), prop=weight/total)%>%
@@ -185,7 +184,8 @@ landings_tax<-rename(landings_total, common_name=species)%>%
 
 landings_tax_groups<-group_by(landings_tax, year,Species)%>%
   summarise(weight=sum(weight))%>%
-  mutate(indicator=cur_group_id())
+  mutate(indicator=cur_group_id())%>%
+  left_join(phylo)
 
 hauls <- unique(landings_tax_groups$indicator)   
 N_hauls <- length(hauls) # number of hauls
@@ -209,7 +209,7 @@ delta_var <- NULL
 weight_var <- NULL
 
 for (j in 1:N_hauls) {  
-diff_hauls <- landings_tax[which(landings_tax_groups$indicator == j),] #subset unique hauls/functional groups
+diff_hauls <- landings_tax_groups[which(landings_tax_groups$indicator == j),] #subset unique hauls/functional groups
 N_species[j] <- length(unique(diff_hauls$Species))# count the number of unique species in each haul (denominator)
 sub_species[j] <- N_species[j]-1
 diff <- unique(as.vector(diff_hauls$Species)) # name of each unique species 
@@ -279,6 +279,405 @@ grid.arrange(rich, diversity, evenness,tax.distinct, nrow=4)
 
 ```
 
+## Regional landings diveristy
+
+Landings assigned to survey regions based on county lines.
+
+![Trawl survey regions with counties outlined](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/trawl_survey.PNG)
+![Maine counties](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ME_counties.PNG)
+
+```{r echo=FALSE, message=FALSE}
+# add regions by county
+landings_county<-landings_total
+#table(landings_county$county)
+
+landings_county$Region<-NULL
+landings_county$Region[landings_county$county=="York"]<-1
+landings_county$Region[landings_county$county=="Cumberland"]<-2
+landings_county$Region[landings_county$county=="Sagadahoc"]<-2
+landings_county$Region[landings_county$county=="Lincoln"]<-2
+landings_county$Region[landings_county$county=="Knox"]<-3
+landings_county$Region[landings_county$county=="Waldo"]<-3
+landings_county$Region[landings_county$county=="Hancock"]<-4
+landings_county$Region[landings_county$county=="Washington"]<-5
+
+# group to east/west of Penobscot Bay
+landings_county$group<-NULL
+landings_county$group[landings_county$Region==1]<-"East"
+landings_county$group[landings_county$Region==2]<-"East"
+landings_county$group[landings_county$Region==3]<-"Penobscot"
+landings_county$group[landings_county$Region==4]<-"West"
+landings_county$group[landings_county$Region==5]<-"West"
+
+landings_county<-filter(landings_county,!is.na(landings_county$group))
+```
+
+
+### Species richness
+```{r echo=FALSE, message=FALSE}
+richness<-group_by(landings_county, group, year)%>%
+  summarise(richness=length(unique(species)))
+
+ggplot()+ geom_line(data=richness, aes(year, richness))+
+  facet_grid(rows=vars(group))+theme_bw()
+
+
+```
+
+### Shannon-Weiner diversity
+```{r echo=FALSE, message=FALSE}
+shannon<-group_by(landings_county, year,group)%>%
+  mutate(total=sum(weight), prop=weight/total)%>%
+  summarise(shannon=-1*(sum(prop*log(prop))))
+
+ggplot()+geom_line(data=shannon, aes(year, shannon))+
+  facet_grid(rows=vars(group))+theme_bw()
+
+
+```
+
+### Simpson's diversity and evenness
+```{r echo=FALSE, message=FALSE}
+
+simpson<-group_by(landings_county, year,group,species)%>%
+  summarise(species_total=sum(weight))%>% #aggregate counties to get yearly species totals for all of Maine
+  group_by(year, group)%>%
+  mutate(richness=length(unique(species)))%>%
+  mutate(total=sum(species_total))%>%
+  mutate(prop=species_total/total)%>%
+  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+
+ggplot()+geom_line(data=simpson, aes(year, simpsonE))+
+  facet_grid(rows=vars(group))+theme_bw()
+
+```
+
+### Average taxinomic distinctness
+```{r echo=FALSE, message=FALSE}
+library(taxize)
+library(purrr)
+library(mgcv)
+library(gridExtra)
+
+species<-read.csv(here("Data/species_landings.csv"))%>%
+  filter(scientific.name!="")%>%
+  filter(scientific.name!="Fucus vesiculosus")%>%
+  rename(common_name=species, Species=scientific.name)
+  
+
+diff_species<-as.vector(unique(species$Species))
+tax <- classification(diff_species, db = 'itis') 
+info <- matrix(NA)
+expand <- matrix(NA)
+specific <- matrix(NA, nrow = length(diff_species), ncol=6)
+
+
+for (i in 1:length(tax)){
+info <- tax[[i]][c('name','rank')]
+expand <- info[info$rank == 'phylum'| info$rank == 'class'| info$rank == 'order' | info$rank == 'family' | info$rank == 'genus' | info$rank == 'species',]
+specific[i,] <- as.vector(expand$name)
+
+}
+colnames(specific) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+phylo<-as.data.frame(specific)
+
+merge<-left_join(species,phylo, by="Species")
+  
+landings_tax<-rename(landings_county, common_name=species)%>%
+  full_join(merge)%>%
+  filter(!is.na(Species))
+
+
+#break into groups
+east_species<-filter(landings_tax, group=="East")%>%
+  group_by(year,group,Species)%>%
+  summarise(weight=sum(weight))%>%
+  mutate(indicator=cur_group_id())%>%
+  left_join(phylo)
+  
+west_species<-filter(landings_tax, group=="West")%>%
+  group_by(year,group,Species)%>%
+  summarise(weight=sum(weight))%>%
+  mutate(indicator=cur_group_id())%>%
+  left_join(phylo)
+
+pen_species<-filter(landings_tax, group=="Penobscot")%>%
+  group_by(year,group,Species)%>%
+  summarise(weight=sum(weight))%>%
+  mutate(indicator=cur_group_id())%>%
+  left_join(phylo)
+
+#east
+hauls <- unique(east_species$indicator)   
+N_hauls <- length(hauls) # number of hauls
+N_species <- NULL #N species
+sub_species <- NULL # N_species-1
+total <- NULL  #xixj
+numerator <- NULL #wijxixj
+x_y <- matrix(NA, nrow = 6, ncol = 6) 
+x <- NULL
+y <- NULL
+ident <- NULL
+weight <- NULL #wij
+count <- NULL
+total_weight <- NULL
+mean_weight <- NULL
+weight_var <- NULL
+delta <- NULL
+delta_star <- NULL
+delta_plus <- NULL
+delta_var <- NULL
+weight_var <- NULL
+
+for (j in 1:N_hauls) {  
+diff_hauls <- east_species[which(east_species$indicator == j),] #subset unique hauls/functional groups
+N_species[j] <- length(unique(diff_hauls$Species))# count the number of unique species in each haul (denominator)
+sub_species[j] <- N_species[j]-1
+diff <- unique(as.vector(diff_hauls$Species)) # name of each unique species 
+combos <- combn(diff, 2) # create combinations of each species/haul (for weight calc)
+
+phylo <- as.matrix(subset(diff_hauls, select = c(Phylum,Class,Order,Family,Genus, Species))) # extract phylogenetic information only
+unique_phylo <- uniquecombs(phylo) # subset by unique species information
+unique_phylo <- as.data.frame(unique_phylo)
+
+total <- NULL  # reset the length for each haul because they will be different
+weight <- NULL # reset  
+
+for (i in 1:ncol(combos)) { # for each unique combination count the number of each species 
+  total[i] <- sum(diff_hauls$Species == combos[1,i]) * sum(diff_hauls$Species == combos[2,i]) #empty vector is always length 210
+  #total[i] <- diff_hauls[diff_hauls[,22] == combos[1,i],9] * diff_hauls[diff_hauls[,22] == combos[2,i],9]
+  x <- unique_phylo[unique_phylo$Species == combos[1,i],]
+  y <- unique_phylo[unique_phylo$Species == combos[2,i],]
+  x_y <- rbind(x,y)
+  
+  for (k in 1:ncol(x_y)){ # for each combination calculate the weight value 
+    ident[k] <- identical(as.vector(x_y[1,k]), as.vector(x_y[2,k])) # determine how much of phylogenetic information is the same
+    weight[i] <- sum(ident == "FALSE") # vector of weights
+    #mean_weight[i] <- mean(weight) #rep(mean(weight),length(weight))
+    numerator[j] <- sum(total*weight) 
+    count[j] <- sum(total)
+    mean_weight[j] <- mean(weight)
+    total_weight[j] <- sum(weight)
+    weight_var[j] <- sum((weight- mean(weight))^2) 
+  }
+  delta <- (2*numerator)/(N_species*sub_species)
+  delta_star <- numerator/(count)
+  delta_plus <- (2*total_weight)/(N_species*sub_species)
+  delta_var <- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
+}
+}
+
+years<-2006:2020
+delta<-as.data.frame(delta[1:15]) # taxonomic diversity
+delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
+delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
+delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+
+east_d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
+colnames(east_d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+
+#write.csv(d, here("Data/tax_metrics.csv"))
+
+east_tax.distinct<-ggplot()+geom_line(data=subset(east_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("East\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
+                                                                        
+
+                                                                        #west
+hauls <- unique(west_species$indicator)   
+N_hauls <- length(hauls) # number of hauls
+N_species <- NULL #N species
+sub_species <- NULL # N_species-1
+total <- NULL  #xixj
+numerator <- NULL #wijxixj
+x_y <- matrix(NA, nrow = 6, ncol = 6) 
+x <- NULL
+y <- NULL
+ident <- NULL
+weight <- NULL #wij
+count <- NULL
+total_weight <- NULL
+mean_weight <- NULL
+weight_var <- NULL
+delta <- NULL
+delta_star <- NULL
+delta_plus <- NULL
+delta_var <- NULL
+weight_var <- NULL
+
+for (j in 1:N_hauls) {  
+diff_hauls <- west_species[which(west_species$indicator == j),] #subset unique hauls/functional groups
+N_species[j] <- length(unique(diff_hauls$Species))# count the number of unique species in each haul (denominator)
+sub_species[j] <- N_species[j]-1
+diff <- unique(as.vector(diff_hauls$Species)) # name of each unique species 
+combos <- combn(diff, 2) # create combinations of each species/haul (for weight calc)
+
+phylo <- as.matrix(subset(diff_hauls, select = c(Phylum,Class,Order,Family,Genus, Species))) # extract phylogenetic information only
+unique_phylo <- uniquecombs(phylo) # subset by unique species information
+unique_phylo <- as.data.frame(unique_phylo)
+
+total <- NULL  # reset the length for each haul because they will be different
+weight <- NULL # reset  
+
+for (i in 1:ncol(combos)) { # for each unique combination count the number of each species 
+  total[i] <- sum(diff_hauls$Species == combos[1,i]) * sum(diff_hauls$Species == combos[2,i]) #empty vector is always length 210
+  #total[i] <- diff_hauls[diff_hauls[,22] == combos[1,i],9] * diff_hauls[diff_hauls[,22] == combos[2,i],9]
+  x <- unique_phylo[unique_phylo$Species == combos[1,i],]
+  y <- unique_phylo[unique_phylo$Species == combos[2,i],]
+  x_y <- rbind(x,y)
+  
+  for (k in 1:ncol(x_y)){ # for each combination calculate the weight value 
+    ident[k] <- identical(as.vector(x_y[1,k]), as.vector(x_y[2,k])) # determine how much of phylogenetic information is the same
+    weight[i] <- sum(ident == "FALSE") # vector of weights
+    #mean_weight[i] <- mean(weight) #rep(mean(weight),length(weight))
+    numerator[j] <- sum(total*weight) 
+    count[j] <- sum(total)
+    mean_weight[j] <- mean(weight)
+    total_weight[j] <- sum(weight)
+    weight_var[j] <- sum((weight- mean(weight))^2) 
+  }
+  delta <- (2*numerator)/(N_species*sub_species)
+  delta_star <- numerator/(count)
+  delta_plus <- (2*total_weight)/(N_species*sub_species)
+  delta_var <- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
+}
+}
+
+years<-2006:2020
+delta<-as.data.frame(delta[1:15]) # taxonomic diversity
+delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
+delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
+delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+
+west_d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
+colnames(west_d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+
+#write.csv(d, here("Data/tax_metrics.csv"))
+
+west_tax.distinct<-ggplot()+geom_line(data=subset(west_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("West\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
+                                                                         
+                                                                        
+                                                                        #Penobscot
+hauls <- unique(pen_species$indicator)   
+N_hauls <- length(hauls) # number of hauls
+N_species <- NULL #N species
+sub_species <- NULL # N_species-1
+total <- NULL  #xixj
+numerator <- NULL #wijxixj
+x_y <- matrix(NA, nrow = 6, ncol = 6) 
+x <- NULL
+y <- NULL
+ident <- NULL
+weight <- NULL #wij
+count <- NULL
+total_weight <- NULL
+mean_weight <- NULL
+weight_var <- NULL
+delta <- NULL
+delta_star <- NULL
+delta_plus <- NULL
+delta_var <- NULL
+weight_var <- NULL
+
+for (j in 1:N_hauls) {  
+diff_hauls <- pen_species[which(pen_species$indicator == j),] #subset unique hauls/functional groups
+N_species[j] <- length(unique(diff_hauls$Species))# count the number of unique species in each haul (denominator)
+sub_species[j] <- N_species[j]-1
+diff <- unique(as.vector(diff_hauls$Species)) # name of each unique species 
+combos <- combn(diff, 2) # create combinations of each species/haul (for weight calc)
+
+phylo <- as.matrix(subset(diff_hauls, select = c(Phylum,Class,Order,Family,Genus, Species))) # extract phylogenetic information only
+unique_phylo <- uniquecombs(phylo) # subset by unique species information
+unique_phylo <- as.data.frame(unique_phylo)
+
+total <- NULL  # reset the length for each haul because they will be different
+weight <- NULL # reset  
+
+for (i in 1:ncol(combos)) { # for each unique combination count the number of each species 
+  total[i] <- sum(diff_hauls$Species == combos[1,i]) * sum(diff_hauls$Species == combos[2,i]) #empty vector is always length 210
+  #total[i] <- diff_hauls[diff_hauls[,22] == combos[1,i],9] * diff_hauls[diff_hauls[,22] == combos[2,i],9]
+  x <- unique_phylo[unique_phylo$Species == combos[1,i],]
+  y <- unique_phylo[unique_phylo$Species == combos[2,i],]
+  x_y <- rbind(x,y)
+  
+  for (k in 1:ncol(x_y)){ # for each combination calculate the weight value 
+    ident[k] <- identical(as.vector(x_y[1,k]), as.vector(x_y[2,k])) # determine how much of phylogenetic information is the same
+    weight[i] <- sum(ident == "FALSE") # vector of weights
+    #mean_weight[i] <- mean(weight) #rep(mean(weight),length(weight))
+    numerator[j] <- sum(total*weight) 
+    count[j] <- sum(total)
+    mean_weight[j] <- mean(weight)
+    total_weight[j] <- sum(weight)
+    weight_var[j] <- sum((weight- mean(weight))^2) 
+  }
+  delta <- (2*numerator)/(N_species*sub_species)
+  delta_star <- numerator/(count)
+  delta_plus <- (2*total_weight)/(N_species*sub_species)
+  delta_var <- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
+}
+}
+
+years<-2006:2020
+delta<-as.data.frame(delta[1:15]) # taxonomic diversity
+delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
+delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
+delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+
+pen_d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
+colnames(pen_d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+
+#write.csv(d, here("Data/tax_metrics.csv"))
+
+pen_tax.distinct<-ggplot()+geom_line(data=subset(pen_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Penobscot\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
+
+                                                                        grid.arrange(east_tax.distinct, west_tax.distinct, pen_tax.distinct, nrow=3)                                                                        
+```
+
+### East of Penobscot Bay
+```{r echo=FALSE, message=FALSE}
+#combo plots
+
+#east
+r<-ggplot()+geom_line(data=subset(richness, group=="East"),aes(year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+s<-ggplot()+geom_line(data=subset(shannon, group=="East"),aes(year, shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+e<-ggplot()+geom_line(data=subset(simpson, group=="East"),aes(year, simpsonE))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+t<-ggplot()+geom_line(data = east_d, aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+
+grid.arrange(r,s,e,t, nrow=4)
+
+
+```
+
+### West of Penobscot Bay
+```{r echo=FALSE, message=FALSE}
+#west
+r<-ggplot()+geom_line(data=subset(richness, group=="West"),aes(year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+s<-ggplot()+geom_line(data=subset(shannon, group=="West"),aes(year, shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+e<-ggplot()+geom_line(data=subset(simpson, group=="West"),aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+t<-ggplot()+geom_line(data = west_d, aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+
+grid.arrange(r,s,e,t, nrow=4)
+```
+
+
+### Penobscot Bay
+```{r echo=FALSE, message=FALSE}
+#pen bay
+r<-ggplot()+geom_line(data=subset(richness, group=="Penobscot"),aes(year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+s<-ggplot()+geom_line(data=subset(shannon, group=="Penobscot"),aes(year, shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+e<-ggplot()+geom_line(data=subset(simpson, group=="Penobscot"),aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+t<-ggplot()+geom_line(data = pen_d, aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+
+grid.arrange(r,s,e,t, nrow=4)
+```
+
 
 ## Functional Groups
 ```{r echo=FALSE, message=FALSE}
@@ -312,6 +711,7 @@ ggplot(year_group_prop)+
 
 
 ```
+
 
 ### Benthivore
 ```{r echo=FALSE, message=FALSE}

@@ -425,8 +425,8 @@ ano_region #regions are statistically different communities </code></pre>
 ## Number of permutations: 999
 ## 
 ## Upper quantiles of permutations (null model):
-##     90%     95%   97.5%     99% 
-## 0.00992 0.01355 0.01637 0.01961 
+##    90%    95%  97.5%    99% 
+## 0.0103 0.0140 0.0164 0.0210 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##         0%     25%     50%      75%  100%     N
@@ -468,7 +468,7 @@ ano_region_groups #regions are statistically different communities </code></pre>
 ## 
 ## Upper quantiles of permutations (null model):
 ##    90%    95%  97.5%    99% 
-## 0.0197 0.0262 0.0305 0.0367 
+## 0.0193 0.0261 0.0320 0.0366 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##                       0%    25%     50%     75%  100%     N
@@ -508,7 +508,7 @@ ano_year #years are statistically different communities</code></pre>
 ## 
 ## Upper quantiles of permutations (null model):
 ##    90%    95%  97.5%    99% 
-## 0.0206 0.0262 0.0319 0.0385 
+## 0.0212 0.0271 0.0304 0.0352 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##           0%     25%     50%      75%  100%     N
@@ -567,7 +567,7 @@ ano_year_blocks #years are statistically different communities</code></pre>
 ## 
 ## Upper quantiles of permutations (null model):
 ##    90%    95%  97.5%    99% 
-## 0.0102 0.0134 0.0168 0.0200 
+## 0.0102 0.0132 0.0161 0.0194 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##           0%     25%   50%      75%  100%     N
@@ -674,7 +674,7 @@ adonis</code></pre>
 ##                         Df SumOfSqs      R2       F Pr(&gt;F)    
 ## REGION_NEW               2   2.8660 0.09609 11.7024 0.0001 ***
 ## YEAR_GROUPS              3   3.3389 0.11194  9.0888 0.0001 ***
-## REGION_NEW:YEAR_GROUPS   6   1.2124 0.04065  1.6502 0.0036 ** 
+## REGION_NEW:YEAR_GROUPS   6   1.2124 0.04065  1.6502 0.0031 ** 
 ## Residual               183  22.4091 0.75132                   
 ## Total                  194  29.8265 1.00000                   
 ## ---
@@ -688,13 +688,13 @@ adonis</code></pre>
 ##  3rd Qu.:183.0   3rd Qu.:22.409   3rd Qu.:0.75132   3rd Qu.:10.396  
 ##  Max.   :194.0   Max.   :29.826   Max.   :1.00000   Max.   :11.702  
 ##                                                     NA&#39;s   :2       
-##      Pr(&gt;F)        
-##  Min.   :0.000100  
-##  1st Qu.:0.000100  
-##  Median :0.000100  
-##  Mean   :0.001267  
-##  3rd Qu.:0.001850  
-##  Max.   :0.003600  
+##      Pr(&gt;F)      
+##  Min.   :0.0001  
+##  1st Qu.:0.0001  
+##  Median :0.0001  
+##  Mean   :0.0011  
+##  3rd Qu.:0.0016  
+##  Max.   :0.0031  
 ##  NA&#39;s   :2</code></pre>
 </div>
 </div>
@@ -733,7 +733,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##           Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)    
-## Region     1    1.1374 1.13737  7.9949 0.09518  2e-04 ***
+## Region     1    1.1374 1.13737  7.9949 0.09518  1e-04 ***
 ## Residuals 76   10.8119 0.14226         0.90482           
 ## Total     77   11.9492                 1.00000           
 ## ---
@@ -785,7 +785,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##           Df SumsOfSqs MeanSqs F.Model     R2 Pr(&gt;F)    
-## Region     1    0.5465 0.54645  4.3301 0.0539  9e-04 ***
+## Region     1    0.5465 0.54645  4.3301 0.0539  0.001 ***
 ## Residuals 76    9.5910 0.12620         0.9461           
 ## Total     77   10.1374                 1.0000           
 ## ---
@@ -824,7 +824,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##           Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)  
-## Region     1    0.2281 0.22808  1.8482 0.02374  0.076 .
+## Region     1    0.2281 0.22808  1.8482 0.02374 0.0757 .
 ## Residuals 76    9.3790 0.12341         0.97626         
 ## Total     77    9.6071                 1.00000         
 ## ---
@@ -906,7 +906,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##             Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)    
-## REGION_NEW   1    0.5328 0.53284   4.082 0.03428  7e-04 ***
+## REGION_NEW   1    0.5328 0.53284   4.082 0.03428  6e-04 ***
 ## Residuals  115   15.0112 0.13053         0.96572           
 ## Total      116   15.5440                 1.00000           
 ## ---
@@ -939,7 +939,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##             Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)   
-## YEAR_GROUPS  1    0.5499 0.54989  3.1888 0.03315  0.003 **
+## YEAR_GROUPS  1    0.5499 0.54989  3.1888 0.03315 0.0025 **
 ## Residuals   93   16.0372 0.17244         0.96685          
 ## Total       94   16.5871                 1.00000          
 ## ---
@@ -1004,7 +1004,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##             Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)   
-## YEAR_GROUPS  1    0.3126 0.31256  2.9311 0.02904 0.0051 **
+## YEAR_GROUPS  1    0.3126 0.31256  2.9311 0.02904 0.0055 **
 ## Residuals   98   10.4504 0.10664         0.97096          
 ## Total       99   10.7629                 1.00000          
 ## ---
@@ -1064,7 +1064,7 @@ permutest(bd)</code></pre>
 ## 
 ## Response: Distances
 ##            Df  Sum Sq   Mean Sq      F N.Perm Pr(&gt;F)  
-## Groups      4 0.07648 0.0191204 2.0314    999  0.091 .
+## Groups      4 0.07648 0.0191204 2.0314    999  0.096 .
 ## Residuals 190 1.78838 0.0094125                       
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -1199,10 +1199,10 @@ summary(inv_region)</code></pre>
 ## cod.atlantic                0.517   0.001 ***
 ## haddock                     0.412   0.001 ***
 ## dogfish.spiny               0.379   0.001 ***
-## hake.atlantic.red           0.280   0.003 ** 
-## mackerel.atlantic           0.219   0.029 *  
-## squid.long.finned           0.211   0.031 *  
-## butterfish                  0.210   0.036 *  
+## hake.atlantic.red           0.280   0.005 ** 
+## mackerel.atlantic           0.219   0.022 *  
+## squid.long.finned           0.211   0.036 *  
+## butterfish                  0.210   0.029 *  
 ## redfish.acadian.ocean.perch 0.205   0.001 ***
 ## 
 ##  Group 2  #sps.  4 
@@ -1215,8 +1215,8 @@ summary(inv_region)</code></pre>
 ##  Group 4  #sps.  3 
 ##               stat p.value    
 ## cucumber.sea 0.224   0.001 ***
-## scallop.sea  0.205   0.047 *  
-## crab.green   0.172   0.010 ** 
+## scallop.sea  0.205   0.043 *  
+## crab.green   0.172   0.004 ** 
 ## 
 ##  Group 5  #sps.  1 
 ##                  stat p.value    
@@ -1227,10 +1227,10 @@ summary(inv_region)</code></pre>
 ## plaice.american..dab. 0.676   0.001 ***
 ## shad.american         0.401   0.001 ***
 ## cunner                0.380   0.001 ***
-## sculpin.longhorn      0.334   0.001 ***
-## herring.blueback      0.305   0.003 ** 
+## sculpin.longhorn      0.334   0.002 ** 
+## herring.blueback      0.305   0.002 ** 
 ## monkfish              0.291   0.002 ** 
-## crab.red              0.219   0.002 ** 
+## crab.red              0.219   0.004 ** 
 ## 
 ##  Group 1+5  #sps.  6 
 ##                                      stat p.value    
@@ -1238,8 +1238,8 @@ summary(inv_region)</code></pre>
 ## skate.little                        0.477   0.001 ***
 ## pout.ocean                          0.460   0.001 ***
 ## skate.smooth                        0.299   0.002 ** 
-## skate.winter                        0.229   0.011 *  
-## flounder.atlantic.witch..gray.sole. 0.215   0.029 *  
+## skate.winter                        0.229   0.019 *  
+## flounder.atlantic.witch..gray.sole. 0.215   0.028 *  
 ## 
 ##  Group 3+4  #sps.  1 
 ##                     stat p.value    
@@ -1254,16 +1254,16 @@ summary(inv_region)</code></pre>
 ## skate.thorny 0.297   0.001 ***
 ## 
 ##  Group 2+3+4  #sps.  1 
-##                   stat p.value    
-## herring.atlantic 0.319   0.001 ***
+##                   stat p.value   
+## herring.atlantic 0.319   0.002 **
 ## 
 ##  Group 3+4+5  #sps.  1 
 ##                  stat p.value   
-## halibut.atlantic 0.26   0.002 **
+## halibut.atlantic 0.26   0.003 **
 ## 
 ##  Group 1+2+3+4  #sps.  1 
 ##                        stat p.value  
-## hake.silver..whiting. 0.209   0.041 *
+## hake.silver..whiting. 0.209   0.032 *
 ## 
 ##  Group 2+3+4+5  #sps.  1 
 ##                   stat p.value    
@@ -1284,8 +1284,8 @@ summary(inv_year)</code></pre>
 ##  Significance level (alpha): 0.05
 ## 
 ##  Total number of species: 50
-##  Selected number of species: 23 
-##  Number of species associated to 1 group: 13 
+##  Selected number of species: 24 
+##  Number of species associated to 1 group: 14 
 ##  Number of species associated to 2 groups: 8 
 ##  Number of species associated to 3 groups: 2 
 ## 
@@ -1297,14 +1297,15 @@ summary(inv_year)</code></pre>
 ## skate.little 0.321   0.001 ***
 ## sea.raven    0.318   0.001 ***
 ## monkfish     0.281   0.001 ***
-## skate.winter 0.236   0.008 ** 
+## skate.winter 0.236   0.006 ** 
 ## scup         0.202   0.001 ***
 ## 
-##  Group 2005-2009  #sps.  3 
+##  Group 2005-2009  #sps.  4 
 ##                        stat p.value    
 ## plaice.american..dab. 0.269   0.001 ***
-## wolffish.atlantic     0.207   0.019 *  
-## squid.short.finned    0.184   0.014 *  
+## wolffish.atlantic     0.207   0.012 *  
+## cod.atlantic          0.188   0.047 *  
+## squid.short.finned    0.184   0.012 *  
 ## 
 ##  Group 2010-2014  #sps.  1 
 ##             stat p.value   
@@ -1319,24 +1320,24 @@ summary(inv_year)</code></pre>
 ##  Group 2000-2004+2005-2009  #sps.  5 
 ##                    stat p.value    
 ## sculpin.longhorn  0.436   0.001 ***
-## menhaden.atlantic 0.233   0.008 ** 
-## smelt.rainbow     0.213   0.016 *  
-## skate.thorny      0.206   0.020 *  
+## menhaden.atlantic 0.233   0.002 ** 
+## smelt.rainbow     0.213   0.015 *  
+## skate.thorny      0.206   0.027 *  
 ## lumpfish          0.171   0.026 *  
 ## 
 ##  Group 2010-2014+2015-2019  #sps.  3 
 ##                   stat p.value    
 ## lobster.american 0.499   0.001 ***
-## skate.barndoor   0.231   0.008 ** 
-## halibut.atlantic 0.230   0.008 ** 
+## skate.barndoor   0.231   0.007 ** 
+## halibut.atlantic 0.230   0.007 ** 
 ## 
 ##  Group 2000-2004+2005-2009+2015-2019  #sps.  1 
 ##             stat p.value    
 ## crab.jonah 0.286   0.001 ***
 ## 
 ##  Group 2000-2004+2010-2014+2015-2019  #sps.  1 
-##                        stat p.value   
-## hake.silver..whiting. 0.279   0.002 **
+##                        stat p.value    
+## hake.silver..whiting. 0.279   0.001 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
