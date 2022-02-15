@@ -279,6 +279,9 @@ $(document).ready(function () {
   <a href="anosim_adonis_analysis_7.21.html">Anosim/ Adonis</a>
 </li>
 <li>
+  <a href="env_NMDS.html">Environmental Effects on NMDS</a>
+</li>
+<li>
   <a href="fishery_landings.html">Fishery Landings</a>
 </li>
 <li>
@@ -625,6 +628,22 @@ ME_NMDS_distance&lt;- vegdist(ME_NMDS_data, method=&quot;bray&quot;)</code></pre
 ## ... Procrustes: rmse 0.0002644395  max resid 0.00239894 
 ## ... Similar to previous best
 ## *** Solution reached</code></pre>
+<pre class="r"><code>ME_NMDS</code></pre>
+<pre><code>## 
+## Call:
+## metaMDS(comm = ME_NMDS_distance, k = 2, trymax = 200, method = &quot;bray&quot;) 
+## 
+## global Multidimensional Scaling using monoMDS
+## 
+## Data:     ME_NMDS_distance 
+## Distance: bray 
+## 
+## Dimensions: 2 
+## Stress:     0.2057105 
+## Stress type 1, weak ties
+## Two convergent solutions found after 86 tries
+## Scaling: centring, PC rotation 
+## Species: scores missing</code></pre>
 <pre class="r"><code>#extract NMDS scores for ggplot
 data.scores = as.data.frame(scores(ME_NMDS))
 #add columns to data frame 
