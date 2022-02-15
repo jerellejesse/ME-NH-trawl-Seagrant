@@ -20,6 +20,8 @@ navbar:
           href: NMDS_group_abundance_7.21.html
     - text: "Anosim/ Adonis"
       href: anosim_adonis_analysis_7.21.html
+    - text: "Environmental Effects on NMDS"
+      href: env_NMDS.html
     - text: "Fishery Landings"
       href: fishery_landings.html
     - text: "Trawl Biodiversity Metrics"

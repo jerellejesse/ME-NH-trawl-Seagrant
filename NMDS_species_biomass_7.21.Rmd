@@ -79,6 +79,7 @@ ME_NMDS=metaMDS(ME_NMDS_distance, # Our community-by-species matrix
                 k=2, # The number of reduced dimensions
                 method="bray",
                 trymax=200) #increase iterations
+ME_NMDS
 
 #extract NMDS scores for ggplot
 data.scores = as.data.frame(scores(ME_NMDS))

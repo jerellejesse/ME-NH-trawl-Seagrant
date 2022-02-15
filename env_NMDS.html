@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Jerelle Jesse" />
+
+
+<title>Seagrant ME-NH trawl survey <br> Objectve 2: Environmental Effects on NMDS</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Seagrant: ME-NH inshore trawl survey</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Trawl_plots.html">ME-NH Trawl</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    NMDS
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="NMDS_species_biomass_7.21.html">Top 50 species biomass</a>
+    </li>
+    <li>
+      <a href="NMDS_species_abundance_7.21.html">Top 50 species abundance</a>
+    </li>
+    <li>
+      <a href="NMDS_group_biomass_7.21.html">Functional group biomass</a>
+    </li>
+    <li>
+      <a href="NMDS_group_abundance_7.21.html">Functional group abundance</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="anosim_adonis_analysis_7.21.html">Anosim/ Adonis</a>
+</li>
+<li>
+  <a href="env_NMDS.html">Environmental Effects on NMDS</a>
+</li>
+<li>
+  <a href="fishery_landings.html">Fishery Landings</a>
+</li>
+<li>
+  <a href="biodiversity.html">Trawl Biodiversity Metrics</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<style type="text/css">/********** GMRI Rmarkdown Core Style Sheet - Do Not Modify!!! **********/
+
+
+/********** Begin Style Sheet **********/
+
+/* Avenir Font from Fonts.com for GMRI Branding */
+
+@import url("http://fast.fonts.net/t/1.css?apiType=css&projectid=806f61f6-d695-4965-a878-820b50bc0269");
+    @font-face{
+        font-family:"Avenir LT W01_35 Light1475496";
+        src:url("Fonts/0078f486-8e52-42c0-ad81-3c8d3d43f48e.woff2") format("woff2"),url("Fonts/908c4810-64db-4b46-bb8e-823eb41f68c0.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_35 Light_1475502";
+        src:url("Fonts/a59168c1-917d-4de9-a244-0316c057c357.woff2") format("woff2"),url("Fonts/6dc0e7d8-9284-44e1-8f05-984a41daa3a4.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_45 Book1475508";
+        src:url("Fonts/065a6b14-b2cc-446e-9428-271c570df0d9.woff2") format("woff2"),url("Fonts/65d75eb0-2601-4da5-a9a4-9ee67a470a59.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_45 Book O1475514";
+        src:url("Fonts/476612d9-282d-4f76-95cd-b4dd31e7ed21.woff2") format("woff2"),url("Fonts/f1ebae2b-5296-4244-8771-5f40e60a564a.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_55 Roman1475520";
+        src:url("Fonts/b290e775-e0f9-4980-914b-a4c32a5e3e36.woff2") format("woff2"),url("Fonts/4b978f72-bb48-46c3-909a-2a8cd2f8819c.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_55 Obliqu1475526";
+        src:url("Fonts/1a7173fa-062b-49ad-9915-bc57d3bfc1f5.woff2") format("woff2"),url("Fonts/cdda031e-26e9-4269-83d1-5a218caa10db.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_65 Medium1475532";
+        src:url("Fonts/17b90ef5-b63f-457b-a981-503bb7afe3c0.woff2") format("woff2"),url("Fonts/c9aeeabd-dd65-491d-b4be-3e0db9ae47a0.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_65 Medium1475538";
+        src:url("Fonts/deb5e718-7abb-4df3-9365-edfa95317090.woff2") format("woff2"),url("Fonts/04801919-17ee-4c6b-8b17-eb1965cb3ed6.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_85 Heavy1475544";
+        src:url("Fonts/d513e15e-8f35-4129-ad05-481815e52625.woff2") format("woff2"),url("Fonts/61bd362e-7162-46bd-b67e-28f366c4afbe.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_85 Heavy_1475550";
+        src:url("Fonts/3c210c80-960f-4684-850b-25390b4d08af.woff2") format("woff2"),url("Fonts/cb5c71ad-e582-4d00-929c-67fbfaeb1c27.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_95 Black1475556";
+        src:url("Fonts/c78eb7af-a1c8-4892-974b-52379646fef4.woff2") format("woff2"),url("Fonts/75b36c58-2a02-4057-a537-09af0832ae46.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_95 Black_1475562";
+        src:url("Fonts/a2477e08-09d9-4d4b-97a9-23a1e22cb44c.woff2") format("woff2"),url("Fonts/19d12bba-92b1-43ad-9bab-cd36a4195c2a.woff") format("woff");
+    }
+
+
+
+
+
+/* PRE-Avenir Fonts: Lato + Raleway font import from google fonts */
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+/* add font families as needed: font-family: 'Lato', sans-serif; */
+
+
+/* Level 1 Headers */
+h1 { text-align: left;
+     margin: 10px 0 15px 0; 
+     font-size: 38px; 
+     font-family: Avenir;
+} 
+
+
+/* Headers 2 - 6 */
+h2, h3, h4, h5, h6 { 
+    color: #333333; 
+    margin: 20px 0 5px 0; 
+    text-align: left;
+    font-family: Avenir;}
+
+
+/* Sizing/font For Each Header Type */
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
+h4 { font-size: 18px; }
+h5 { font-size: 16px; font-weight: normal; color: #3069aa; text-decoration: underline;}
+h6 { font-size: 14px; font-weight: normal; color: #3069aa; }
+
+
+/* Paragraph Text */
+p, ol { margin-top: 10px; 
+    font-family: 'Raleway', sans-serif;}
+
+
+/* Title Author and Date Headers */
+h1.title.toc-ignore {margin-top: 10px;}
+h4.author, h4.date {
+    color: rgb(0,115,109);
+    margin-top: 0px; 
+    margin-bottom: 5px; 
+    font-size: 12px;}
+
+
+
+/* Add Spacing Above Headers */
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 40px;
+}
+
+
+/* Links */
+a {
+    color: rgb(234,79,18)
+}
+
+
+/***********************************************/
+
+
+/********  Table of Contents  **********/
+
+/* Highlighted TOC Element */
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: rgb(0,96,138);
+    border-color: rgb(0,96,138);
+}
+
+/* Default TOC Elements */
+.list-group-item, .list-group-item:focus, .list-group-item:hover {
+    z-index: 2;
+    color: rgb(0,96,138);
+    background-color: #fff;
+    border-color: rgb(0,96,138);
+}
+
+
+/********  Tab Panels  **********/
+
+/* Navigation Tabs - Highlighted Tabset Pills */
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: rgb(0,115,109) ;
+    }
+
+/* Navigation Tabs - Default Tabset Pills */
+.nav-pills > li > a, .nav-pills > li > a:hover, .nav-pills > li > a:focus {
+    color: rgb(0,115,109);
+    background-color: #fff;
+    }
+
+
+/* Second Level Tabs - Active */
+.nav.nav-tabs > li.active  > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    color: #fff;
+    background-color: rgb(83,83,83) ;
+    }
+
+/* Second Level Tabs - Inactive */
+.nav.nav-tabs > li  > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    color: rgb(83,83,83);
+    background-color: #fff;
+    }
+
+
+
+/********** End Core Style Sheet **********/
+/********** End Core Style Sheet **********/
+
+
+
+</style>
+<div id="environmental-effects-on-community-structure-nmds" class="section level1">
+<h1>Environmental Effects on Community structure NMDS</h1>
+<p>includes latitude, longitude, salinity, temperature, depth</p>
+<div id="functional-group-biomass" class="section level2">
+<h2>Functional Group Biomass</h2>
+<div id="nmds" class="section level3">
+<h3>NMDS</h3>
+<pre class="r"><code>#load in data
+trawl_data_arrange&lt;-read.csv(here(&quot;Data/group_biomass_matrix.csv&quot;))[-1]
+
+trawl_data&lt;-read.csv(here(&quot;Data/MaineDMR_Trawl_Survey_Tow_Data_2021-05-14.csv&quot;))
+
+all_Data&lt;-group_by(trawl_data, Season, Year, Region)%&gt;%
+  filter(Year&lt;2020)%&gt;%
+  summarise(start_lat=mean(Start_Latitude),start_long=mean(Start_Longitude),end_lat=mean(End_Latitude), end_long=mean(End_Longitude),start_depth=mean(Start_Depth_fathoms, na.rm=TRUE), end_depth=mean(End_Depth_fathoms, na.rm=TRUE), bottom_temp=mean(Bottom_WaterTemp_DegC, na.rm=TRUE), bottom_sal=mean(Bottom_Salinity, na.rm=TRUE),surface_temp=mean(Surface_WaterTemp_DegC, na.rm=TRUE), surface_sal=mean(Surface_Salinity, na.rm=TRUE))%&gt;%
+  full_join(trawl_data_arrange)%&gt;%
+  ungroup()
+
+com&lt;-select(all_Data, benthivore, benthos,piscivore,planktivore, undefined)
+
+com&lt;-vegdist(com, method=&quot;bray&quot;)
+
+#convert com to a matrix
+m_com = as.matrix(com)
+
+set.seed(123)
+nmds = metaMDS(m_com,k=2, distance = &quot;bray&quot;, trymax = 200)</code></pre>
+<pre><code>## Run 0 stress 0.1741426 
+## Run 1 stress 0.1741425 
+## ... New best solution
+## ... Procrustes: rmse 8.547141e-05  max resid 0.001121714 
+## ... Similar to previous best
+## Run 2 stress 0.1741403 
+## ... New best solution
+## ... Procrustes: rmse 0.0006325414  max resid 0.008146205 
+## ... Similar to previous best
+## Run 3 stress 0.1741405 
+## ... Procrustes: rmse 7.796045e-05  max resid 0.0009075655 
+## ... Similar to previous best
+## Run 4 stress 0.174143 
+## ... Procrustes: rmse 0.000617407  max resid 0.007835139 
+## ... Similar to previous best
+## Run 5 stress 0.1756323 
+## Run 6 stress 0.1741425 
+## ... Procrustes: rmse 0.0006070086  max resid 0.007888487 
+## ... Similar to previous best
+## Run 7 stress 0.1741427 
+## ... Procrustes: rmse 0.0006227408  max resid 0.007964962 
+## ... Similar to previous best
+## Run 8 stress 0.1773435 
+## Run 9 stress 0.1774551 
+## Run 10 stress 0.1868927 
+## Run 11 stress 0.1833826 
+## Run 12 stress 0.1756293 
+## Run 13 stress 0.1792026 
+## Run 14 stress 0.1873262 
+## Run 15 stress 0.1792051 
+## Run 16 stress 0.1873265 
+## Run 17 stress 0.1741427 
+## ... Procrustes: rmse 0.0006111671  max resid 0.007892951 
+## ... Similar to previous best
+## Run 18 stress 0.175632 
+## Run 19 stress 0.1792018 
+## Run 20 stress 0.1741426 
+## ... Procrustes: rmse 0.0006109017  max resid 0.007909025 
+## ... Similar to previous best
+## *** Solution reached</code></pre>
+<pre class="r"><code>nmds</code></pre>
+<pre><code>## 
+## Call:
+## metaMDS(comm = m_com, distance = &quot;bray&quot;, k = 2, trymax = 200) 
+## 
+## global Multidimensional Scaling using monoMDS
+## 
+## Data:     m_com 
+## Distance: user supplied 
+## 
+## Dimensions: 2 
+## Stress:     0.1741403 
+## Stress type 1, weak ties
+## Two convergent solutions found after 20 tries
+## Scaling: centring, PC rotation 
+## Species: scores missing</code></pre>
+</div>
+<div id="envfit" class="section level3">
+<h3>Envfit</h3>
+<pre class="r"><code>env&lt;-select(all_Data, start_lat, start_long, end_lat, end_long,start_depth, end_depth, bottom_temp, bottom_sal, surface_temp, surface_sal)
+
+en&lt;-envfit(nmds, env, permutations=999, na.rm=TRUE)
+en</code></pre>
+<pre><code>## 
+## ***VECTORS
+## 
+##                 NMDS1    NMDS2     r2 Pr(&gt;r)    
+## start_lat     0.38259 -0.92392 0.1461  0.001 ***
+## start_long    0.29706 -0.95486 0.1659  0.001 ***
+## end_lat       0.37975 -0.92509 0.1454  0.001 ***
+## end_long      0.29696 -0.95489 0.1659  0.001 ***
+## start_depth  -0.84780 -0.53031 0.0347  0.028 *  
+## end_depth    -0.74052 -0.67203 0.0300  0.058 .  
+## bottom_temp  -0.98891 -0.14850 0.3638  0.001 ***
+## bottom_sal   -0.99645 -0.08424 0.1995  0.001 ***
+## surface_temp -0.96907  0.24679 0.4962  0.001 ***
+## surface_sal   0.61131  0.79139 0.0008  0.927    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Permutation: free
+## Number of permutations: 999
+## 
+## 5 observations deleted due to missingness</code></pre>
+<pre class="r"><code>plot(nmds)
+plot(en)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-4-1.png" width="1152" /></p>
+<pre class="r"><code>en_coord_cont = as.data.frame(scores(en, &quot;vectors&quot;)) * ordiArrowMul(en)
+en_coord_cat = as.data.frame(scores(en, &quot;factors&quot;)) * ordiArrowMul(en)
+
+#extract NMDS scores for ggplot
+data.scores = as.data.frame(scores(nmds))
+#add columns to data frame 
+data.scores$Region = all_Data$Region
+data.scores$Year = all_Data$Year
+data.scores$Season= all_Data$Season
+data.scores$Year_groups= all_Data$YEAR_GROUPS
+data.scores$Year_decades= all_Data$YEAR_DECADES
+data.scores$Region_new=all_Data$REGION_NEW
+data.scores$Region_year=all_Data$REGION_YEAR
+data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+<div id="region-groups" class="section level4">
+<h4>Region groups</h4>
+<pre class="r"><code>p_region&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p_region</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-5-1.png" width="1152" /></p>
+</div>
+<div id="year-groups" class="section level4">
+<h4>Year groups</h4>
+<pre class="r"><code>p_year&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+
+p_year</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-6-1.png" width="1152" /></p>
+</div>
+</div>
+<div id="gam-contours-for-environmental-effects" class="section level3">
+<h3>GAM contours for environmental effects</h3>
+<div id="bottom-temperature" class="section level4">
+<h4>Bottom temperature</h4>
+<pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-3.png" width="1152" /></p>
+</div>
+<div id="surface-temperature" class="section level4">
+<h4>Surface temperature</h4>
+<pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-3.png" width="1152" /></p>
+</div>
+<div id="bottom-salinity" class="section level4">
+<h4>Bottom salinity</h4>
+<pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-3.png" width="1152" /></p>
+</div>
+<div id="surface-salinity" class="section level4">
+<h4>Surface salinity</h4>
+<pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-3.png" width="1152" /></p>
+</div>
+<div id="start-latitude" class="section level4">
+<h4>start latitude</h4>
+<pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-3.png" width="1152" /></p>
+</div>
+<div id="start-longitude" class="section level4">
+<h4>start longitude</h4>
+<pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-3.png" width="1152" /></p>
+</div>
+<div id="start-depth" class="section level4">
+<h4>start depth</h4>
+<pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
+##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-3.png" width="1152" /></p>
+</div>
+</div>
+</div>
+<div id="top-50-species-biomass" class="section level2">
+<h2>Top 50 Species Biomass</h2>
+<div id="nmds-1" class="section level3">
+<h3>NMDS</h3>
+<pre class="r"><code>#load in data
+trawl_data_arrange&lt;-read.csv(here(&quot;Data/species_biomass_matrix.csv&quot;))[-1]
+
+trawl_data&lt;-read.csv(here(&quot;Data/MaineDMR_Trawl_Survey_Tow_Data_2021-05-14.csv&quot;))
+
+all_Data&lt;-group_by(trawl_data, Season, Year, Region)%&gt;%
+  filter(Year&lt;2020)%&gt;%
+  summarise(start_lat=mean(Start_Latitude),start_long=mean(Start_Longitude),end_lat=mean(End_Latitude), end_long=mean(End_Longitude),start_depth=mean(Start_Depth_fathoms, na.rm=TRUE), end_depth=mean(End_Depth_fathoms, na.rm=TRUE), bottom_temp=mean(Bottom_WaterTemp_DegC, na.rm=TRUE), bottom_sal=mean(Bottom_Salinity, na.rm=TRUE),surface_temp=mean(Surface_WaterTemp_DegC, na.rm=TRUE), surface_sal=mean(Surface_Salinity, na.rm=TRUE))%&gt;%
+  full_join(trawl_data_arrange)%&gt;%
+  ungroup()
+
+com&lt;-select(all_Data, 14:63)
+
+com&lt;-vegdist(com, method=&quot;bray&quot;)
+
+#convert com to a matrix
+m_com = as.matrix(com)
+
+set.seed(123)
+nmds = metaMDS(m_com,k=2, distance = &quot;bray&quot;, trymax = 500)</code></pre>
+<pre><code>## Run 0 stress 0.2121976 
+## Run 1 stress 0.2129894 
+## Run 2 stress 0.2065891 
+## ... New best solution
+## ... Procrustes: rmse 0.03066016  max resid 0.394017 
+## Run 3 stress 0.2321135 
+## Run 4 stress 0.2078851 
+## Run 5 stress 0.2068134 
+## ... Procrustes: rmse 0.02915097  max resid 0.2055298 
+## Run 6 stress 0.2127907 
+## Run 7 stress 0.2078697 
+## Run 8 stress 0.2061183 
+## ... New best solution
+## ... Procrustes: rmse 0.01620476  max resid 0.2111533 
+## Run 9 stress 0.2063589 
+## ... Procrustes: rmse 0.01024384  max resid 0.1293444 
+## Run 10 stress 0.2065615 
+## ... Procrustes: rmse 0.01586056  max resid 0.2115795 
+## Run 11 stress 0.2057376 
+## ... New best solution
+## ... Procrustes: rmse 0.006280238  max resid 0.07403794 
+## Run 12 stress 0.2223293 
+## Run 13 stress 0.2061959 
+## ... Procrustes: rmse 0.01002217  max resid 0.08219748 
+## Run 14 stress 0.2061249 
+## ... Procrustes: rmse 0.007921465  max resid 0.07564778 
+## Run 15 stress 0.2078696 
+## Run 16 stress 0.2066023 
+## Run 17 stress 0.2078697 
+## Run 18 stress 0.2078724 
+## Run 19 stress 0.2129545 
+## Run 20 stress 0.2058355 
+## ... Procrustes: rmse 0.004467055  max resid 0.02821935 
+## Run 21 stress 0.2127013 
+## Run 22 stress 0.2058589 
+## ... Procrustes: rmse 0.007143827  max resid 0.04871218 
+## Run 23 stress 0.2090882 
+## Run 24 stress 0.2057963 
+## ... Procrustes: rmse 0.006359738  max resid 0.04886675 
+## Run 25 stress 0.2061198 
+## ... Procrustes: rmse 0.006030516  max resid 0.07288652 
+## Run 26 stress 0.2062534 
+## Run 27 stress 0.2078726 
+## Run 28 stress 0.2158658 
+## Run 29 stress 0.2078697 
+## Run 30 stress 0.2120911 
+## Run 31 stress 0.2118629 
+## Run 32 stress 0.2136581 
+## Run 33 stress 0.2061525 
+## ... Procrustes: rmse 0.006968232  max resid 0.07723316 
+## Run 34 stress 0.2121226 
+## Run 35 stress 0.2127652 
+## Run 36 stress 0.2080182 
+## Run 37 stress 0.2250331 
+## Run 38 stress 0.2065819 
+## Run 39 stress 0.2061254 
+## ... Procrustes: rmse 0.007985836  max resid 0.07619115 
+## Run 40 stress 0.2065615 
+## Run 41 stress 0.2124912 
+## Run 42 stress 0.2061197 
+## ... Procrustes: rmse 0.006355229  max resid 0.07480883 
+## Run 43 stress 0.2068125 
+## Run 44 stress 0.2064923 
+## Run 45 stress 0.2090879 
+## Run 46 stress 0.2061809 
+## ... Procrustes: rmse 0.01100693  max resid 0.08288323 
+## Run 47 stress 0.2061184 
+## ... Procrustes: rmse 0.006293763  max resid 0.07425619 
+## Run 48 stress 0.2063299 
+## Run 49 stress 0.2147466 
+## Run 50 stress 0.206164 
+## ... Procrustes: rmse 0.00963397  max resid 0.1248158 
+## Run 51 stress 0.211741 
+## Run 52 stress 0.4165594 
+## Run 53 stress 0.2061961 
+## ... Procrustes: rmse 0.01004438  max resid 0.08220953 
+## Run 54 stress 0.2061094 
+## ... Procrustes: rmse 0.006083115  max resid 0.07283369 
+## Run 55 stress 0.2061256 
+## ... Procrustes: rmse 0.008030977  max resid 0.07652824 
+## Run 56 stress 0.2090879 
+## Run 57 stress 0.2211213 
+## Run 58 stress 0.2068131 
+## Run 59 stress 0.2217395 
+## Run 60 stress 0.2127076 
+## Run 61 stress 0.2061307 
+## ... Procrustes: rmse 0.009372368  max resid 0.1243742 
+## Run 62 stress 0.2061229 
+## ... Procrustes: rmse 0.009878406  max resid 0.123909 
+## Run 63 stress 0.2065852 
+## Run 64 stress 0.2063197 
+## Run 65 stress 0.2126293 
+## Run 66 stress 0.2224418 
+## Run 67 stress 0.2090938 
+## Run 68 stress 0.2063816 
+## Run 69 stress 0.2065614 
+## Run 70 stress 0.2058137 
+## ... Procrustes: rmse 0.006205867  max resid 0.04862407 
+## Run 71 stress 0.2214504 
+## Run 72 stress 0.2078858 
+## Run 73 stress 0.2065614 
+## Run 74 stress 0.2068128 
+## Run 75 stress 0.2065985 
+## Run 76 stress 0.2078725 
+## Run 77 stress 0.2065513 
+## Run 78 stress 0.2113782 
+## Run 79 stress 0.2064735 
+## Run 80 stress 0.2209042 
+## Run 81 stress 0.2068126 
+## Run 82 stress 0.2066 
+## Run 83 stress 0.2117095 
+## Run 84 stress 0.2065997 
+## Run 85 stress 0.2113613 
+## Run 86 stress 0.2120856 
+## Run 87 stress 0.206463 
+## Run 88 stress 0.213848 
+## Run 89 stress 0.2068102 
+## Run 90 stress 0.2127135 
+## Run 91 stress 0.2090882 
+## Run 92 stress 0.2129931 
+## Run 93 stress 0.2078869 
+## Run 94 stress 0.2096572 
+## Run 95 stress 0.2062792 
+## Run 96 stress 0.2130205 
+## Run 97 stress 0.221723 
+## Run 98 stress 0.2063669 
+## Run 99 stress 0.2065615 
+## Run 100 stress 0.209088 
+## Run 101 stress 0.208019 
+## Run 102 stress 0.2065925 
+## Run 103 stress 0.2064454 
+## Run 104 stress 0.2126814 
+## Run 105 stress 0.2060862 
+## ... Procrustes: rmse 0.006689337  max resid 0.0720389 
+## Run 106 stress 0.2243925 
+## Run 107 stress 0.209088 
+## Run 108 stress 0.2057889 
+## ... Procrustes: rmse 0.005941908  max resid 0.04863602 
+## Run 109 stress 0.2117035 
+## Run 110 stress 0.2064453 
+## Run 111 stress 0.2113673 
+## Run 112 stress 0.2127084 
+## Run 113 stress 0.2120908 
+## Run 114 stress 0.212747 
+## Run 115 stress 0.2063318 
+## Run 116 stress 0.2065546 
+## Run 117 stress 0.2061263 
+## ... Procrustes: rmse 0.006535832  max resid 0.07638569 
+## Run 118 stress 0.2131558 
+## Run 119 stress 0.2057391 
+## ... Procrustes: rmse 0.000225975  max resid 0.001854674 
+## ... Similar to previous best
+## *** Solution reached</code></pre>
+<pre class="r"><code>nmds</code></pre>
+<pre><code>## 
+## Call:
+## metaMDS(comm = m_com, distance = &quot;bray&quot;, k = 2, trymax = 500) 
+## 
+## global Multidimensional Scaling using monoMDS
+## 
+## Data:     m_com 
+## Distance: user supplied 
+## 
+## Dimensions: 2 
+## Stress:     0.2057376 
+## Stress type 1, weak ties
+## Two convergent solutions found after 119 tries
+## Scaling: centring, PC rotation 
+## Species: scores missing</code></pre>
+</div>
+<div id="envfit-1" class="section level3">
+<h3>Envfit</h3>
+<pre class="r"><code>env&lt;-select(all_Data, start_lat, start_long, end_lat, end_long,start_depth, end_depth, bottom_temp, bottom_sal, surface_temp, surface_sal)
+
+en&lt;-envfit(nmds, env, permutations=999, na.rm=TRUE)
+en</code></pre>
+<pre><code>## 
+## ***VECTORS
+## 
+##                 NMDS1    NMDS2     r2 Pr(&gt;r)    
+## start_lat     0.51905 -0.85474 0.1876  0.001 ***
+## start_long    0.53496 -0.84488 0.1401  0.001 ***
+## end_lat       0.51564 -0.85680 0.1876  0.001 ***
+## end_long      0.53480 -0.84498 0.1401  0.001 ***
+## start_depth  -0.75671 -0.65375 0.0607  0.005 ** 
+## end_depth    -0.68106 -0.73223 0.0533  0.007 ** 
+## bottom_temp  -0.87107 -0.49116 0.4235  0.001 ***
+## bottom_sal   -0.99117 -0.13258 0.2249  0.001 ***
+## surface_temp -0.95801 -0.28672 0.5252  0.001 ***
+## surface_sal  -0.02081  0.99978 0.0108  0.370    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Permutation: free
+## Number of permutations: 999
+## 
+## 5 observations deleted due to missingness</code></pre>
+<pre class="r"><code>plot(nmds)
+plot(en)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-15-1.png" width="1152" /></p>
+<pre class="r"><code>en_coord_cont = as.data.frame(scores(en, &quot;vectors&quot;)) * ordiArrowMul(en)
+en_coord_cat = as.data.frame(scores(en, &quot;factors&quot;)) * ordiArrowMul(en)
+
+#extract NMDS scores for ggplot
+data.scores = as.data.frame(scores(nmds))
+#add columns to data frame 
+data.scores$Region = all_Data$Region
+data.scores$Year = all_Data$Year
+data.scores$Season= all_Data$Season
+data.scores$Year_groups= all_Data$YEAR_GROUPS
+data.scores$Year_decades= all_Data$YEAR_DECADES
+data.scores$Region_new=all_Data$REGION_NEW
+data.scores$Region_year=all_Data$REGION_YEAR
+data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+<div id="region-groups-1" class="section level4">
+<h4>Region groups</h4>
+<pre class="r"><code>p_region&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p_region</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-16-1.png" width="1152" /></p>
+</div>
+<div id="year-groups-1" class="section level4">
+<h4>Year groups</h4>
+<pre class="r"><code>p_year&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+
+p_year</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-17-1.png" width="1152" /></p>
+</div>
+</div>
+<div id="gam-contours-for-environmental-effects-1" class="section level3">
+<h3>GAM contours for environmental effects</h3>
+<div id="bottom-temperature-1" class="section level4">
+<h4>Bottom temperature</h4>
+<pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-3.png" width="1152" /></p>
+</div>
+<div id="surface-temperature-1" class="section level4">
+<h4>Surface temperature</h4>
+<pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-3.png" width="1152" /></p>
+</div>
+<div id="bottom-salinity-1" class="section level4">
+<h4>Bottom salinity</h4>
+<pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-3.png" width="1152" /></p>
+</div>
+<div id="surface-salinity-1" class="section level4">
+<h4>Surface salinity</h4>
+<pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-3.png" width="1152" /></p>
+</div>
+<div id="start-latitude-1" class="section level4">
+<h4>start latitude</h4>
+<pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-3.png" width="1152" /></p>
+</div>
+<div id="start-longitude-1" class="section level4">
+<h4>start longitude</h4>
+<pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-3.png" width="1152" /></p>
+</div>
+<div id="start-depth-1" class="section level4">
+<h4>start depth</h4>
+<pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
+##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-3.png" width="1152" /></p>
+</div>
+</div>
+</div>
+<div id="funcitonal-group-abundance" class="section level2">
+<h2>Funcitonal Group Abundance</h2>
+<div id="nmds-2" class="section level3">
+<h3>NMDS</h3>
+<pre class="r"><code>#load in data
+trawl_data_arrange&lt;-read.csv(here(&quot;Data/group_abundance_matrix.csv&quot;))[-1]
+
+trawl_data&lt;-read.csv(here(&quot;Data/MaineDMR_Trawl_Survey_Tow_Data_2021-05-14.csv&quot;))
+
+all_Data&lt;-group_by(trawl_data, Season, Year, Region)%&gt;%
+  filter(Year&lt;2020)%&gt;%
+  summarise(start_lat=mean(Start_Latitude),start_long=mean(Start_Longitude),end_lat=mean(End_Latitude), end_long=mean(End_Longitude),start_depth=mean(Start_Depth_fathoms, na.rm=TRUE), end_depth=mean(End_Depth_fathoms, na.rm=TRUE), bottom_temp=mean(Bottom_WaterTemp_DegC, na.rm=TRUE), bottom_sal=mean(Bottom_Salinity, na.rm=TRUE),surface_temp=mean(Surface_WaterTemp_DegC, na.rm=TRUE), surface_sal=mean(Surface_Salinity, na.rm=TRUE))%&gt;%
+  full_join(trawl_data_arrange)%&gt;%
+  ungroup()
+
+com&lt;-select(all_Data,benthivore, benthos,piscivore,planktivore, undefined )
+
+com&lt;-vegdist(com, method=&quot;bray&quot;, na.rm=TRUE)
+
+#convert com to a matrix
+m_com = as.matrix(com)
+
+set.seed(123)
+nmds = metaMDS(m_com,k=2, distance = &quot;bray&quot;, trymax = 200)</code></pre>
+<pre><code>## Run 0 stress 0.1375071 
+## Run 1 stress 0.137507 
+## ... New best solution
+## ... Procrustes: rmse 8.33793e-05  max resid 0.001121449 
+## ... Similar to previous best
+## Run 2 stress 0.1404274 
+## Run 3 stress 0.1375071 
+## ... Procrustes: rmse 6.349328e-05  max resid 0.0006545503 
+## ... Similar to previous best
+## Run 4 stress 0.1517021 
+## Run 5 stress 0.1404274 
+## Run 6 stress 0.1517024 
+## Run 7 stress 0.154412 
+## Run 8 stress 0.1375071 
+## ... Procrustes: rmse 3.188211e-05  max resid 0.0003404784 
+## ... Similar to previous best
+## Run 9 stress 0.1404276 
+## Run 10 stress 0.1404275 
+## Run 11 stress 0.1375071 
+## ... Procrustes: rmse 8.125209e-05  max resid 0.001100816 
+## ... Similar to previous best
+## Run 12 stress 0.1404274 
+## Run 13 stress 0.1517025 
+## Run 14 stress 0.1375068 
+## ... New best solution
+## ... Procrustes: rmse 0.0003130745  max resid 0.00374505 
+## ... Similar to previous best
+## Run 15 stress 0.1404274 
+## Run 16 stress 0.1375118 
+## ... Procrustes: rmse 0.0004065847  max resid 0.005198767 
+## ... Similar to previous best
+## Run 17 stress 0.1404276 
+## Run 18 stress 0.137507 
+## ... Procrustes: rmse 0.0003082631  max resid 0.003739519 
+## ... Similar to previous best
+## Run 19 stress 0.1544117 
+## Run 20 stress 0.1404274 
+## *** Solution reached</code></pre>
+<pre class="r"><code>nmds</code></pre>
+<pre><code>## 
+## Call:
+## metaMDS(comm = m_com, distance = &quot;bray&quot;, k = 2, trymax = 200) 
+## 
+## global Multidimensional Scaling using monoMDS
+## 
+## Data:     m_com 
+## Distance: user supplied 
+## 
+## Dimensions: 2 
+## Stress:     0.1375068 
+## Stress type 1, weak ties
+## Two convergent solutions found after 20 tries
+## Scaling: centring, PC rotation 
+## Species: scores missing</code></pre>
+</div>
+<div id="envfit-2" class="section level3">
+<h3>Envfit</h3>
+<pre class="r"><code>env&lt;-select(all_Data, start_lat, start_long, end_lat, end_long,start_depth, end_depth, bottom_temp, bottom_sal, surface_temp, surface_sal)
+
+en&lt;-envfit(nmds, env, permutations=999, na.rm=TRUE)
+en</code></pre>
+<pre><code>## 
+## ***VECTORS
+## 
+##                 NMDS1    NMDS2     r2 Pr(&gt;r)    
+## start_lat     0.43552 -0.90018 0.0033  0.750    
+## start_long   -0.98594 -0.16711 0.0017  0.861    
+## end_lat       0.42320 -0.90604 0.0034  0.748    
+## end_long     -0.98374 -0.17959 0.0017  0.859    
+## start_depth  -0.99993 -0.01194 0.0393  0.035 *  
+## end_depth    -0.99999  0.00455 0.0341  0.045 *  
+## bottom_temp  -0.63753 -0.77042 0.0917  0.001 ***
+## bottom_sal   -0.87298 -0.48776 0.0905  0.001 ***
+## surface_temp -0.82126 -0.57056 0.1043  0.001 ***
+## surface_sal  -0.56102 -0.82780 0.0004  0.970    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Permutation: free
+## Number of permutations: 999
+## 
+## 5 observations deleted due to missingness</code></pre>
+<pre class="r"><code>plot(nmds)
+plot(en)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-26-1.png" width="1152" /></p>
+<pre class="r"><code>en_coord_cont = as.data.frame(scores(en, &quot;vectors&quot;)) * ordiArrowMul(en)
+en_coord_cat = as.data.frame(scores(en, &quot;factors&quot;)) * ordiArrowMul(en)
+
+#extract NMDS scores for ggplot
+data.scores = as.data.frame(scores(nmds))
+#add columns to data frame 
+data.scores$Region = all_Data$Region
+data.scores$Year = all_Data$Year
+data.scores$Season= all_Data$Season
+data.scores$Year_groups= all_Data$YEAR_GROUPS
+data.scores$Year_decades= all_Data$YEAR_DECADES
+data.scores$Region_new=all_Data$REGION_NEW
+data.scores$Region_year=all_Data$REGION_YEAR
+data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+<div id="region-groups-2" class="section level4">
+<h4>Region groups</h4>
+<pre class="r"><code>p_region&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p_region</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-27-1.png" width="1152" /></p>
+</div>
+<div id="year-groups-2" class="section level4">
+<h4>Year groups</h4>
+<pre class="r"><code>p_year&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+
+p_year</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-28-1.png" width="1152" /></p>
+</div>
+</div>
+<div id="gam-contours-for-environmental-effects-2" class="section level3">
+<h3>GAM contours for environmental effects</h3>
+<div id="bottom-temperature-2" class="section level4">
+<h4>Bottom temperature</h4>
+<pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-3.png" width="1152" /></p>
+</div>
+<div id="surface-temperature-2" class="section level4">
+<h4>Surface temperature</h4>
+<pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-3.png" width="1152" /></p>
+</div>
+<div id="bottom-salinity-2" class="section level4">
+<h4>Bottom salinity</h4>
+<pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-3.png" width="1152" /></p>
+</div>
+<div id="surface-salinity-2" class="section level4">
+<h4>Surface salinity</h4>
+<pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-3.png" width="1152" /></p>
+</div>
+<div id="start-latitude-2" class="section level4">
+<h4>start latitude</h4>
+<pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.391 -0.359 -0.328 -0.296 -0.264 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-3.png" width="1152" /></p>
+</div>
+<div id="start-longitude-2" class="section level4">
+<h4>start longitude</h4>
+<pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.391 -0.359 -0.328 -0.296 -0.264 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-3.png" width="1152" /></p>
+</div>
+<div id="start-depth-2" class="section level4">
+<h4>start depth</h4>
+<pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.391 -0.359 -0.328 -0.296 -0.264 ...
+##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-3.png" width="1152" /></p>
+</div>
+</div>
+</div>
+<div id="top-50-species-abundance" class="section level2">
+<h2>Top 50 Species Abundance</h2>
+<div id="nmds-3" class="section level3">
+<h3>NMDS</h3>
+<pre class="r"><code>#load in data
+trawl_data_arrange&lt;-read.csv(here(&quot;Data/species_abundance_matrix.csv&quot;))[-1]
+
+trawl_data&lt;-read.csv(here(&quot;Data/MaineDMR_Trawl_Survey_Tow_Data_2021-05-14.csv&quot;))
+
+all_Data&lt;-group_by(trawl_data, Season, Year, Region)%&gt;%
+  filter(Year&lt;2020)%&gt;%
+  summarise(start_lat=mean(Start_Latitude),start_long=mean(Start_Longitude),end_lat=mean(End_Latitude), end_long=mean(End_Longitude),start_depth=mean(Start_Depth_fathoms, na.rm=TRUE), end_depth=mean(End_Depth_fathoms, na.rm=TRUE), bottom_temp=mean(Bottom_WaterTemp_DegC, na.rm=TRUE), bottom_sal=mean(Bottom_Salinity, na.rm=TRUE),surface_temp=mean(Surface_WaterTemp_DegC, na.rm=TRUE), surface_sal=mean(Surface_Salinity, na.rm=TRUE))%&gt;%
+  full_join(trawl_data_arrange)%&gt;%
+  ungroup()
+
+com&lt;-select(all_Data, 14:63)
+
+com&lt;-vegdist(com, method=&quot;bray&quot;)
+
+#convert com to a matrix
+m_com = as.matrix(com)
+
+set.seed(123)
+nmds = metaMDS(m_com,k=2, distance = &quot;bray&quot;, trymax = 200)</code></pre>
+<pre><code>## Run 0 stress 0.1621597 
+## Run 1 stress 0.1790884 
+## Run 2 stress 0.1624906 
+## ... Procrustes: rmse 0.009948471  max resid 0.1360388 
+## Run 3 stress 0.166605 
+## Run 4 stress 0.1659038 
+## Run 5 stress 0.1784512 
+## Run 6 stress 0.1666044 
+## Run 7 stress 0.175383 
+## Run 8 stress 0.1829157 
+## Run 9 stress 0.1659039 
+## Run 10 stress 0.1662477 
+## Run 11 stress 0.1621603 
+## ... Procrustes: rmse 0.0002541615  max resid 0.003157041 
+## ... Similar to previous best
+## Run 12 stress 0.175406 
+## Run 13 stress 0.165904 
+## Run 14 stress 0.1621599 
+## ... Procrustes: rmse 0.0001949799  max resid 0.002529041 
+## ... Similar to previous best
+## Run 15 stress 0.1755351 
+## Run 16 stress 0.1697831 
+## Run 17 stress 0.1699906 
+## Run 18 stress 0.1662485 
+## Run 19 stress 0.1666052 
+## Run 20 stress 0.1699906 
+## *** Solution reached</code></pre>
+<pre class="r"><code>nmds</code></pre>
+<pre><code>## 
+## Call:
+## metaMDS(comm = m_com, distance = &quot;bray&quot;, k = 2, trymax = 200) 
+## 
+## global Multidimensional Scaling using monoMDS
+## 
+## Data:     m_com 
+## Distance: user supplied 
+## 
+## Dimensions: 2 
+## Stress:     0.1621597 
+## Stress type 1, weak ties
+## Two convergent solutions found after 20 tries
+## Scaling: centring, PC rotation 
+## Species: scores missing</code></pre>
+</div>
+<div id="envfit-3" class="section level3">
+<h3>Envfit</h3>
+<pre class="r"><code>env&lt;-select(all_Data, start_lat, start_long, end_lat, end_long,start_depth, end_depth, bottom_temp, bottom_sal, surface_temp, surface_sal)
+
+en&lt;-envfit(nmds, env, permutations=999, na.rm=TRUE)
+en</code></pre>
+<pre><code>## 
+## ***VECTORS
+## 
+##                 NMDS1    NMDS2     r2 Pr(&gt;r)    
+## start_lat     0.34812  0.93745 0.1120  0.001 ***
+## start_long    0.16650  0.98604 0.0953  0.001 ***
+## end_lat       0.34992  0.93678 0.1113  0.001 ***
+## end_long      0.16648  0.98605 0.0954  0.001 ***
+## start_depth  -0.12190 -0.99254 0.0357  0.032 *  
+## end_depth    -0.09046 -0.99590 0.0246  0.096 .  
+## bottom_temp  -0.14219 -0.98984 0.1301  0.001 ***
+## bottom_sal   -0.43031 -0.90268 0.1064  0.001 ***
+## surface_temp -0.20442 -0.97888 0.2951  0.001 ***
+## surface_sal   0.24819 -0.96871 0.0002  0.986    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Permutation: free
+## Number of permutations: 999
+## 
+## 5 observations deleted due to missingness</code></pre>
+<pre class="r"><code>plot(nmds)
+plot(en)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-37-1.png" width="1152" /></p>
+<pre class="r"><code>en_coord_cont = as.data.frame(scores(en, &quot;vectors&quot;)) * ordiArrowMul(en)
+en_coord_cat = as.data.frame(scores(en, &quot;factors&quot;)) * ordiArrowMul(en)
+
+#extract NMDS scores for ggplot
+data.scores = as.data.frame(scores(nmds))
+#add columns to data frame 
+data.scores$Region = all_Data$Region
+data.scores$Year = all_Data$Year
+data.scores$Season= all_Data$Season
+data.scores$Year_groups= all_Data$YEAR_GROUPS
+data.scores$Year_decades= all_Data$YEAR_DECADES
+data.scores$Region_new=all_Data$REGION_NEW
+data.scores$Region_year=all_Data$REGION_YEAR
+data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+<div id="region-groups-3" class="section level4">
+<h4>Region groups</h4>
+<pre class="r"><code>p_region&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p_region</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-38-1.png" width="1152" /></p>
+</div>
+<div id="year-groups-3" class="section level4">
+<h4>Year groups</h4>
+<pre class="r"><code>p_year&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+
+p_year</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-39-1.png" width="1152" /></p>
+</div>
+</div>
+<div id="gam-contours-for-environmental-effects-3" class="section level3">
+<h3>GAM contours for environmental effects</h3>
+<div id="bottom-temperature-3" class="section level4">
+<h4>Bottom temperature</h4>
+<pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-3.png" width="1152" /></p>
+</div>
+<div id="surface-temperature-3" class="section level4">
+<h4>Surface temperature</h4>
+<pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-3.png" width="1152" /></p>
+</div>
+<div id="bottom-salinity-3" class="section level4">
+<h4>Bottom salinity</h4>
+<pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-3.png" width="1152" /></p>
+</div>
+<div id="surface-salinity-3" class="section level4">
+<h4>Surface salinity</h4>
+<pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-3.png" width="1152" /></p>
+</div>
+<div id="start-latitude-3" class="section level4">
+<h4>start latitude</h4>
+<pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.422 -0.395 -0.368 -0.341 -0.314 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-3.png" width="1152" /></p>
+</div>
+<div id="start-longitude-3" class="section level4">
+<h4>start longitude</h4>
+<pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.422 -0.395 -0.368 -0.341 -0.314 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-3.png" width="1152" /></p>
+</div>
+<div id="start-depth-3" class="section level4">
+<h4>start depth</h4>
+<pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-1.png" width="1152" /></p>
+<pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
+str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
+<pre><code>## List of 3
+##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
+##  $ y: num [1:31] -0.422 -0.395 -0.368 -0.341 -0.314 ...
+##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
+contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
+ 
+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+
+p1</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-2.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-3.png" width="1152" /></p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
