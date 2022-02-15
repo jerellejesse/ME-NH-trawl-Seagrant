@@ -4,6 +4,7 @@ output:
   html_document: 
     toc: true
     toc_float: true
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
@@ -13,6 +14,14 @@ library(here)
 library(rmarkdown)
 library(ggplot2)
 ```
+
+
+```{r, echo = FALSE}
+# Access GMRI CSS Style
+library(gmRi)
+gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
+```
+
 ## Trawl plots
 
 ### Top 5 species

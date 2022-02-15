@@ -8,6 +8,12 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, echo = FALSE}
+# Access GMRI CSS Style
+library(gmRi)
+gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
+```
+
 ## Seagrant: Understanding climate impacts on the Maine coastal fish and invertebrate community through synthesis of the Maine-New Hampshire Inshore Trawl Survey
 
 ### Project Description

@@ -34,6 +34,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
@@ -221,6 +222,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -366,12 +370,196 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 
 </div>
 
 
+<style type="text/css">/********** GMRI Rmarkdown Core Style Sheet - Do Not Modify!!! **********/
+
+
+/********** Begin Style Sheet **********/
+
+/* Avenir Font from Fonts.com for GMRI Branding */
+
+@import url("http://fast.fonts.net/t/1.css?apiType=css&projectid=806f61f6-d695-4965-a878-820b50bc0269");
+    @font-face{
+        font-family:"Avenir LT W01_35 Light1475496";
+        src:url("Fonts/0078f486-8e52-42c0-ad81-3c8d3d43f48e.woff2") format("woff2"),url("Fonts/908c4810-64db-4b46-bb8e-823eb41f68c0.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_35 Light_1475502";
+        src:url("Fonts/a59168c1-917d-4de9-a244-0316c057c357.woff2") format("woff2"),url("Fonts/6dc0e7d8-9284-44e1-8f05-984a41daa3a4.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_45 Book1475508";
+        src:url("Fonts/065a6b14-b2cc-446e-9428-271c570df0d9.woff2") format("woff2"),url("Fonts/65d75eb0-2601-4da5-a9a4-9ee67a470a59.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_45 Book O1475514";
+        src:url("Fonts/476612d9-282d-4f76-95cd-b4dd31e7ed21.woff2") format("woff2"),url("Fonts/f1ebae2b-5296-4244-8771-5f40e60a564a.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_55 Roman1475520";
+        src:url("Fonts/b290e775-e0f9-4980-914b-a4c32a5e3e36.woff2") format("woff2"),url("Fonts/4b978f72-bb48-46c3-909a-2a8cd2f8819c.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_55 Obliqu1475526";
+        src:url("Fonts/1a7173fa-062b-49ad-9915-bc57d3bfc1f5.woff2") format("woff2"),url("Fonts/cdda031e-26e9-4269-83d1-5a218caa10db.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_65 Medium1475532";
+        src:url("Fonts/17b90ef5-b63f-457b-a981-503bb7afe3c0.woff2") format("woff2"),url("Fonts/c9aeeabd-dd65-491d-b4be-3e0db9ae47a0.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_65 Medium1475538";
+        src:url("Fonts/deb5e718-7abb-4df3-9365-edfa95317090.woff2") format("woff2"),url("Fonts/04801919-17ee-4c6b-8b17-eb1965cb3ed6.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_85 Heavy1475544";
+        src:url("Fonts/d513e15e-8f35-4129-ad05-481815e52625.woff2") format("woff2"),url("Fonts/61bd362e-7162-46bd-b67e-28f366c4afbe.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_85 Heavy_1475550";
+        src:url("Fonts/3c210c80-960f-4684-850b-25390b4d08af.woff2") format("woff2"),url("Fonts/cb5c71ad-e582-4d00-929c-67fbfaeb1c27.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_95 Black1475556";
+        src:url("Fonts/c78eb7af-a1c8-4892-974b-52379646fef4.woff2") format("woff2"),url("Fonts/75b36c58-2a02-4057-a537-09af0832ae46.woff") format("woff");
+    }
+    @font-face{
+        font-family:"Avenir LT W01_95 Black_1475562";
+        src:url("Fonts/a2477e08-09d9-4d4b-97a9-23a1e22cb44c.woff2") format("woff2"),url("Fonts/19d12bba-92b1-43ad-9bab-cd36a4195c2a.woff") format("woff");
+    }
+
+
+
+
+
+/* PRE-Avenir Fonts: Lato + Raleway font import from google fonts */
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+/* add font families as needed: font-family: 'Lato', sans-serif; */
+
+
+/* Level 1 Headers */
+h1 { text-align: left;
+     margin: 10px 0 15px 0; 
+     font-size: 38px; 
+     font-family: Avenir;
+} 
+
+
+/* Headers 2 - 6 */
+h2, h3, h4, h5, h6 { 
+    color: #333333; 
+    margin: 20px 0 5px 0; 
+    text-align: left;
+    font-family: Avenir;}
+
+
+/* Sizing/font For Each Header Type */
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
+h4 { font-size: 18px; }
+h5 { font-size: 16px; font-weight: normal; color: #3069aa; text-decoration: underline;}
+h6 { font-size: 14px; font-weight: normal; color: #3069aa; }
+
+
+/* Paragraph Text */
+p, ol { margin-top: 10px; 
+    font-family: 'Raleway', sans-serif;}
+
+
+/* Title Author and Date Headers */
+h1.title.toc-ignore {margin-top: 10px;}
+h4.author, h4.date {
+    color: rgb(0,115,109);
+    margin-top: 0px; 
+    margin-bottom: 5px; 
+    font-size: 12px;}
+
+
+
+/* Add Spacing Above Headers */
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 40px;
+}
+
+
+/* Links */
+a {
+    color: rgb(234,79,18)
+}
+
+
+/***********************************************/
+
+
+/********  Table of Contents  **********/
+
+/* Highlighted TOC Element */
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: rgb(0,96,138);
+    border-color: rgb(0,96,138);
+}
+
+/* Default TOC Elements */
+.list-group-item, .list-group-item:focus, .list-group-item:hover {
+    z-index: 2;
+    color: rgb(0,96,138);
+    background-color: #fff;
+    border-color: rgb(0,96,138);
+}
+
+
+/********  Tab Panels  **********/
+
+/* Navigation Tabs - Highlighted Tabset Pills */
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: rgb(0,115,109) ;
+    }
+
+/* Navigation Tabs - Default Tabset Pills */
+.nav-pills > li > a, .nav-pills > li > a:hover, .nav-pills > li > a:focus {
+    color: rgb(0,115,109);
+    background-color: #fff;
+    }
+
+
+/* Second Level Tabs - Active */
+.nav.nav-tabs > li.active  > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    color: #fff;
+    background-color: rgb(83,83,83) ;
+    }
+
+/* Second Level Tabs - Inactive */
+.nav.nav-tabs > li  > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    color: rgb(83,83,83);
+    background-color: #fff;
+    }
+
+
+
+/********** End Core Style Sheet **********/
+/********** End Core Style Sheet **********/
+
+
+
+</style>
 <div id="analysis-of-similarity-and-analysis-of-variance" class="section level1">
 <h1>Analysis of Similarity and Analysis of Variance</h1>
 <div id="data" class="section level2">
@@ -381,6 +569,8 @@ div.tocify {
 <li>average across depth strata using the <a href="https://noaa-edab.github.io/tech-doc/inshoresurvdat.html#data-analysis-29">NOAA IEA technical document</a></li>
 <li>calculate dissimilarity matrix with Bray-Curtis distances</li>
 </ul>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.1.2</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.1.2</code></pre>
 <pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.1.2</code></pre>
 <pre><code>## Warning: package &#39;rmarkdown&#39; was built under R version 4.1.2</code></pre>
 <div data-pagedtable="false">
@@ -426,7 +616,7 @@ ano_region #regions are statistically different communities </code></pre>
 ## 
 ## Upper quantiles of permutations (null model):
 ##    90%    95%  97.5%    99% 
-## 0.0103 0.0140 0.0164 0.0210 
+## 0.0103 0.0147 0.0180 0.0216 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##         0%     25%     50%      75%  100%     N
@@ -437,7 +627,7 @@ ano_region #regions are statistically different communities </code></pre>
 ## 4        1 2319.00  6086.0 11106.00 18907   741
 ## 5       11 2575.00  5686.0  9835.00 18380   741</code></pre>
 <pre class="r"><code>plot(ano_region) #regions don&#39;t look very different in plot though...confidence bands all overlap</code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 <div id="region-grouped" class="section level3">
 <h3>Region grouped</h3>
@@ -468,7 +658,7 @@ ano_region_groups #regions are statistically different communities </code></pre>
 ## 
 ## Upper quantiles of permutations (null model):
 ##    90%    95%  97.5%    99% 
-## 0.0193 0.0261 0.0320 0.0366 
+## 0.0207 0.0264 0.0307 0.0387 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##                       0%    25%     50%     75%  100%     N
@@ -477,7 +667,7 @@ ano_region_groups #regions are statistically different communities </code></pre>
 ## Penobscot Bay          2 2364.0  6163.0 10546.0 18845   741
 ## West of Penobscot Bay  9 4921.0  9748.0 14430.0 18860  3003</code></pre>
 <pre class="r"><code>plot(ano_region_groups) #</code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="year" class="section level3">
 <h3>Year</h3>
@@ -508,7 +698,7 @@ ano_year #years are statistically different communities</code></pre>
 ## 
 ## Upper quantiles of permutations (null model):
 ##    90%    95%  97.5%    99% 
-## 0.0212 0.0271 0.0304 0.0352 
+## 0.0203 0.0267 0.0314 0.0357 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##           0%     25%     50%      75%  100%     N
@@ -536,7 +726,7 @@ ano_year #years are statistically different communities</code></pre>
 <pre class="r"><code>plot(ano_year)</code></pre>
 <pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
 ## notches went outside hinges (&#39;box&#39;): maybe set notch=FALSE</code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="year-blocks" class="section level3">
 <h3>Year blocks</h3>
@@ -566,8 +756,8 @@ ano_year_blocks #years are statistically different communities</code></pre>
 ## Number of permutations: 999
 ## 
 ## Upper quantiles of permutations (null model):
-##    90%    95%  97.5%    99% 
-## 0.0102 0.0132 0.0161 0.0194 
+##     90%     95%   97.5%     99% 
+## 0.00931 0.01322 0.01615 0.01996 
 ## 
 ## Dissimilarity ranks between and within classes:
 ##           0%     25%   50%      75%  100%     N
@@ -577,7 +767,7 @@ ano_year_blocks #years are statistically different communities</code></pre>
 ## 2010-2014  6 2086.00  4807  8907.00 17501  1225
 ## 2015-2019  3 2053.00  5370 10302.00 18480  1225</code></pre>
 <pre class="r"><code>plot(ano_year_blocks)</code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 </div>
 <div id="analysis-of-variance-adonis" class="section level2">
@@ -674,7 +864,7 @@ adonis</code></pre>
 ##                         Df SumOfSqs      R2       F Pr(&gt;F)    
 ## REGION_NEW               2   2.8660 0.09609 11.7024 0.0001 ***
 ## YEAR_GROUPS              3   3.3389 0.11194  9.0888 0.0001 ***
-## REGION_NEW:YEAR_GROUPS   6   1.2124 0.04065  1.6502 0.0031 ** 
+## REGION_NEW:YEAR_GROUPS   6   1.2124 0.04065  1.6502 0.0037 ** 
 ## Residual               183  22.4091 0.75132                   
 ## Total                  194  29.8265 1.00000                   
 ## ---
@@ -692,9 +882,9 @@ adonis</code></pre>
 ##  Min.   :0.0001  
 ##  1st Qu.:0.0001  
 ##  Median :0.0001  
-##  Mean   :0.0011  
-##  3rd Qu.:0.0016  
-##  Max.   :0.0031  
+##  Mean   :0.0013  
+##  3rd Qu.:0.0019  
+##  Max.   :0.0037  
 ##  NA&#39;s   :2</code></pre>
 </div>
 </div>
@@ -824,7 +1014,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##           Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)  
-## Region     1    0.2281 0.22808  1.8482 0.02374 0.0757 .
+## Region     1    0.2281 0.22808  1.8482 0.02374 0.0777 .
 ## Residuals 76    9.3790 0.12341         0.97626         
 ## Total     77    9.6071                 1.00000         
 ## ---
@@ -906,7 +1096,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##             Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)    
-## REGION_NEW   1    0.5328 0.53284   4.082 0.03428  6e-04 ***
+## REGION_NEW   1    0.5328 0.53284   4.082 0.03428  3e-04 ***
 ## Residuals  115   15.0112 0.13053         0.96572           
 ## Total      116   15.5440                 1.00000           
 ## ---
@@ -1004,7 +1194,7 @@ summary(pair)</code></pre>
 ## Terms added sequentially (first to last)
 ## 
 ##             Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)   
-## YEAR_GROUPS  1    0.3126 0.31256  2.9311 0.02904 0.0055 **
+## YEAR_GROUPS  1    0.3126 0.31256  2.9311 0.02904 0.0065 **
 ## Residuals   98   10.4504 0.10664         0.97096          
 ## Total       99   10.7629                 1.00000          
 ## ---
@@ -1064,12 +1254,12 @@ permutest(bd)</code></pre>
 ## 
 ## Response: Distances
 ##            Df  Sum Sq   Mean Sq      F N.Perm Pr(&gt;F)  
-## Groups      4 0.07648 0.0191204 2.0314    999  0.096 .
+## Groups      4 0.07648 0.0191204 2.0314    999  0.089 .
 ## Residuals 190 1.78838 0.0094125                       
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>plot(bd)  </code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 <div id="year-1" class="section level3">
 <h3>Year</h3>
@@ -1117,7 +1307,7 @@ permutest(bd)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>plot(bd)</code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 <div id="year-block" class="section level3">
 <h3>Year block</h3>
@@ -1163,7 +1353,7 @@ permutest(bd)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>plot(bd)</code></pre>
-<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 </div>
 <div id="indicator-species-analysis" class="section level2">
@@ -1199,10 +1389,10 @@ summary(inv_region)</code></pre>
 ## cod.atlantic                0.517   0.001 ***
 ## haddock                     0.412   0.001 ***
 ## dogfish.spiny               0.379   0.001 ***
-## hake.atlantic.red           0.280   0.005 ** 
+## hake.atlantic.red           0.280   0.003 ** 
 ## mackerel.atlantic           0.219   0.022 *  
-## squid.long.finned           0.211   0.036 *  
-## butterfish                  0.210   0.029 *  
+## squid.long.finned           0.211   0.030 *  
+## butterfish                  0.210   0.039 *  
 ## redfish.acadian.ocean.perch 0.205   0.001 ***
 ## 
 ##  Group 2  #sps.  4 
@@ -1210,13 +1400,13 @@ summary(inv_region)</code></pre>
 ## alewife             0.455   0.001 ***
 ## crab.northern.stone 0.354   0.001 ***
 ## smelt.rainbow       0.340   0.001 ***
-## sturgeon.atlantic   0.256   0.003 ** 
+## sturgeon.atlantic   0.256   0.007 ** 
 ## 
 ##  Group 4  #sps.  3 
 ##               stat p.value    
 ## cucumber.sea 0.224   0.001 ***
-## scallop.sea  0.205   0.043 *  
-## crab.green   0.172   0.004 ** 
+## scallop.sea  0.205   0.034 *  
+## crab.green   0.172   0.010 ** 
 ## 
 ##  Group 5  #sps.  1 
 ##                  stat p.value    
@@ -1227,10 +1417,10 @@ summary(inv_region)</code></pre>
 ## plaice.american..dab. 0.676   0.001 ***
 ## shad.american         0.401   0.001 ***
 ## cunner                0.380   0.001 ***
-## sculpin.longhorn      0.334   0.002 ** 
-## herring.blueback      0.305   0.002 ** 
-## monkfish              0.291   0.002 ** 
-## crab.red              0.219   0.004 ** 
+## sculpin.longhorn      0.334   0.001 ***
+## herring.blueback      0.305   0.001 ***
+## monkfish              0.291   0.001 ***
+## crab.red              0.219   0.003 ** 
 ## 
 ##  Group 1+5  #sps.  6 
 ##                                      stat p.value    
@@ -1238,8 +1428,8 @@ summary(inv_region)</code></pre>
 ## skate.little                        0.477   0.001 ***
 ## pout.ocean                          0.460   0.001 ***
 ## skate.smooth                        0.299   0.002 ** 
-## skate.winter                        0.229   0.019 *  
-## flounder.atlantic.witch..gray.sole. 0.215   0.028 *  
+## skate.winter                        0.229   0.017 *  
+## flounder.atlantic.witch..gray.sole. 0.215   0.023 *  
 ## 
 ##  Group 3+4  #sps.  1 
 ##                     stat p.value    
@@ -1254,16 +1444,16 @@ summary(inv_region)</code></pre>
 ## skate.thorny 0.297   0.001 ***
 ## 
 ##  Group 2+3+4  #sps.  1 
-##                   stat p.value   
-## herring.atlantic 0.319   0.002 **
+##                   stat p.value    
+## herring.atlantic 0.319   0.001 ***
 ## 
 ##  Group 3+4+5  #sps.  1 
 ##                  stat p.value   
-## halibut.atlantic 0.26   0.003 **
+## halibut.atlantic 0.26   0.008 **
 ## 
 ##  Group 1+2+3+4  #sps.  1 
 ##                        stat p.value  
-## hake.silver..whiting. 0.209   0.032 *
+## hake.silver..whiting. 0.209   0.039 *
 ## 
 ##  Group 2+3+4+5  #sps.  1 
 ##                   stat p.value    
@@ -1297,47 +1487,47 @@ summary(inv_year)</code></pre>
 ## skate.little 0.321   0.001 ***
 ## sea.raven    0.318   0.001 ***
 ## monkfish     0.281   0.001 ***
-## skate.winter 0.236   0.006 ** 
+## skate.winter 0.236   0.008 ** 
 ## scup         0.202   0.001 ***
 ## 
 ##  Group 2005-2009  #sps.  4 
-##                        stat p.value    
-## plaice.american..dab. 0.269   0.001 ***
-## wolffish.atlantic     0.207   0.012 *  
-## cod.atlantic          0.188   0.047 *  
-## squid.short.finned    0.184   0.012 *  
+##                        stat p.value   
+## plaice.american..dab. 0.269   0.003 **
+## wolffish.atlantic     0.207   0.019 * 
+## cod.atlantic          0.188   0.041 * 
+## squid.short.finned    0.184   0.020 * 
 ## 
 ##  Group 2010-2014  #sps.  1 
-##             stat p.value   
-## crab.green 0.152   0.009 **
+##             stat p.value  
+## crab.green 0.152   0.011 *
 ## 
 ##  Group 2015-2019  #sps.  3 
 ##                    stat p.value    
 ## hake.atlantic.red 0.337   0.001 ***
 ## haddock           0.305   0.001 ***
-## hake.white        0.303   0.001 ***
+## hake.white        0.303   0.002 ** 
 ## 
 ##  Group 2000-2004+2005-2009  #sps.  5 
 ##                    stat p.value    
 ## sculpin.longhorn  0.436   0.001 ***
-## menhaden.atlantic 0.233   0.002 ** 
-## smelt.rainbow     0.213   0.015 *  
-## skate.thorny      0.206   0.027 *  
-## lumpfish          0.171   0.026 *  
+## menhaden.atlantic 0.233   0.004 ** 
+## smelt.rainbow     0.213   0.018 *  
+## skate.thorny      0.206   0.028 *  
+## lumpfish          0.171   0.036 *  
 ## 
 ##  Group 2010-2014+2015-2019  #sps.  3 
 ##                   stat p.value    
 ## lobster.american 0.499   0.001 ***
-## skate.barndoor   0.231   0.007 ** 
-## halibut.atlantic 0.230   0.007 ** 
+## skate.barndoor   0.231   0.009 ** 
+## halibut.atlantic 0.230   0.006 ** 
 ## 
 ##  Group 2000-2004+2005-2009+2015-2019  #sps.  1 
-##             stat p.value    
-## crab.jonah 0.286   0.001 ***
+##             stat p.value   
+## crab.jonah 0.286   0.002 **
 ## 
 ##  Group 2000-2004+2010-2014+2015-2019  #sps.  1 
-##                        stat p.value    
-## hake.silver..whiting. 0.279   0.001 ***
+##                        stat p.value   
+## hake.silver..whiting. 0.279   0.002 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
@@ -1379,6 +1569,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {

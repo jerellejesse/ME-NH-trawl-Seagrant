@@ -6,11 +6,17 @@ output:
   html_document: 
     toc: true
     toc_float: true
-    
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+# Access GMRI CSS Style
+library(gmRi)
+gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 ```
 
 # Analysis of Similarity and Analysis of Variance

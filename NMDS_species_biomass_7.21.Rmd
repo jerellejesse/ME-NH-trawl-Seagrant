@@ -2,7 +2,8 @@
 pagetitle: "Seagrant ME-NH trawl survey <br> Objectve 2: Nonmetric Multidimensional Scaling"
 author: "Jerelle Jesse"
 output: 
-  html_document: default
+  html_document:
+    code_folding: hide
 
 ---
 
@@ -10,6 +11,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8) 
 ```
+
+```{r, echo = FALSE}
+# Access GMRI CSS Style
+library(gmRi)
+gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
+```
+
+
 # Nonmetric Multidimensional Scaling- Top 50 biomass species
 
 ## Data
