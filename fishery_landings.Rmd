@@ -1225,7 +1225,6 @@ landings_groups<-mutate(landings_full,COMMON_NAME=tolower(species))%>%
 
 #fill in missing functional groups for new species
 landings_missing<-filter(landings_groups, is.na(functional_group))
-table(landings_missing$COMMON_NAME)
 
 #landings_groups$functional_group[landings_groups$functional_group==""]<-""
 

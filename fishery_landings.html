@@ -569,6 +569,11 @@ a {
 <h2>Maine DMR landings by county data</h2>
 <ul>
 <li>2006-2020 specified by county</li>
+<li>Can run into confidentiality issues when grouped by county/year/species</li>
+<li>Confidential data is grouped into “Other Maine” or “Other Species” for 2006-2007</li>
+<li>Maine DMR landings portal (2008-2020) says confidential landings also uses “Other Maine/County”, but data pulled from portal has “Not specified”, “UK”, “Unidentified Catch”. Unclear why or if this is different</li>
+<li>446 confidential county records ~28%</li>
+<li>31 confidential species records ~ 2%</li>
 </ul>
 <br>
 <div data-pagedtable="false">
@@ -622,16 +627,16 @@ species_filter1&lt;-filter(species, species != &quot;&quot;)%&gt;%
   filter(species != &quot;Seaweed Unc&quot;)%&gt;%
   filter(species != &quot;Unidentified Catch&quot;)
 
-for(i in 1:7){
+# for(i in 1:7){
+# 
+# print(ggplot()+
+#   geom_point(data=species_filter1, aes(x=year, y=1, size=total_weight))+
+#   theme(axis.text.y = element_blank(), axis.title.y = element_blank(), axis.ticks.y=element_blank())+
+#   scale_size(range = c(.1,12), name=&quot;Weight&quot;)+
+#   facet_wrap_paginate(~species, ncol=2, nrow=4, page=i))
+# }
 
-print(ggplot()+
-  geom_point(data=species_filter1, aes(x=year, y=1, size=total_weight))+
-  theme(axis.text.y = element_blank(), axis.title.y = element_blank(), axis.ticks.y=element_blank())+
-  scale_size(range = c(.1,12), name=&quot;Weight&quot;)+
-  facet_wrap_paginate(~species, ncol=2, nrow=4, page=i))
-}</code></pre>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-2.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-3.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-4.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-5.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-6.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-7.png" width="672" /></p>
-<pre class="r"><code>species_filter2&lt;-species_filter1%&gt;%
+species_filter2&lt;-species_filter1%&gt;%
   filter(species != &quot;Bluefish&quot;)%&gt;%
   filter(species != &quot;Clam Surf / Hen&quot;)%&gt;%
   filter(species != &quot;Cucmber Sea&quot;)%&gt;%
@@ -658,7 +663,7 @@ print(ggplot()+
   scale_size(range = c(.1,12), name=&quot;Weight&quot;)+
   facet_wrap_paginate(~species, ncol=2, nrow=4, page=i))
 }</code></pre>
-<p><img src="fishery_landings_files/figure-html/unnamed-chunk-6-8.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-9.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-10.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-11.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-12.png" width="672" /></p>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-2.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-3.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-4.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-6-5.png" width="672" /></p>
 <p><br></p>
 </div>
 <div id="top-10-species" class="section level4">
@@ -667,12 +672,12 @@ print(ggplot()+
 </div>
 </div>
 </div>
-<div id="maine-dmr-landings-full-data" class="section level2">
-<h2>Maine DMR landings full data</h2>
+<div id="maine-dmr-landings-historic-data" class="section level2">
+<h2>Maine DMR landings historic data</h2>
 <ul>
 <li>1950-2019 not grouped by county</li>
+<li>Yearly totals for select species included</li>
 <li>Are trends different when county confidentiality is not an issue?</li>
-<li>Seems like less species accounted for in historical data?</li>
 </ul>
 <br>
 <div data-pagedtable="false">
@@ -861,7 +866,11 @@ print(ggplot()+
 ## * Found: 28 
 ## * Not Found: 0</code></pre>
 <p><img src="fishery_landings_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<p>Combo plot #### County specified data <img src="fishery_landings_files/figure-html/unnamed-chunk-21-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
+<p>Combo plot</p>
+</div>
+<div id="county-specified-data-3" class="section level4">
+<h4>County specified data</h4>
+<p><img src="fishery_landings_files/figure-html/unnamed-chunk-21-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
 </div>
 <div id="full-data-3" class="section level4">
 <h4>Full data</h4>
@@ -953,7 +962,7 @@ print(ggplot()+
 </div>
 <div id="functional-groups" class="section level2">
 <h2>Functional Groups</h2>
-<div id="county-specified-data-3" class="section level3">
+<div id="county-specified-data-4" class="section level3">
 <h3>County specified data</h3>
 <p><img src="fishery_landings_files/figure-html/unnamed-chunk-31-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-31-2.png" width="672" /></p>
 <div id="benthivore" class="section level4">
@@ -979,21 +988,6 @@ print(ggplot()+
 </div>
 <div id="full-data-4" class="section level3">
 <h3>Full data</h3>
-<pre><code>## 
-##                     bloodworms                      clam soft 
-##                             56                             70 
-##                       crab unc                          elver 
-##                             70                             26 
-##                        oysters periwinkles atlantic (cockles) 
-##                             39                             70 
-##                       rockweed                salmon atlantic 
-##                             19                             39 
-##                      sandworms                    seaweed unc 
-##                             70                             48 
-##                  shark dogfish                         skates 
-##                             36                             34 
-##                     yellow eel 
-##                             52</code></pre>
 <p><img src="fishery_landings_files/figure-html/unnamed-chunk-37-1.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-37-2.png" width="672" /><img src="fishery_landings_files/figure-html/unnamed-chunk-37-3.png" width="672" /></p>
 <div id="benthivore-1" class="section level4">
 <h4>Benthivore</h4>
