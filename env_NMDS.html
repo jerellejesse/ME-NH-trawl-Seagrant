@@ -732,12 +732,8 @@ p_year</code></pre>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -764,12 +760,8 @@ p1</code></pre>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -796,12 +788,8 @@ p1</code></pre>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -828,12 +816,8 @@ p1</code></pre>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -860,12 +844,8 @@ p1</code></pre>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -892,12 +872,8 @@ p1</code></pre>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -924,12 +900,8 @@ p1</code></pre>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.404 -0.377 -0.351 -0.325 -0.298 ...
-##  $ y: num [1:31] -0.249 -0.226 -0.202 -0.179 -0.156 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1234,12 +1206,8 @@ p_year</code></pre>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1266,12 +1234,8 @@ p1</code></pre>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1298,12 +1262,8 @@ p1</code></pre>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1330,12 +1290,8 @@ p1</code></pre>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1362,12 +1318,8 @@ p1</code></pre>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1394,12 +1346,8 @@ p1</code></pre>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1426,12 +1374,8 @@ p1</code></pre>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.402 -0.374 -0.345 -0.317 -0.288 ...
-##  $ y: num [1:31] -0.478 -0.451 -0.425 -0.398 -0.372 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1621,12 +1565,8 @@ p_year</code></pre>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1653,12 +1593,8 @@ p1</code></pre>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1685,12 +1621,8 @@ p1</code></pre>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1717,12 +1649,8 @@ p1</code></pre>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.39 -0.358 -0.326 -0.295 -0.263 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1749,12 +1677,8 @@ p1</code></pre>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.391 -0.359 -0.328 -0.296 -0.264 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1781,12 +1705,8 @@ p1</code></pre>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.391 -0.359 -0.328 -0.296 -0.264 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1813,12 +1733,8 @@ p1</code></pre>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.391 -0.359 -0.328 -0.296 -0.264 ...
-##  $ y: num [1:31] -0.278 -0.261 -0.244 -0.228 -0.211 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -1997,12 +1913,8 @@ p_year</code></pre>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -2029,12 +1941,8 @@ p1</code></pre>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -2061,12 +1969,8 @@ p1</code></pre>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -2093,12 +1997,8 @@ p1</code></pre>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.42 -0.393 -0.366 -0.339 -0.312 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -2125,12 +2025,8 @@ p1</code></pre>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.422 -0.395 -0.368 -0.341 -0.314 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -2157,12 +2053,8 @@ p1</code></pre>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.422 -0.395 -0.368 -0.341 -0.314 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
@@ -2189,12 +2081,8 @@ p1</code></pre>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-1.png" width="1152" /></p>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it&#39;s a list though - cannot be plotted as is</code></pre>
-<pre><code>## List of 3
-##  $ x: num [1:31] -0.507 -0.477 -0.447 -0.418 -0.388 ...
-##  $ y: num [1:31] -0.422 -0.395 -0.368 -0.341 -0.314 ...
-##  $ z: num [1:31, 1:31] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<pre class="r"><code>ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
+#str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
+ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  

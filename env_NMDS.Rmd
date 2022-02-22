@@ -162,7 +162,7 @@ bottom_temp<-ordisurf(nmds, env$bottom_temp)
 
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -191,7 +191,7 @@ p2
 surface_temp<-ordisurf(nmds, env$surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -220,7 +220,7 @@ p2
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -248,7 +248,7 @@ p2
 surface_sal<-ordisurf(nmds, env$surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -277,7 +277,7 @@ p2
 start_lat<-ordisurf(nmds, env$start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -305,7 +305,7 @@ p2
 start_long<-ordisurf(nmds, env$start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -334,7 +334,7 @@ p2
 start_depth<-ordisurf(nmds, env$start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -465,7 +465,7 @@ bottom_temp<-ordisurf(nmds, env$bottom_temp)
 
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -494,7 +494,7 @@ p2
 surface_temp<-ordisurf(nmds, env$surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -523,7 +523,7 @@ p2
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -551,7 +551,7 @@ p2
 surface_sal<-ordisurf(nmds, env$surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -580,7 +580,7 @@ p2
 start_lat<-ordisurf(nmds, env$start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -608,7 +608,7 @@ p2
 start_long<-ordisurf(nmds, env$start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -637,7 +637,7 @@ p2
 start_depth<-ordisurf(nmds, env$start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -768,7 +768,7 @@ bottom_temp<-ordisurf(nmds, env$bottom_temp)
 
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -797,7 +797,7 @@ p2
 surface_temp<-ordisurf(nmds, env$surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -826,7 +826,7 @@ p2
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -854,7 +854,7 @@ p2
 surface_sal<-ordisurf(nmds, env$surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -883,7 +883,7 @@ p2
 start_lat<-ordisurf(nmds, env$start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -911,7 +911,7 @@ p2
 start_long<-ordisurf(nmds, env$start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -940,7 +940,7 @@ p2
 start_depth<-ordisurf(nmds, env$start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1071,7 +1071,7 @@ bottom_temp<-ordisurf(nmds, env$bottom_temp)
 
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1100,7 +1100,7 @@ p2
 surface_temp<-ordisurf(nmds, env$surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1129,7 +1129,7 @@ p2
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1157,7 +1157,7 @@ p2
 surface_sal<-ordisurf(nmds, env$surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1186,7 +1186,7 @@ p2
 start_lat<-ordisurf(nmds, env$start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1214,7 +1214,7 @@ p2
 start_long<-ordisurf(nmds, env$start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
@@ -1243,7 +1243,7 @@ p2
 start_depth<-ordisurf(nmds, env$start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
-str(ordi.grid) #it's a list though - cannot be plotted as is
+#str(ordi.grid) #it's a list though - cannot be plotted as is
 ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
