@@ -14,7 +14,7 @@
 
 <title>Seagrant ME-NH trawl survey <br> Objectve 2: Nonmetric Multidimensional Scaling</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -64,6 +64,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -84,6 +85,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -239,7 +243,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -254,8 +258,11 @@ $(document).ready(function () {
 <li>
   <a href="Trawl_plots.html">ME-NH Trawl</a>
 </li>
+<li>
+  <a href="gamms.html">GAMMs</a>
+</li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     NMDS
      
     <span class="caret"></span>
@@ -298,7 +305,7 @@ $(document).ready(function () {
 <div id="header">
 
 <div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
@@ -520,7 +527,7 @@ ME_NMDS_distance&lt;- vegdist(ME_NMDS_data, method=&quot;bray&quot;)</code></pre
 <li>uses rank order</li>
 <li>stress &lt; 0.2 is good, &lt; 0.1 is great, &lt;0.05 is excellent representation in reduced dimensions</li>
 </ul>
-<pre class="r"><code>ME_NMDS=metaMDS(ME_NMDS_distance, # Our community-by-species matrix
+<pre class="r"><code>ME_NMDS&lt;-metaMDS(ME_NMDS_distance, # Our community-by-species matrix
                 k=2, # The number of reduced dimensions
                 method=&quot;bray&quot;,
                 trymax=200) #increase iterations</code></pre>
@@ -571,7 +578,7 @@ data.scores$Season_year=trawl_data_arrange$SEASON_YEAR
 #calculate center of ellipse for each region/year grouping
 data.scores_2&lt;-group_by(data.scores, Region_new, Year_groups, Season)%&gt;%
    mutate(indicator=cur_group_id())
-id&lt;-select(data.scores_2, Region_new, Year_groups,Season, indicator)
+id&lt;-dplyr::select(data.scores_2, Region_new, Year_groups,Season, indicator)
 id&lt;-unique(id)
 
 ctr&lt;-NULL
@@ -580,7 +587,7 @@ Ncombo&lt;-length(unique(data.scores_2$indicator))
 for (i in 1:Ncombo) {
  combos&lt;- filter(data.scores_2, indicator==i)%&gt;%
    ungroup()%&gt;%
-   select(1:2)
+   dplyr::select(1:2)
  
   ctr[[i]]&lt;-MASS::cov.trob(combos)$center
   
@@ -598,22 +605,25 @@ centers&lt;-full_join(d,id)</code></pre>
 <div id="region" class="section level4">
 <h4>Region</h4>
 <pre><code>## Joining, by = &quot;indicator&quot;
+## Joining, by = &quot;indicator&quot;
 ## Joining, by = &quot;indicator&quot;</code></pre>
-<p><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-1.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-2.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-3.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-4.png" width="1152" /></p>
+<p><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-1.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-2.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-3.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-4.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-5-5.png" width="1152" /></p>
 </div>
 <div id="time" class="section level4">
 <h4>Time</h4>
 <pre><code>## Joining, by = &quot;indicator&quot;
 ## Joining, by = &quot;indicator&quot;
 ## Joining, by = &quot;indicator&quot;
+## Joining, by = &quot;indicator&quot;
 ## Joining, by = &quot;indicator&quot;</code></pre>
-<p><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-1.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-2.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-3.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-4.png" width="1152" /></p>
+<p><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-1.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-2.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-3.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-4.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-6-5.png" width="1152" /></p>
 </div>
 <div id="season" class="section level4">
 <h4>Season</h4>
 <pre><code>## Joining, by = &quot;indicator&quot;
+## Joining, by = &quot;indicator&quot;
 ## Joining, by = &quot;indicator&quot;</code></pre>
-<p><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-1.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-2.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-3.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-4.png" width="1152" /></p>
+<p><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-1.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-2.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-3.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-4.png" width="1152" /><img src="NMDS_group_biomass_7.21_files/figure-html/unnamed-chunk-7-5.png" width="1152" /></p>
 </div>
 </div>
 </div>

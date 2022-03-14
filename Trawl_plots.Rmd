@@ -40,6 +40,7 @@ library(here)
 trawl_data<-read.csv(here("Data/ME_trawl_NMDS_data.csv"))[,c(2:17, 20)]
 #updated data
 trawl_data_update<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
+
 cpue_species<-group_by(trawl_data_update,Year,Season)%>%
   mutate(tows=n_distinct(Tow_Number))%>%
   group_by(COMMON_NAME,Year,Season)%>%

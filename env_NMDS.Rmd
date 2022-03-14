@@ -109,6 +109,22 @@ data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
 data.scores$Season_year=all_Data$SEASON_YEAR
 
+p<- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = "bold", label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = "bold"), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = "bold"), 
+       legend.text = element_text(size = 16))
+       
+
+
+p
+
 ```
 
 
@@ -120,6 +136,7 @@ p_region<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -143,6 +160,7 @@ p_year<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -159,7 +177,7 @@ p_year
 #### Bottom temperature
 ```{r}
 bottom_temp<-ordisurf(nmds, env$bottom_temp)
-
+summary(bottom_temp)
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -168,18 +186,28 @@ ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p1 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p2 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p
 p1
 p2
 
@@ -189,6 +217,7 @@ p2
 #### Surface temperature
 ```{r}
 surface_temp<-ordisurf(nmds, env$surface_temp)
+summary(surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -196,19 +225,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -218,6 +255,7 @@ p2
 #### Bottom salinity
 ```{r}
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
+summary(bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -225,19 +263,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -246,6 +292,7 @@ p2
 #### Surface salinity
 ```{r}
 surface_sal<-ordisurf(nmds, env$surface_sal)
+summary(surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -253,19 +300,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -275,6 +330,7 @@ p2
 #### start latitude
 ```{r}
 start_lat<-ordisurf(nmds, env$start_lat)
+summary(start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -282,19 +338,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -303,6 +367,7 @@ p2
 #### start longitude
 ```{r}
 start_long<-ordisurf(nmds, env$start_long)
+summary(start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -310,19 +375,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -332,6 +405,7 @@ p2
 #### start depth
 ```{r}
 start_depth<-ordisurf(nmds, env$start_depth)
+summary(start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -339,19 +413,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Depth")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -412,6 +494,21 @@ data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
 data.scores$Season_year=all_Data$SEASON_YEAR
 
+p<- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = "bold", label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = "bold"), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = "bold"), 
+       legend.text = element_text(size = 16))
+       
+
+
+p
 ```
 
 
@@ -423,6 +520,7 @@ p_region<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -446,6 +544,7 @@ p_year<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -462,7 +561,7 @@ p_year
 #### Bottom temperature
 ```{r}
 bottom_temp<-ordisurf(nmds, env$bottom_temp)
-
+summary(bottom_temp)
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -471,18 +570,28 @@ ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p1 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p2 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p
 p1
 p2
 
@@ -492,6 +601,7 @@ p2
 #### Surface temperature
 ```{r}
 surface_temp<-ordisurf(nmds, env$surface_temp)
+summary(surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -499,19 +609,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -521,6 +639,7 @@ p2
 #### Bottom salinity
 ```{r}
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
+summary(bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -528,19 +647,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -549,6 +676,7 @@ p2
 #### Surface salinity
 ```{r}
 surface_sal<-ordisurf(nmds, env$surface_sal)
+summary(surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -556,19 +684,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -578,6 +714,7 @@ p2
 #### start latitude
 ```{r}
 start_lat<-ordisurf(nmds, env$start_lat)
+summary(start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -585,19 +722,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -606,6 +751,7 @@ p2
 #### start longitude
 ```{r}
 start_long<-ordisurf(nmds, env$start_long)
+summary(start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -613,19 +759,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -635,6 +789,7 @@ p2
 #### start depth
 ```{r}
 start_depth<-ordisurf(nmds, env$start_depth)
+summary(start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -642,19 +797,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Depth")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -715,6 +878,21 @@ data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
 data.scores$Season_year=all_Data$SEASON_YEAR
 
+p<- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = "bold", label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = "bold"), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = "bold"), 
+       legend.text = element_text(size = 16))
+       
+
+
+p
 ```
 
 
@@ -726,6 +904,7 @@ p_region<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -749,6 +928,7 @@ p_year<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -765,7 +945,7 @@ p_year
 #### Bottom temperature
 ```{r}
 bottom_temp<-ordisurf(nmds, env$bottom_temp)
-
+summary(bottom_temp)
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -774,18 +954,28 @@ ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p1 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p2 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p
 p1
 p2
 
@@ -795,6 +985,7 @@ p2
 #### Surface temperature
 ```{r}
 surface_temp<-ordisurf(nmds, env$surface_temp)
+summary(surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -802,19 +993,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -824,6 +1023,7 @@ p2
 #### Bottom salinity
 ```{r}
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
+summary(bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -831,19 +1031,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -852,6 +1060,7 @@ p2
 #### Surface salinity
 ```{r}
 surface_sal<-ordisurf(nmds, env$surface_sal)
+summary(surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -859,19 +1068,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -881,6 +1098,7 @@ p2
 #### start latitude
 ```{r}
 start_lat<-ordisurf(nmds, env$start_lat)
+summary(start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -888,19 +1106,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -909,6 +1135,7 @@ p2
 #### start longitude
 ```{r}
 start_long<-ordisurf(nmds, env$start_long)
+summary(start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -916,19 +1143,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -938,6 +1173,7 @@ p2
 #### start depth
 ```{r}
 start_depth<-ordisurf(nmds, env$start_depth)
+summary(start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -945,22 +1181,31 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Depth")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
+
 
 
 ## Top 50 Species Abundance
@@ -1018,6 +1263,23 @@ data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
 data.scores$Season_year=all_Data$SEASON_YEAR
 
+p<- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = "bold", label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = "bold"), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = "bold"), 
+       legend.text = element_text(size = 16))
+       
+
+
+p
+
+
 ```
 
 
@@ -1029,6 +1291,7 @@ p_region<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1052,6 +1315,7 @@ p_year<- ggplot()+
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = "bold", label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = "bold"), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1068,7 +1332,7 @@ p_year
 #### Bottom temperature
 ```{r}
 bottom_temp<-ordisurf(nmds, env$bottom_temp)
-
+summary(bottom_temp)
 
 ordi.grid <- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1077,18 +1341,28 @@ ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+p1 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p2 <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p
 p1
 p2
 
@@ -1098,6 +1372,7 @@ p2
 #### Surface temperature
 ```{r}
 surface_temp<-ordisurf(nmds, env$surface_temp)
+summary(surface_temp)
 
 ordi.grid <- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1105,19 +1380,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Temperature")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -1127,6 +1410,7 @@ p2
 #### Bottom salinity
 ```{r}
 bottom_sal<-ordisurf(nmds, env$bottom_sal)
+summary(bottom_sal)
 
 ordi.grid <- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1134,19 +1418,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Bottom Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -1155,6 +1447,7 @@ p2
 #### Surface salinity
 ```{r}
 surface_sal<-ordisurf(nmds, env$surface_sal)
+summary(surface_sal)
 
 ordi.grid <- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1162,19 +1455,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Surface Salinity")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -1184,6 +1485,7 @@ p2
 #### start latitude
 ```{r}
 start_lat<-ordisurf(nmds, env$start_lat)
+summary(start_lat)
 
 ordi.grid <- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1191,19 +1493,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Latitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
@@ -1212,6 +1522,7 @@ p2
 #### start longitude
 ```{r}
 start_long<-ordisurf(nmds, env$start_long)
+summary(start_long)
 
 ordi.grid <- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1219,19 +1530,27 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Longitude")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 
@@ -1241,6 +1560,7 @@ p2
 #### start depth
 ```{r}
 start_depth<-ordisurf(nmds, env$start_depth)
+summary(start_depth)
 
 ordi.grid <- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it's a list though - cannot be plotted as is
@@ -1248,19 +1568,28 @@ ordi.mite <- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z <- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals <- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p <- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
+  labs(x = "NMDS1", y = "NMDS2", color="Depth")+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 <- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position="identity",size=1.5)+
   labs(x = "NMDS1", y = "NMDS2", color="Depth")+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
+p
 p1
 p2
 ```
+

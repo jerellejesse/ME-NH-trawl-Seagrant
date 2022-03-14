@@ -11,13 +11,14 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(dplyr)
 library(here)
 library(rmarkdown)
 library(ggplot2)
 library(ggthemes)
 library(ggforce)
+library(stringr)
 ```
 
 ```{r, echo = FALSE}
@@ -37,7 +38,7 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 * 31 confidential species records ~ 2%
 
 <br>
-```{r echo=FALSE, message=FALSE}
+```{r  }
 landings<- read.csv(here("Data/MaineDMR_Modern_Landings_Data_All.csv"))
 
 landings_sum<-select(landings, year, county, species, weight, value)%>%
@@ -55,12 +56,17 @@ confidential_county<-filter(landings_total, county %in% c("Other Maine", "UK", "
 
 confidential_Species<-filter(landings_total, species %in% c("Other Species", "Unidentified Catch"))
 
+trawl_data_update<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))%>%
+  rename(species=COMMON_NAME)
+
+trawl_data_update$species<-str_to_title(trawl_data_update$species)
+
 ```
 
 <br>
 
 ### County
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 county<-group_by(landings_total, county, year)%>%
       summarise(total_weight=sum(weight, na.rm=TRUE))
@@ -76,7 +82,7 @@ p1
 <br>
 
 ### Species
-```{r echo=FALSE, message=FALSE}
+```{r }
 species<-group_by(landings_total,species, year)%>%
       summarise(total_weight=sum(weight, na.rm=TRUE))
 paged_table(species)
@@ -101,13 +107,11 @@ print(ggplot()+
 #dev.off()
 ```
 
-#### Remove inconsistent low participation fisheries from trends
-* bluefish, surf clam, sea cucumber, American eel,winter flounder, yellowtail flounder, hagfish, silver hake (whiting), Atlantic periwinkles (cockles), green sea urchin, seaweed, skates, smelts, long-finned squid, short-finned squid, swordfish, bigeye tuna,Atlantic wolffish
+#### Remove species not caught in trawl
 
-* Should we remove low participation, but consistent fisheries? Example: bloodworms, razor clam, cusk, spiny dogfish, elvers, halibut, European flat oyster, sandworms, bluefin tuna, waved whelk
 ```{r}
 #remove species blanks, other, unclassified
-species_filter1<-filter(species, species != "")%>%
+species_county_filter1<-filter(species, species != "")%>%
   filter(species != "Herring Unc")%>%
   filter(species != "Other Species")%>%
   filter(species != "Seaweed Unc")%>%
@@ -122,29 +126,17 @@ species_filter1<-filter(species, species != "")%>%
 #   facet_wrap_paginate(~species, ncol=2, nrow=4, page=i))
 # }
 
-species_filter2<-species_filter1%>%
-  filter(species != "Bluefish")%>%
-  filter(species != "Clam Surf / Hen")%>%
-  filter(species != "Cucmber Sea")%>%
-  filter(species != "Eel American")%>%
-  filter(species != "Flounder Winter")%>%
-  filter(species != "Flounder Yellowtail")%>%
-  filter(species != "Hagfish")%>%
-  filter(species != "Hake Silver (Whiting)")%>%
-  filter(species !="Periwinkles Atlantic (Cockles)")%>%
-  filter(species != "Sea Urchins Green")%>%
-  filter(species !="Skates")%>%
-  filter(species !="Smelts")%>%
-  filter(species != "Squid Long Finned")%>%
-  filter(species != "Squid Short Finned")%>%
-  filter(species != "Swordfish")%>%
-  filter(species != "Tuna Bigeye")%>%
-  filter(species != "Wolffish Atlantic")
+remove_county<-anti_join(species_county_filter1, trawl_data_update)
+remove_county<-as.data.frame(unique(remove_county$species))
+remove_county<-rename(remove_county, species="unique(remove_county$species)")
+remove_county
+species_county_filter2<-anti_join(species_county_filter1, remove_county)
+
 
 for(i in 1:5){
 
 print(ggplot()+
-  geom_point(data=species_filter2, aes(x=year, y=1, size=total_weight))+
+  geom_point(data=species_county_filter2, aes(x=year, y=1, size=total_weight))+
   theme(axis.text.y = element_blank(), axis.title.y = element_blank(), axis.ticks.y=element_blank())+
   scale_size(range = c(.1,12), name="Weight")+
   facet_wrap_paginate(~species, ncol=2, nrow=4, page=i))
@@ -187,7 +179,7 @@ paged_table(landings_full)
 <br>
 
 ### Species
-```{r echo=FALSE, message=FALSE}
+```{r }
 species_full<-group_by(landings_full,species, year)%>%
       summarise(total_weight=sum(total_weight, na.rm=TRUE))%>%
       filter(year>2005)
@@ -217,23 +209,27 @@ print(ggplot()+
 
 
 
-#### Remove inconsistent low participation fisheries from trends
-* Sea cucumber, winter flounder, yellowtail flounder,silver hake, skates, wolffish, crab unclassified
+#### Remove species not caught in trawl
 
 ```{r}
+
 #remove species blanks, other, unclassified
-species_filter1<-filter(species_full, species != "Cucumber Sea")%>%
-  filter(species != "Flounder Winter")%>%
-  filter(species != "Flounder Yellowtail")%>%
-  filter(species != "Hake Silver (Whiting)")%>%
+species_full_filter1<-species_full%>%
   filter(species != "Skates")%>%
-  filter(species != "Wolffish Atlantic")%>%
-  filter(species != "Crab Unc")
+  filter(species != "Crab Unc")%>%
+  filter(species != "Seaweed Unc")
+
+remove_full<-anti_join(species_full_filter1, trawl_data_update)
+remove_full<-as.data.frame(unique(remove_full$species))
+remove_full<-rename(remove_full, species="unique(remove_full$species)")
+remove_full
+species_full_filter2<-anti_join(species_full_filter1, remove_full)
+
 
 for(i in 1:4){
 
 print(ggplot()+
-  geom_point(data=species_filter1, aes(x=year, y=1, size=total_weight))+
+  geom_point(data=species_full_filter2, aes(x=year, y=1, size=total_weight))+
   theme(axis.text.y = element_blank(), axis.title.y = element_blank(), axis.ticks.y=element_blank())+
   scale_size(range = c(.1,12), name="Weight")+
   facet_wrap_paginate(~species, ncol=2, nrow=4, page=i))
@@ -246,7 +242,7 @@ print(ggplot()+
 <br>
 
 #### Top 10 species
-```{r echo=FALSE, message=FALSE}
+```{r }
 order_full<-group_by(species_full, species)%>%
   summarise(avg_weight=mean(total_weight, na.rm=TRUE))%>%
   arrange(desc(avg_weight))
@@ -263,10 +259,13 @@ p2
 
 
 ## Diveristy metrics
+* options for...
+  - #1 all landings or
+  - #2 species filtered for best comparison
 
 ### Species richness
 #### County specified data
-```{r echo=FALSE, message=FALSE}
+```{r }
 richness<-group_by(landings_total, county, year)%>%
   summarise(richness=length(unique(species)))
 
@@ -278,11 +277,19 @@ richness<-group_by(landings_total, year)%>%
 
 rich<-ggplot()+ geom_line(data=subset(richness, year<2020), aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-rich
+#filtered for best comparison to trawl survey
+richness2<-group_by(species_county_filter2, year)%>%
+  summarise(richness=length(unique(species)))
+
+rich2<-ggplot()+ geom_line(data=subset(richness2, year<2020), aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+rich2
 ```
 
+
+
 #### Full data not county specified
-```{r echo=FALSE, message=FALSE}
+```{r }
 richness_full<-group_by(landings_full, year)%>%
   summarise(richness=length(unique(species)))
 
@@ -290,13 +297,21 @@ richness_full<-group_by(landings_full, year)%>%
 rich_full<-ggplot()+ geom_line(data=subset(richness_full, year>2005), aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 rich_full
+
+# filtered
+richness_full2<-group_by(species_full_filter2, year)%>%
+  summarise(richness=length(unique(species)))
+
+rich_full2<-ggplot()+ geom_line(data=subset(richness_full2, year>2005), aes(year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+rich_full2
 ```
 
 
 ### Shannon-Weiner diversity
 
 #### County specified data
-```{r echo=FALSE, message=FALSE}
+```{r }
 shannon<-group_by(landings_total, year,county)%>%
   mutate(total=sum(weight), prop=weight/total)%>%
   summarise(shannon=-1*(sum(prop*log(prop))))
@@ -314,11 +329,21 @@ diversity<-ggplot()+geom_line(data=subset(shannon, year<2020), aes(year, shannon
 
 diversity
 
+#filtered
+shannon2<-group_by(species_county_filter2, year,species)%>%
+  mutate(species_total=sum(total_weight))%>%
+  group_by(year)%>%
+  mutate(total=sum(species_total),prop=species_total/total)%>%
+  summarise(shannon=-1*(sum(prop*log(prop))))
+
+diversity2<-ggplot()+geom_line(data=subset(shannon2, year<2020), aes(year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+diversity2
 ```
 
 
 #### Full data
-```{r echo=FALSE, message=FALSE}
+```{r }
 shannon_full<-group_by(landings_full, year,species)%>%
   mutate(species_total=sum(total_weight))%>%
   group_by(year)%>%
@@ -329,13 +354,23 @@ diversity_full<-ggplot()+geom_line(data=subset(shannon_full, year>2005), aes(yea
 
 diversity_full
 
+#filtered data
+shannon_full2<-group_by(species_full_filter2, year,species)%>%
+  mutate(species_total=sum(total_weight))%>%
+  group_by(year)%>%
+  mutate(total=sum(species_total),prop=species_total/total)%>%
+  summarise(shannon=-1*(sum(prop*log(prop))))
+
+diversity_full2<-ggplot()+geom_line(data=subset(shannon_full2, year>2005), aes(year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+diversity_full2
 ```
 
 
 ### Simpson's diversity and evenness
 
 #### County specified data
-```{r echo=FALSE, message=FALSE}
+```{r }
 simpson<-group_by(landings_total, year, county)%>%
   mutate(total=sum(weight), prop=weight/total)%>%
   summarise(simpson=1/(sum(prop^2)) )
@@ -351,17 +386,32 @@ simpson<-group_by(landings_total, year,species)%>%
   mutate(prop=species_total/total)%>%
   summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
    
-ggplot()+geom_line(data=simpson, aes(year, simpsonD))+theme_classic()
+#ggplot()+geom_line(data=simpson, aes(year, simpsonD))+theme_classic()
 
 evenness<-ggplot()+geom_line(data=subset(simpson, year<2020), aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 evenness
 
+
+#filtered data
+simpson2<-group_by(species_county_filter2, year,species)%>%
+  summarise(species_total=sum(total_weight))%>% #aggregate counties to get yearly species totals for all of Maine
+  group_by(year)%>%
+  mutate(richness=length(unique(species)))%>%
+  mutate(total=sum(species_total))%>%
+  mutate(prop=species_total/total)%>%
+  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+   
+#ggplot()+geom_line(data=simpson2, aes(year, simpsonD))+theme_classic()
+
+evenness2<-ggplot()+geom_line(data=subset(simpson2, year<2020), aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+evenness2
 ```
 
 
 #### Full data
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 simpson_full<-group_by(landings_full, year,species)%>%
   summarise(species_total=sum(total_weight))%>% #aggregate counties to get yearly species totals for all of Maine
@@ -371,17 +421,33 @@ simpson_full<-group_by(landings_full, year,species)%>%
   mutate(prop=species_total/total)%>%
   summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
    
-ggplot()+geom_line(data=simpson_full, aes(year, simpsonD))+theme_classic()
+#ggplot()+geom_line(data=simpson_full, aes(year, simpsonD))+theme_classic()
 
 evenness_full<-ggplot()+geom_line(data=subset(simpson_full, year>2005), aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 evenness_full
 
+
+#filtered data
+simpson_full2<-group_by(species_full_filter2, year,species)%>%
+  summarise(species_total=sum(total_weight))%>% #aggregate counties to get yearly species totals for all of Maine
+  group_by(year)%>%
+  mutate(richness=length(unique(species)))%>%
+  mutate(total=sum(species_total))%>%
+  mutate(prop=species_total/total)%>%
+  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+   
+#ggplot()+geom_line(data=simpson_full2, aes(year, simpsonD))+theme_classic()
+
+evenness_full2<-ggplot()+geom_line(data=subset(simpson_full2, year>2005), aes(year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+
+evenness_full2
+
 ```
 
 ### Average taxinomic distinctness
 #### Country specified data
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(taxize)
 library(purrr)
 library(mgcv)
@@ -493,17 +559,124 @@ tax.distinct<-ggplot()+geom_line(data=subset(d, year<2020), aes(year, delta_plus
 
 ```
 
-#### Full data
-```{r echo=FALSE, message=FALSE}
-library(taxize)
-library(purrr)
-library(mgcv)
+With filtered data
+```{r}
+species<-read.csv(here("Data/species_landings.csv"))%>%
+  filter(scientific.name!="")%>%
+  filter(scientific.name!="Fucus vesiculosus")%>%
+  anti_join(remove_county)%>%
+  rename(common_name=species, Species=scientific.name)
+  
 
+diff_species<-as.vector(unique(species$Species))
+tax <- classification(diff_species, db = 'itis') 
+info <- matrix(NA)
+expand <- matrix(NA)
+specific <- matrix(NA, nrow = length(diff_species), ncol=6)
+
+
+for (i in 1:length(tax)){
+info <- tax[[i]][c('name','rank')]
+expand <- info[info$rank == 'phylum'| info$rank == 'class'| info$rank == 'order' | info$rank == 'family' | info$rank == 'genus' | info$rank == 'species',]
+specific[i,] <- as.vector(expand$name)
+
+}
+colnames(specific) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+phylo<-as.data.frame(specific)
+
+merge<-left_join(species,phylo, by="Species")
+  
+landings_tax<-rename(landings_total, common_name=species)%>%
+  full_join(merge)%>%
+  filter(!is.na(Species))
+
+landings_tax_groups<-group_by(landings_tax, year,Species)%>%
+  summarise(weight=sum(weight))%>%
+  mutate(indicator=cur_group_id())%>%
+  left_join(phylo)
+
+hauls <- unique(landings_tax_groups$indicator)   
+N_hauls <- length(hauls) # number of hauls
+N_species <- NULL #N species
+sub_species <- NULL # N_species-1
+total <- NULL  #xixj
+numerator <- NULL #wijxixj
+x_y <- matrix(NA, nrow = 6, ncol = 6) 
+x <- NULL
+y <- NULL
+ident <- NULL
+weight <- NULL #wij
+count <- NULL
+total_weight <- NULL
+mean_weight <- NULL
+weight_var <- NULL
+delta <- NULL
+delta_star <- NULL
+delta_plus <- NULL
+delta_var <- NULL
+weight_var <- NULL
+
+for (j in 1:N_hauls) {  
+diff_hauls <- landings_tax_groups[which(landings_tax_groups$indicator == j),] #subset unique hauls/functional groups
+N_species[j] <- length(unique(diff_hauls$Species))# count the number of unique species in each haul (denominator)
+sub_species[j] <- N_species[j]-1
+diff <- unique(as.vector(diff_hauls$Species)) # name of each unique species 
+combos <- combn(diff, 2) # create combinations of each species/haul (for weight calc)
+
+phylo <- as.matrix(subset(diff_hauls, select = c(Phylum,Class,Order,Family,Genus, Species))) # extract phylogenetic information only
+unique_phylo <- uniquecombs(phylo) # subset by unique species information
+unique_phylo <- as.data.frame(unique_phylo)
+
+total <- NULL  # reset the length for each haul because they will be different
+weight <- NULL # reset  
+
+for (i in 1:ncol(combos)) { # for each unique combination count the number of each species 
+  total[i] <- sum(diff_hauls$Species == combos[1,i]) * sum(diff_hauls$Species == combos[2,i]) #empty vector is always length 210
+  #total[i] <- diff_hauls[diff_hauls[,22] == combos[1,i],9] * diff_hauls[diff_hauls[,22] == combos[2,i],9]
+  x <- unique_phylo[unique_phylo$Species == combos[1,i],]
+  y <- unique_phylo[unique_phylo$Species == combos[2,i],]
+  x_y <- rbind(x,y)
+  
+  for (k in 1:ncol(x_y)){ # for each combination calculate the weight value 
+    ident[k] <- identical(as.vector(x_y[1,k]), as.vector(x_y[2,k])) # determine how much of phylogenetic information is the same
+    weight[i] <- sum(ident == "FALSE") # vector of weights
+    #mean_weight[i] <- mean(weight) #rep(mean(weight),length(weight))
+    numerator[j] <- sum(total*weight) 
+    count[j] <- sum(total)
+    mean_weight[j] <- mean(weight)
+    total_weight[j] <- sum(weight)
+    weight_var[j] <- sum((weight- mean(weight))^2) 
+  }
+  delta <- (2*numerator)/(N_species*sub_species)
+  delta_star <- numerator/(count)
+  delta_plus <- (2*total_weight)/(N_species*sub_species)
+  delta_var <- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
+}
+}
+years<-2006:2020
+delta<-as.data.frame(delta[1:15]) # taxonomic diversity
+delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
+delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
+delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+
+d2<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
+colnames(d2)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+
+#write.csv(d, here("Data/tax_metrics.csv"))
+
+tax.distinct2<-ggplot()+geom_line(data=subset(d2, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                                                        tax.distinct2    
+
+```
+
+#### Full data
+```{r}
 unique<-as.data.frame(unique(species_full$species))%>%
   rename(common_name="unique(species_full$species)")
 
 species2<-read.csv(here("Data/species_landings.csv"))%>%
   filter(scientific.name!="Fucus vesiculosus")%>%
+  anti_join(remove_full)%>%
   rename(common_name=species, Species=scientific.name)%>%
   right_join(unique)
 
@@ -615,11 +788,132 @@ tax.distinct_full<-ggplot()+geom_line(data=subset(d_full, year>2005), aes(year, 
 
 ```
 
+filtered data
+```{r }
+library(taxize)
+library(purrr)
+library(mgcv)
+
+unique<-as.data.frame(unique(species_full_filter2$species))%>%
+  rename(common_name="unique(species_full_filter2$species)")
+
+species2<-read.csv(here("Data/species_landings.csv"))%>%
+  filter(scientific.name!="Fucus vesiculosus")%>%
+  rename(common_name=species, Species=scientific.name)%>%
+  right_join(unique)
+
+species2$Species[species2$common_name=="Alewife"]<-"Alosa pseudoharengus" 
+
+species<-species2%>%
+  filter(Species!="NA")%>%
+  filter(Species!="")
+
+diff_species<-as.vector(unique(species$Species))
+tax <- classification(diff_species, db = 'itis') 
+info <- matrix(NA)
+expand <- matrix(NA)
+specific <- matrix(NA, nrow = length(diff_species), ncol=6)
+
+
+for (i in 1:length(tax)){
+info <- tax[[i]][c('name','rank')]
+expand <- info[info$rank == 'phylum'| info$rank == 'class'| info$rank == 'order' | info$rank == 'family' | info$rank == 'genus' | info$rank == 'species',]
+specific[i,] <- as.vector(expand$name)
+
+}
+colnames(specific) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
+phylo<-as.data.frame(specific)
+
+merge<-left_join(species,phylo, by="Species")
+  
+landings_tax<-rename(landings_full, common_name=species)%>%
+  full_join(merge)%>%
+  filter(!is.na(Species))
+
+landings_tax_groups<-group_by(landings_tax, year,Species)%>%
+  summarise(weight=sum(total_weight))%>%
+  mutate(indicator=cur_group_id())%>%
+  left_join(phylo)
+
+hauls <- unique(landings_tax_groups$indicator)   
+N_hauls <- length(hauls) # number of hauls
+N_species <- NULL #N species
+sub_species <- NULL # N_species-1
+total <- NULL  #xixj
+numerator <- NULL #wijxixj
+x_y <- matrix(NA, nrow = 6, ncol = 6) 
+x <- NULL
+y <- NULL
+ident <- NULL
+weight <- NULL #wij
+count <- NULL
+total_weight <- NULL
+mean_weight <- NULL
+weight_var <- NULL
+delta <- NULL
+delta_star <- NULL
+delta_plus <- NULL
+delta_var <- NULL
+weight_var <- NULL
+
+for (j in 1:N_hauls) {  
+diff_hauls <- landings_tax_groups[which(landings_tax_groups$indicator == j),] #subset unique hauls/functional groups
+N_species[j] <- length(unique(diff_hauls$Species))# count the number of unique species in each haul (denominator)
+sub_species[j] <- N_species[j]-1
+diff <- unique(as.vector(diff_hauls$Species)) # name of each unique species 
+combos <- combn(diff, 2) # create combinations of each species/haul (for weight calc)
+
+phylo <- as.matrix(subset(diff_hauls, select = c(Phylum,Class,Order,Family,Genus, Species))) # extract phylogenetic information only
+unique_phylo <- uniquecombs(phylo) # subset by unique species information
+unique_phylo <- as.data.frame(unique_phylo)
+
+total <- NULL  # reset the length for each haul because they will be different
+weight <- NULL # reset  
+
+for (i in 1:ncol(combos)) { # for each unique combination count the number of each species 
+  total[i] <- sum(diff_hauls$Species == combos[1,i]) * sum(diff_hauls$Species == combos[2,i]) #empty vector is always length 210
+  #total[i] <- diff_hauls[diff_hauls[,22] == combos[1,i],9] * diff_hauls[diff_hauls[,22] == combos[2,i],9]
+  x <- unique_phylo[unique_phylo$Species == combos[1,i],]
+  y <- unique_phylo[unique_phylo$Species == combos[2,i],]
+  x_y <- rbind(x,y)
+  
+  for (k in 1:ncol(x_y)){ # for each combination calculate the weight value 
+    ident[k] <- identical(as.vector(x_y[1,k]), as.vector(x_y[2,k])) # determine how much of phylogenetic information is the same
+    weight[i] <- sum(ident == "FALSE") # vector of weights
+    #mean_weight[i] <- mean(weight) #rep(mean(weight),length(weight))
+    numerator[j] <- sum(total*weight) 
+    count[j] <- sum(total)
+    mean_weight[j] <- mean(weight)
+    total_weight[j] <- sum(weight)
+    weight_var[j] <- sum((weight- mean(weight))^2) 
+  }
+  delta <- (2*numerator)/(N_species*sub_species)
+  delta_star <- numerator/(count)
+  delta_plus <- (2*total_weight)/(N_species*sub_species)
+  delta_var <- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
+}
+}
+years<-1950:2019
+delta<-as.data.frame(delta[1:70]) # taxonomic diversity
+delta_star<-as.data.frame(delta_star[1:70]) # taxonomic distinctness
+delta_plus<-as.data.frame(delta_plus[1:70]) # average taxonomic distinctness
+delta_var<-as.data.frame(delta_var[1:70]) # variation in taxonomic distinctness
+
+d_full2<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
+colnames(d_full2)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+
+#write.csv(d_full, here("Data/tax_metrics_full.csv"))
+
+tax.distinct_full2<-ggplot()+geom_line(data=subset(d_full2, year>2005), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                                                      tax.distinct_full2
+
+```
+
 
 Combo plot
 
 #### County specified data
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(reshape2)
 library(gridExtra)
 
@@ -633,10 +927,22 @@ ggplot()+geom_line(data=all_melt, aes(year,value))+facet_grid(rows = vars(variab
 
 grid.arrange(rich, diversity, evenness,tax.distinct, nrow=4)
 
+
+#filtered
+all_metrics2<-full_join(richness2,shannon2, by="year")%>%
+  full_join(simpson2)%>%
+  full_join(d2)
+
+all_melt2<-melt(all_metrics2, id="year")
+
+ggplot()+geom_line(data=all_melt2, aes(year,value))+facet_grid(rows = vars(variable), scales="free")+theme_bw()
+
+grid.arrange(rich2, diversity2, evenness2,tax.distinct2, nrow=4)
+
 ```
 
 #### Full data
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(reshape2)
 library(gridExtra)
 
@@ -650,7 +956,53 @@ ggplot()+geom_line(data=all_melt_full, aes(year,value))+facet_grid(rows = vars(v
 
 grid.arrange(rich_full, diversity_full, evenness_full,tax.distinct_full, nrow=4)
 
+#filtered data
+all_metrics_full2<-full_join(richness_full2,shannon_full2, by="year")%>%
+  full_join(simpson_full2)%>%
+  full_join(d_full2)
+
+all_melt_full2<-melt(all_metrics_full2, id="year")
+
+ggplot()+geom_line(data=all_melt_full2, aes(year,value))+facet_grid(rows = vars(variable), scales="free")+theme_bw()
+
+grid.arrange(rich_full2, diversity_full2, evenness_full2,tax.distinct_full2, nrow=4)
 ```
+
+<br>
+
+## Correlation analysis
+* compare trawl and landings
+
+```{r}
+library(corrplot)
+library(PerformanceAnalytics)
+# combine data
+trawl_metrics<-read.csv(here("Data/trawl_biodiversity_update.csv"))%>%
+  rename(richness_trawl=richness, shannon_trawl=shannon, simpsonE_trawl=simpsonE, delta_plus_trawl=delta_plus, year=Year)%>%
+  dplyr::select(2,3,4,6,9)
+
+# trawl_melt<-melt(trawl_metrics, id="year")
+# 
+# ggplot()+geom_line(data=trawl_melt, aes(year,value))+facet_grid(rows = vars(variable), scales="free")+theme_bw()
+
+
+landings_metrics<-dplyr::select(all_metrics2, 1,2,3,5,8)
+
+combo<-full_join(landings_metrics,trawl_metrics)%>%
+  filter(year>2005)
+
+#correlation test
+cor<-round(cor(combo),2)
+cor.table<-as.data.frame(as.table(cor))
+
+
+corrplot(cor, type="upper")
+chart.Correlation(cor, histogram=TRUE)
+cor.table
+
+
+```
+
 
 <br>
 
@@ -661,7 +1013,7 @@ Landings assigned to survey regions based on county lines.
 ![Trawl survey regions with counties outlined](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/trawl_survey.PNG)
 ![Maine counties](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ME_counties.PNG)
 
-```{r echo=FALSE, message=FALSE}
+```{r }
 # add regions by county
 landings_county<-landings_total
 #table(landings_county$county)
@@ -689,7 +1041,7 @@ landings_county<-filter(landings_county,!is.na(landings_county$group))
 
 
 ### Species richness
-```{r echo=FALSE, message=FALSE}
+```{r }
 richness<-group_by(landings_county, group, year)%>%
   summarise(richness=length(unique(species)))
 
@@ -700,7 +1052,7 @@ ggplot()+ geom_line(data=richness, aes(year, richness))+
 ```
 
 ### Shannon-Weiner diversity
-```{r echo=FALSE, message=FALSE}
+```{r }
 shannon<-group_by(landings_county, year,group)%>%
   mutate(total=sum(weight), prop=weight/total)%>%
   summarise(shannon=-1*(sum(prop*log(prop))))
@@ -712,7 +1064,7 @@ ggplot()+geom_line(data=shannon, aes(year, shannon))+
 ```
 
 ### Simpson's diversity and evenness
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 simpson<-group_by(landings_county, year,group,species)%>%
   summarise(species_total=sum(weight))%>% #aggregate counties to get yearly species totals for all of Maine
@@ -728,7 +1080,7 @@ ggplot()+geom_line(data=simpson, aes(year, simpsonE))+
 ```
 
 ### Average taxinomic distinctness
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(taxize)
 library(purrr)
 library(mgcv)
@@ -1007,7 +1359,7 @@ pen_tax.distinct<-ggplot()+geom_line(data=subset(pen_d, year<2020), aes(year, de
 ```
 
 ### East of Penobscot Bay
-```{r echo=FALSE, message=FALSE}
+```{r }
 #combo plots
 
 #east
@@ -1025,7 +1377,7 @@ grid.arrange(r,s,e,t, nrow=4)
 ```
 
 ### West of Penobscot Bay
-```{r echo=FALSE, message=FALSE}
+```{r }
 #west
 r<-ggplot()+geom_line(data=subset(richness, group=="West"),aes(year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
@@ -1040,7 +1392,7 @@ grid.arrange(r,s,e,t, nrow=4)
 
 
 ### Penobscot Bay
-```{r echo=FALSE, message=FALSE}
+```{r }
 #pen bay
 r<-ggplot()+geom_line(data=subset(richness, group=="Penobscot"),aes(year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
@@ -1056,7 +1408,7 @@ grid.arrange(r,s,e,t, nrow=4)
 
 ## Functional Groups
 ### County specified data
-```{r echo=FALSE, message=FALSE}
+```{r }
 groups<-read.csv(here("Data/species_groups.csv"))
 landings_groups<-mutate(landings_total,COMMON_NAME=tolower(species))%>%
   left_join(groups, by="COMMON_NAME")
@@ -1090,7 +1442,7 @@ ggplot(year_group_prop)+
 
 
 #### Benthivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 benthivore<-filter(landings_groups, functional_group=="benthivore")
 group_benthivore<-group_by(benthivore,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(weight, na.rm=TRUE))
@@ -1114,7 +1466,7 @@ ggplot(benthivore_prop)+
 <br>
 
 #### Benthos
-```{r echo=FALSE, message=FALSE}
+```{r }
 benthos<-filter(landings_groups, functional_group=="benthos")
 group_benthos<-group_by(benthos,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(weight, na.rm=TRUE))
@@ -1136,7 +1488,7 @@ ggplot(benthos_prop)+
 <br>
 
 #### Piscivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 piscivore<-filter(landings_groups, functional_group=="piscivore")
 
 order<-group_by(piscivore, COMMON_NAME)%>%
@@ -1166,7 +1518,7 @@ ggplot(piscivore_prop)+
 <br>
 
 #### Planktivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 planktivore<-filter(landings_groups, functional_group=="planktivore")
 group_planktivore<-group_by(planktivore,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(weight, na.rm=TRUE))
@@ -1188,7 +1540,7 @@ ggplot(planktivore_prop)+
 <br>
 
 #### Undefined
-```{r echo=FALSE, message=FALSE}
+```{r }
 undefined<-filter(landings_groups, functional_group=="undefined")
 
 order<-group_by(undefined, COMMON_NAME)%>%
@@ -1218,7 +1570,7 @@ ggplot(undefined_prop)+
 
 
 ### Full data
-```{r echo=FALSE, message=FALSE}
+```{r }
 groups<-read.csv(here("Data/species_groups.csv"))
 landings_groups<-mutate(landings_full,COMMON_NAME=tolower(species))%>%
   left_join(groups, by="COMMON_NAME")
@@ -1262,7 +1614,7 @@ ggplot(subset(year_group_prop, year>2005))+
 
 
 #### Benthivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 benthivore<-filter(landings_groups, functional_group=="benthivore")
 group_benthivore<-group_by(benthivore,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))
@@ -1289,7 +1641,7 @@ ggplot(subset(benthivore_prop, year>2005))+
 <br>
 
 #### Benthos
-```{r echo=FALSE, message=FALSE}
+```{r }
 benthos<-filter(landings_groups, functional_group=="benthos")
 group_benthos<-group_by(benthos,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))
@@ -1317,7 +1669,7 @@ ggplot(subset(benthos_prop, year>2005))+
 <br>
 
 #### Piscivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 piscivore<-filter(landings_groups, functional_group=="piscivore")
 
 order<-group_by(piscivore, COMMON_NAME)%>%
@@ -1352,7 +1704,7 @@ ggplot(subset(piscivore_prop, year>2005))+
 <br>
 
 #### Planktivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 planktivore<-filter(landings_groups, functional_group=="planktivore")
 group_planktivore<-group_by(planktivore,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))
@@ -1380,7 +1732,7 @@ ggplot(subset(planktivore_prop, year>2005))+
 <br>
 
 #### Undefined
-```{r echo=FALSE, message=FALSE}
+```{r }
 undefined<-filter(landings_groups, functional_group=="undefined")
 
 order<-group_by(undefined, COMMON_NAME)%>%

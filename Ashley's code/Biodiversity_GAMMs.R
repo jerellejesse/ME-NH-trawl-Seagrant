@@ -148,7 +148,7 @@ FVCOM <- FVCOM_spring[FVCOM_spring$FV_year < 2017,]
 
 ME_NH_spring_full <- cbind(exp, FVCOM)
 #setwd("C:/Users/aweston/Box/Ashley Weston (System Account)/Seagrant/Results/GAMMs")
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Results/GAMMs")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheres Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/Results/GAMMs")
 write.csv(ME_NH_spring_full, "ME_NH_spring_full.csv")
 
 
@@ -159,12 +159,12 @@ write.csv(ME_NH_spring_full, "ME_NH_spring_full.csv")
 
 ####ME-NH fall models#####
 # trawl observations 
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Results")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/Results")
 fall <- read.csv("ME_NH_fall_exp.csv")
+
 # FVCOM observations 
-#setwd("C:/Users/aweston/Box/Ashley Weston (System Account)/Seagrant/Results/GAMMs")
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Results/GAMMs")
 fall <- read.csv("ME_NH_fall_full.csv")
+
 ### number of spp 
 #1 choose response distribution - start w/normal distribution
 hist(fall$N_species) # start w/normal distribution
@@ -716,7 +716,7 @@ write.csv(GOM_spring_full, "GOM_spring_full.csv")
 ####fall w/trawl observations
 #### SALINITY OBSERVATIONS DO NOT START UNTIL AFTER 1992
 
-### fall w/FVCOM ovbservations
+### fall w/FVCOM observations
 ## (1978-2017)
 setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results/GAMMs")
 GOM_fall <- read.csv("GOM_fall_full.csv")
@@ -733,7 +733,7 @@ FV_GOM_N_FL <- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal
 summary(FV_GOM_N_FL$gam)
 plot(FV_GOM_N_FL$gam)
 
-#Shannon-weiner
+#Shannon-wiener
 GOM_H_FL <- gamm4(H_index ~ s(BOTTEMP) + s(SURFTEMP) + s(BOTSALIN) +  s(SURFSALIN) + 
   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 summary(GOM_H_FL$gam)

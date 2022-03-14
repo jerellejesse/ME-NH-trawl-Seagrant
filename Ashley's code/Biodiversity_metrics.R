@@ -22,27 +22,27 @@ trawl <- read.csv("EXPCATCH_forGMRI.csv", header = TRUE) #ME-NH trawl survey cat
 
 
 # first drop samples that are not to the species level
-trawl_2 <- trawl[!trawl$SCIENTIFIC_NAME == "Anemonia" ,]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Pandalus" ,]    #ID to spp also
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Stelleroidea",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Octopoda",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Clypeasteroida",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Yoldia",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Calcarea",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Majidae",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Balanus",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Stomatopoda",]    #low
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Euphausiacea",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Paguroidea",]
+trawl_2 <- trawl[!trawl$SCIENTIFIC_NAME == "Anemonia" ,] #anemone
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Pandalus" ,]  #shrimp  #ID to spp also
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Stelleroidea",] #sea stars
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Octopoda",] #octopus
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Clypeasteroida",] # sand dollar
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Yoldia",] #clams
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Calcarea",] #sponge
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Majidae",] #spider crab
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Balanus",] #barnacle
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Stomatopoda",]  #mantis shrimp  #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Euphausiacea",] #krill
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Paguroidea",] # hermit crab
 trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Mysidacea",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Diaphus",]        #low
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Sepiolidae",]
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Artediellus",]    #low
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Macrouridae",]    #low
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Paralepididae",]  #low
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Clupeidae",]      #low
-trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Myctophidae",]    #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Mysidacea",] # mysid shrimp
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Diaphus",]      #lantern fish  #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Sepiolidae",] #bobtail squid
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Artediellus",]   #pacific sculpin #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Macrouridae",]  # deep sea rattial/ grenadiers  #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Paralepididae",] #barracudinas #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Clupeidae",]    #herring  #low
+trawl_2 <- trawl_2[!trawl_2$SCIENTIFIC_NAME == "Myctophidae",]  #lanternfish  #low
 
 ## there are 331 occurances where W_NUM = NA; remove these #AEW check into this (report)
 trawl_2 <- trawl_2[!is.na(trawl_2$W_NUM),]

@@ -10,7 +10,8 @@
 
 # Fall
 # whole NEFSC trawl
-setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/NEFSC")
+#setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/NEFSC")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/NEFSC")
 FL_by_tow <- read.csv("nefsc_FL_by_tow.csv", header = TRUE)
 SP_by_tow <- read.csv("nefsc_SP_by_tow.csv", header = TRUE)
 
@@ -52,6 +53,7 @@ cols <- c(4,44)
 fall_E <- fall_by_tow[,cols]
 NEFSC_fall_E <- cbind(fall_E, surv)
 colnames(NEFSC_fall_E) <- c("YEAR", "E_index", "surv")
+
 
 
 
@@ -148,7 +150,9 @@ GOM_E_spring <- cbind(GOM_E_sp, surv)
 colnames(GOM_E_spring) <- c("YEAR", "E_index", "surv")
 
 # Mass DMF
-setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/MDMF")
+#setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/MDMF")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/MDMF")
+
 ma_fall_inds <- read.csv("MDMF_fall_div_ind_by_tow.csv")
 ma_fall_inds <- ma_fall_inds[ma_fall_inds$YEAR >= 2000,]
 ma_spring_inds <- read.csv("MDMF_spring_div_ind_by_tow.csv")
@@ -186,7 +190,9 @@ ma_E_sp <- ma_spring_inds[,cols]
 ma_E_spring <- cbind(ma_E_sp, surv)
 
 # ME-NH 
-setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results")
+#setwd("C:/Users/aweston/OneDrive - Gulf of Maine Research Institute/Seagrant/Results")
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/Results")
+
 me_inds <- read.csv("diversity_ind_by_haul.csv", header = TRUE)
 me_fall_inds <- subset(me_inds, SEASON == "FL")
 me_spring_inds <- subset(me_inds, SEASON == 'SP')
@@ -221,6 +227,75 @@ me_D_spring <- cbind(me_D_sp, surv)
 cols <- c(4,35)
 me_E_sp <- me_spring_inds[,cols]
 me_E_spring <- cbind(me_E_sp, surv)
+
+#### Taxonomic indices ####
+#nefsc
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/NEFSC")
+
+fall_tax<-read.csv("NEFSC_all_metrics_FL.csv")
+spring_tax<-read.csv("NEFSC_all_metrics_SP.csv")
+#remove strata from canadian waters and south of hatteras 
+can <- c(1351, 1350, 1310, 1320, 1330, 1410,1420, 1490, 1990)
+other <- unique(fall_tax$STRATUM[fall_tax$STRATUM > 3990]) #South of hatteras and scotian shelf 
+remove <- c(can, other)
+fall_tax_tow <- fall_tax[!fall_tax$STRATUM %in% remove,]
+
+other_2 <- unique(spring_tax$STRATUM[spring_tax$STRATUM > 3990])
+remove <- c(can, other_2)
+spring_tax_tow <- spring_tax[spring_tax$SEASON == "SPRING",]
+fall_tax_tow <- fall_tax_tow[fall_tax_tow$EST_YEAR >= 2000,] # clip to same years 
+spring_tax_tow <- spring_tax_tow[spring_tax_tow$EST_YEAR >= 2000,] 
+
+#FALL
+surv<- rep("NEFSC", 5680)#fall
+
+cols <- c(4, 41) #delta
+fall_taxdiv <- fall_tax_tow[,cols]
+NEFSC_fall_taxdiv <- cbind(fall_taxdiv, surv)
+colnames(NEFSC_fall_taxdiv) <- c("YEAR", "delta", "surv")
+cols <- c(4, 42) #delta star
+fall_taxdist <- fall_tax_tow[,cols]
+NEFSC_fall_taxdist <- cbind(fall_taxdist, surv)
+colnames(NEFSC_fall_taxdist) <- c("YEAR", "delta_star", "surv")
+cols <- c(4, 43) #delta plus
+fall_avgtax <- fall_tax_tow[,cols]
+NEFSC_fall_avgtax <- cbind(fall_avgtax, surv)
+colnames(NEFSC_fall_avgtax) <- c("YEAR", "delta_plus", "surv")
+cols <- c(4, 44) #delta var
+fall_taxvar <- fall_tax_tow[,cols]
+NEFSC_fall_taxdvar <- cbind(fall_taxvar, surv)
+colnames(NEFSC_fall_taxvar) <- c("YEAR", "delta_star", "surv")
+
+
+#spring
+surv<- rep("NEFSC", 6414)#spring
+cols <- c(4, 41) #delta
+spring_taxdiv <- spring_tax_tow[,cols]
+NEFSC_spring_taxdiv <- cbind(spring__taxdiv, surv)
+colnames(NEFSC_spring_taxdiv) <- c("YEAR", "delta", "surv")
+cols <- c(4, 42) #delta star
+spring_taxdist <- spring_tax_tow[,cols]
+NEFSC_spring_taxdist <- cbind(spring_taxdist, surv)
+colnames(NEFSC_spring_taxdist) <- c("YEAR", "delta_star", "surv")
+cols <- c(4, 43) #delta plus
+spring_avgtax <- spring_tax_tow[,cols]
+NEFSC_spring_avgtax <- cbind(spring_avgtax, surv)
+colnames(NEFSC_spring_avgtax) <- c("YEAR", "delta_plus", "surv")
+cols <- c(4, 44) #delta var
+spring_taxvar <- spring_tax_tow[,cols]
+NEFSC_spring_taxdvar <- cbind(spring_taxvar, surv)
+colnames(NEFSC_spring_taxvar) <- c("YEAR", "delta_star", "surv")
+
+
+## GOM
+
+
+## MA
+
+
+## ME-NH
+
+
 
 ####### LMs between surveys #########
 # Fall N_species
@@ -282,7 +357,7 @@ pairs(spr.E.lst)
 
 # NEFSC fall
 N_NEFSC_FL <- lm(data = fall_by_tow, N_species ~ EST_YEAR)
-summary(N_NEFSC)
+summary(N_NEFSC_FL)
 H_NEFSC_FL <- lm(data = fall_by_tow, H_index ~ EST_YEAR)
 summary(H_NEFSC_FL)
 D_NEFSC_FL <- lm(data = fall_by_tow, D_index ~ EST_YEAR)
@@ -363,3 +438,93 @@ D_ME_SP <- lm(data = me_spring_inds, D_index ~ YEAR)
 summary(D_ME_SP)
 E_ME_SP <- lm(data = me_spring_inds, E_index ~ YEAR)
 summary(E_ME_SP)
+
+
+#### Taxonomic indices linear models ####
+
+# NEFSC fall
+taxdiv_NEFSC_FL <- lm(data = fall_by_tow, delta ~ EST_YEAR)
+summary(taxdiv_NEFSC_FL)
+taxdist_NEFSC_FL <- lm(data = fall_by_tow, delta_star ~ EST_YEAR)
+summary(taxdist_NEFSC_FL)
+avgtax_NEFSC_FL <- lm(data = fall_by_tow, delta_plus ~ EST_YEAR)
+summary(avgtax_NEFSC_FL)
+taxvar_NEFSC_FL <- lm(data = fall_by_tow, delta_var ~ EST_YEAR)
+summary(taxvar_NEFSC_FL)
+
+# NEFSC spring
+tax_NEFSC_SP <- lm(data = spring_by_tow, delta ~ EST_YEAR)
+summary(tax_NEFSC_SP)
+taxdist_NEFSC_SP <- lm(data = spring_by_tow, delta_star ~ EST_YEAR)
+summary(taxdist_NEFSC_SP)
+avgtax_NEFSC_SP <- lm(data = spring_by_tow, delta_plus ~ EST_YEAR)
+summary(avgtax_NEFSC_SP)
+taxvar_NEFSC_SP <- lm(data = spring_by_tow, delta_var ~ EST_YEAR)
+summary(taxvar_NEFSC_SP)
+
+
+# GOM fall
+tax_GOM_FL <- lm(data = GOM_fall, delta ~ EST_YEAR)
+summary(tax_GOM_FL)
+taxdist_GOM_FL <- lm(data = GOM_fall, delta_star ~ EST_YEAR)
+summary(taxdist_GOM_FL)
+avgtax_GOM_FL <- lm(data = GOM_fall, delta_plus ~ EST_YEAR)
+summary(avgtax_GOM_FL)
+taxvar_GOM_FL <- lm(data = GOM_fall, delta_var~ EST_YEAR)
+summary(taxvar_GOM_FL)
+
+# GOM spring
+tax_GOM_SP <- lm(data = GOM_spring, delta ~ EST_YEAR)
+summary(tax_GOM_SP)
+taxdist_GOM_SP <- lm(data = GOM_spring, delta_star ~ EST_YEAR)
+summary(taxdist_GOM_SP)
+avgtax_GOM_SP <- lm(data = GOM_spring, delta_plus ~ EST_YEAR)
+summary(avgtax_GOM_SP)
+taxvar_GOM_SP <- lm(data = GOM_spring, delta_var ~ EST_YEAR)
+summary(taxvar_GOM_SP)
+
+
+## MA spring
+tax_MA_SP <- lm(data = ma_spring_inds, delta ~ YEAR)
+summary(tax_MA_SP)
+taxdist_MA_SP <- lm(data = ma_spring_inds, delta_star ~ YEAR)
+summary(taxdist_MA_SP)
+avgtaxdist_MA_SP <- lm(data = ma_spring_inds, delta_plus ~ YEAR)
+summary(avgtaxdist_MA_SP)
+taxvar_MA_SP <- lm(data = ma_spring_inds, delta_var ~ YEAR)
+summary(taxvar_MA_SP)
+
+
+# MA fall
+tax_MA_FL <- lm(data = ma_fall_inds, delta ~ YEAR)
+summary(tax_MA_FL)
+taxdist_MA_FL <- lm(data = ma_fall_inds, delta_star ~ YEAR)
+summary(taxdist_MA_FL)
+avgtaxdist_MA_FL <- lm(data = ma_fall_inds, delta_plus ~ YEAR)
+summary(avgtaxdist_MA_FL)
+taxvar_MA_FL <- lm(data = ma_fall_inds, delta_var ~ YEAR)
+summary(taxvar_MA_FL)
+
+
+
+## ME-NH spring
+tax_ME_SP <- lm(data = me_spring_inds, delta ~ YEAR)
+summary(tax_ME_SP)
+taxdist_ME_SP <- lm(data = me_spring_inds, delta_star ~ YEAR)
+summary(taxdist_ME_SP)
+avgtaxdist_ME_SP <- lm(data = me_spring_inds, delta_plus ~ YEAR)
+summary(avgtaxdist_ME_SP)
+taxvar_ME_SP <- lm(data = me_spring_inds, delta_var ~ YEAR)
+summary(taxvar_ME_SP)
+
+
+
+# ME-NH fall
+tax_ME_FL <- lm(data = me_fall_inds, delta ~ YEAR)
+summary(tax_ME_FL)
+taxdist_ME_FL <- lm(data = me_fall_inds, delta_star ~ YEAR)
+summary(taxdist_ME_FL)
+avgtaxdist_ME_FL <- lm(data = me_fall_inds, delta_plus ~ YEAR)
+summary(vgtaxdist_ME_FL)
+taxvar_ME_FL <- lm(data = me_fall_inds, delta_var ~ YEAR)
+summary(taxvar_ME_FL)

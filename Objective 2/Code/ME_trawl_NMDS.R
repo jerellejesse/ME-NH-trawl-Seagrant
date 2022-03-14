@@ -5,7 +5,7 @@
 #Nonmetric multidimensional scaling 
 
 #set directory
-setwd("C:/Users/jjesse/Desktop/GMRI/ME NH Trawl/Seagrant/Objective 2")
+setwd("C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/Data")
 
 #load packages
 library(tidyverse)
@@ -16,6 +16,9 @@ library(ggnewscale)
 
 #read in data (functional groups were added in Biodiversity_metrics_groups.R)
 trawl_data<-read.csv("ME_trawl_NMDS_data.csv")[,c(2:17, 20)]
+
+table(trawl_data$SCIENTIFIC_NAME)
+table(trawl_data$COMMON_NAME)
 
 #arrange data for NMDS in vegan
 #sample rows-> year, stratum (do we also want plots with region?)

@@ -8,6 +8,8 @@ navbar:
       href: index.html
     - text: "ME-NH Trawl"
       href: Trawl_plots.html
+    - text: "GAMMs"
+      href: gamms.html
     - text: "NMDS"
       menu:
         - text: "Top 50 species biomass"

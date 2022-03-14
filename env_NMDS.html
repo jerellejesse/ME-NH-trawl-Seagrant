@@ -14,7 +14,7 @@
 
 <title>Seagrant ME-NH trawl survey <br> Objectve 2: Environmental Effects on NMDS</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -313,7 +317,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -328,8 +332,11 @@ div.tocify {
 <li>
   <a href="Trawl_plots.html">ME-NH Trawl</a>
 </li>
+<li>
+  <a href="gamms.html">GAMMs</a>
+</li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     NMDS
      
     <span class="caret"></span>
@@ -372,7 +379,7 @@ div.tocify {
 <div id="header">
 
 <div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
@@ -687,7 +694,24 @@ data.scores$Year_groups= all_Data$YEAR_GROUPS
 data.scores$Year_decades= all_Data$YEAR_DECADES
 data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
-data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+data.scores$Season_year=all_Data$SEASON_YEAR
+
+p&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-4-2.png" width="1152" /></p>
 <div id="region-groups" class="section level4">
 <h4>Region groups</h4>
 <pre class="r"><code>p_region&lt;- ggplot()+
@@ -696,6 +720,7 @@ data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -715,6 +740,7 @@ p_region</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -731,6 +757,28 @@ p_year</code></pre>
 <h4>Bottom temperature</h4>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   7.9053     0.1355   58.34   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 6.605      9 19.65  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.483   Deviance explained = 50.1%
+## -REML =  397.4  Scale est. = 3.4884    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
@@ -738,190 +786,385 @@ ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-7-4.png" width="1152" /></p>
 </div>
 <div id="surface-temperature" class="section level4">
 <h4>Surface temperature</h4>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   9.7700     0.1225   79.73   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 7.611      9 33.59  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.615   Deviance explained = 63.1%
+## -REML = 380.68  Scale est. = 2.8531    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-8-4.png" width="1152" /></p>
 </div>
 <div id="bottom-salinity" class="section level4">
 <h4>Bottom salinity</h4>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 32.33134    0.03265   990.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 5.029      9 6.363  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.233   Deviance explained = 25.3%
+## -REML =  125.2  Scale est. = 0.20256   n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-9-4.png" width="1152" /></p>
 </div>
 <div id="surface-salinity" class="section level4">
 <h4>Surface salinity</h4>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  30.8492     0.2342   131.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                edf Ref.df F p-value
+## s(x1,x2) 0.0003495      9 0   0.947
+## 
+## R-sq.(adj) =  -1.22e-06   Deviance explained = 6.28e-05%
+## -REML = 492.33  Scale est. = 10.425    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-10-4.png" width="1152" /></p>
 </div>
 <div id="start-latitude" class="section level4">
 <h4>start latitude</h4>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_lat)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 43.87499    0.02602    1687   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##           edf Ref.df     F p-value    
+## s(x1,x2) 7.37      9 8.919  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.293   Deviance explained =   32%
+## -REML = 91.074  Scale est. = 0.13198   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-11-4.png" width="1152" /></p>
 </div>
 <div id="start-longitude" class="section level4">
 <h4>start longitude</h4>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_long)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -68.97337    0.06034   -1143   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df    F p-value    
+## s(x1,x2) 7.539      9 10.6  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =   0.33   Deviance explained = 35.6%
+## -REML = 254.73  Scale est. = 0.70989   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-12-4.png" width="1152" /></p>
 </div>
 <div id="start-depth" class="section level4">
 <h4>start depth</h4>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_depth)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  40.6472     0.3104   130.9   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value   
+## s(x1,x2) 4.618      9 1.703  0.0027 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0732   Deviance explained = 9.53%
+## -REML = 566.64  Scale est. = 18.794    n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-13-4.png" width="1152" /></p>
 </div>
 </div>
 </div>
@@ -1161,7 +1404,24 @@ data.scores$Year_groups= all_Data$YEAR_GROUPS
 data.scores$Year_decades= all_Data$YEAR_DECADES
 data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
-data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+data.scores$Season_year=all_Data$SEASON_YEAR
+
+p&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-15-2.png" width="1152" /></p>
 <div id="region-groups-1" class="section level4">
 <h4>Region groups</h4>
 <pre class="r"><code>p_region&lt;- ggplot()+
@@ -1170,6 +1430,7 @@ data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1189,6 +1450,7 @@ p_region</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1205,6 +1467,28 @@ p_year</code></pre>
 <h4>Bottom temperature</h4>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   7.9053     0.1279   61.82   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 7.679      9 24.65  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =   0.54   Deviance explained = 55.9%
+## -REML = 388.52  Scale est. = 3.1069    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
@@ -1212,190 +1496,385 @@ ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-18-4.png" width="1152" /></p>
 </div>
 <div id="surface-temperature-1" class="section level4">
 <h4>Surface temperature</h4>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    9.770      0.125   78.17   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 7.801      9 31.48  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =    0.6   Deviance explained = 61.6%
+## -REML = 384.57  Scale est. = 2.9679    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-19-4.png" width="1152" /></p>
 </div>
 <div id="bottom-salinity-1" class="section level4">
 <h4>Bottom salinity</h4>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 32.33134    0.03023    1069   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 6.248      9 10.92  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.342   Deviance explained = 36.4%
+## -REML = 113.14  Scale est. = 0.17365   n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-20-4.png" width="1152" /></p>
 </div>
 <div id="surface-salinity-1" class="section level4">
 <h4>Surface salinity</h4>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  30.8492     0.2316   133.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value
+## s(x1,x2) 2.579      9 0.482    0.13
+## 
+## R-sq.(adj) =  0.0224   Deviance explained = 3.58%
+## -REML = 491.96  Scale est. = 10.191    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-21-4.png" width="1152" /></p>
 </div>
 <div id="start-latitude-1" class="section level4">
 <h4>start latitude</h4>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_lat)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 43.87499    0.02754    1593   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 4.889      9 5.629  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.207   Deviance explained = 22.7%
+## -REML =  97.67  Scale est. = 0.14795   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-22-4.png" width="1152" /></p>
 </div>
 <div id="start-longitude-1" class="section level4">
 <h4>start longitude</h4>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_long)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -68.97337    0.06801   -1014   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 4.332      9 3.746 7.49e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.148   Deviance explained = 16.7%
+## -REML = 272.24  Scale est. = 0.90208   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-23-4.png" width="1152" /></p>
 </div>
 <div id="start-depth-1" class="section level4">
 <h4>start depth</h4>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_depth)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  40.6472     0.3099   131.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 3.619      9 1.791 0.000654 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0767   Deviance explained = 9.39%
+## -REML = 565.42  Scale est. = 18.723    n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-24-4.png" width="1152" /></p>
 </div>
 </div>
 </div>
@@ -1520,7 +1999,24 @@ data.scores$Year_groups= all_Data$YEAR_GROUPS
 data.scores$Year_decades= all_Data$YEAR_DECADES
 data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
-data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+data.scores$Season_year=all_Data$SEASON_YEAR
+
+p&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-26-2.png" width="1152" /></p>
 <div id="region-groups-2" class="section level4">
 <h4>Region groups</h4>
 <pre class="r"><code>p_region&lt;- ggplot()+
@@ -1529,6 +2025,7 @@ data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1548,6 +2045,7 @@ p_region</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1564,6 +2062,28 @@ p_year</code></pre>
 <h4>Bottom temperature</h4>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   7.9053     0.1806   43.76   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 1.786      9 1.876 0.000123 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.082   Deviance explained = 9.07%
+## -REML = 445.45  Scale est. = 6.1995    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
@@ -1571,190 +2091,385 @@ ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-29-4.png" width="1152" /></p>
 </div>
 <div id="surface-temperature-2" class="section level4">
 <h4>Surface temperature</h4>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   9.7700     0.1866   52.37   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 3.931      9 2.548 3.44e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.108   Deviance explained = 12.7%
+## -REML = 453.05  Scale est. = 6.6138    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-30-4.png" width="1152" /></p>
 </div>
 <div id="bottom-salinity-2" class="section level4">
 <h4>Bottom salinity</h4>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 32.33134    0.03573   904.8   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value    
+## s(x1,x2) 1.784      9 1.845 0.00014 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0808   Deviance explained = 8.94%
+## -REML = 139.19  Scale est. = 0.24262   n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-31-4.png" width="1152" /></p>
 </div>
 <div id="surface-salinity-2" class="section level4">
 <h4>Surface salinity</h4>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  30.8492     0.2342   131.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##               edf Ref.df F p-value
+## s(x1,x2) 0.001547      9 0   0.627
+## 
+## R-sq.(adj) =  2.6e-06   Deviance explained = 0.00108%
+## -REML = 492.33  Scale est. = 10.425    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-32-4.png" width="1152" /></p>
 </div>
 <div id="start-latitude-2" class="section level4">
 <h4>start latitude</h4>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_lat)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  43.8750     0.0294    1493   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 5.385      9 2.312 0.000787 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0969   Deviance explained = 12.2%
+## -REML =  111.2  Scale est. = 0.16851   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-33-4.png" width="1152" /></p>
 </div>
 <div id="start-longitude-2" class="section level4">
 <h4>start longitude</h4>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_long)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -68.97337    0.06958  -991.3   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 5.552      9 2.623 0.000294 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.108   Deviance explained = 13.4%
+## -REML = 278.78  Scale est. = 0.94399   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-34-4.png" width="1152" /></p>
 </div>
 <div id="start-depth-2" class="section level4">
 <h4>start depth</h4>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_depth)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  40.6472     0.3171   128.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value  
+## s(x1,x2) 1.627      9 0.744   0.015 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0334   Deviance explained = 4.15%
+## -REML = 568.05  Scale est. = 19.602    n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-35-4.png" width="1152" /></p>
 </div>
 </div>
 </div>
@@ -1868,7 +2583,24 @@ data.scores$Year_groups= all_Data$YEAR_GROUPS
 data.scores$Year_decades= all_Data$YEAR_DECADES
 data.scores$Region_new=all_Data$REGION_NEW
 data.scores$Region_year=all_Data$REGION_YEAR
-data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
+data.scores$Season_year=all_Data$SEASON_YEAR
+
+p&lt;- ggplot()+
+     geom_point(data = data.scores, aes(x = NMDS1, y = NMDS2, color=Year_groups, shape=Region_new), size = 4) + 
+  scale_color_colorblind()+
+        geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
+   geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
+       fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+    theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
+       panel.background = element_blank(), panel.border = element_rect(fill = NA), 
+       axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
+       legend.title = element_text(size = 16, face = &quot;bold&quot;), 
+       legend.text = element_text(size = 16))
+       
+
+
+p</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-37-2.png" width="1152" /></p>
 <div id="region-groups-3" class="section level4">
 <h4>Region groups</h4>
 <pre class="r"><code>p_region&lt;- ggplot()+
@@ -1877,6 +2609,7 @@ data.scores$Season_year=all_Data$SEASON_YEAR</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1896,6 +2629,7 @@ p_region</code></pre>
         geom_segment(data=en_coord_cont, aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), size =1.5, alpha = 0.5)+
    geom_text(data = en_coord_cont, aes(x = NMDS1, y = NMDS2), size=5, 
        fontface = &quot;bold&quot;, label = row.names(en_coord_cont))+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
   theme(axis.title = element_text(size = 16, face = &quot;bold&quot;), 
        panel.background = element_blank(), panel.border = element_rect(fill = NA), 
        axis.ticks = element_blank(), axis.text = element_blank(), legend.key = element_blank(), 
@@ -1912,6 +2646,28 @@ p_year</code></pre>
 <h4>Bottom temperature</h4>
 <pre class="r"><code>bottom_temp&lt;-ordisurf(nmds, env$bottom_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   7.9053     0.1719   45.98   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 5.473      9 4.253 6.89e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.168   Deviance explained = 19.2%
+## -REML = 439.82  Scale est. = 5.6159    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
@@ -1919,190 +2675,385 @@ ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
 
-p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
   
-p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+p1 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p2 &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+
+  stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+    scale_color_colorblind()
+
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-40-4.png" width="1152" /></p>
 </div>
 <div id="surface-temperature-3" class="section level4">
 <h4>Surface temperature</h4>
 <pre class="r"><code>surface_temp&lt;-ordisurf(nmds, env$surface_temp)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_temp)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   9.7700     0.1658   58.93   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df    F p-value    
+## s(x1,x2) 3.525      9 8.82  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.296   Deviance explained = 30.9%
+## -REML = 431.74  Scale est. = 5.2228    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_temp$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Temperature&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-41-4.png" width="1152" /></p>
 </div>
 <div id="bottom-salinity-3" class="section level4">
 <h4>Bottom salinity</h4>
 <pre class="r"><code>bottom_sal&lt;-ordisurf(nmds, env$bottom_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-1.png" width="1152" /></p>
+<pre class="r"><code>summary(bottom_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 32.33134    0.03535   914.5   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##           edf Ref.df     F  p-value    
+## s(x1,x2) 2.43      9 2.341 2.76e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =    0.1   Deviance explained = 11.2%
+## -REML = 137.71  Scale est. = 0.23747   n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- bottom_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Bottom Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-42-4.png" width="1152" /></p>
 </div>
 <div id="surface-salinity-3" class="section level4">
 <h4>Surface salinity</h4>
 <pre class="r"><code>surface_sal&lt;-ordisurf(nmds, env$surface_sal)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-1.png" width="1152" /></p>
+<pre class="r"><code>summary(surface_sal)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  30.8492     0.2342   131.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##               edf Ref.df F p-value
+## s(x1,x2) 0.001339      9 0   0.544
+## 
+## R-sq.(adj) =  3.94e-06   Deviance explained = 0.0011%
+## -REML = 492.33  Scale est. = 10.425    n = 190</code></pre>
 <pre class="r"><code>ordi.grid &lt;- surface_sal$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Surface Salinity&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-43-4.png" width="1152" /></p>
 </div>
 <div id="start-latitude-3" class="section level4">
 <h4>start latitude</h4>
 <pre class="r"><code>start_lat&lt;-ordisurf(nmds, env$start_lat)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_lat)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 43.87499    0.02901    1512   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F  p-value    
+## s(x1,x2) 4.389      9 2.949 1.08e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =   0.12   Deviance explained =   14%
+## -REML = 106.86  Scale est. = 0.16413   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_lat$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Latitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+ stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-44-4.png" width="1152" /></p>
 </div>
 <div id="start-longitude-3" class="section level4">
 <h4>start longitude</h4>
 <pre class="r"><code>start_long&lt;-ordisurf(nmds, env$start_long)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_long)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -68.97337    0.07037  -980.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##           edf Ref.df     F  p-value    
+## s(x1,x2) 3.26      9 2.083 0.000136 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0881   Deviance explained = 10.3%
+## -REML = 277.67  Scale est. = 0.96557   n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_long$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Longitude&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-45-4.png" width="1152" /></p>
 </div>
 <div id="start-depth-3" class="section level4">
 <h4>start depth</h4>
 <pre class="r"><code>start_depth&lt;-ordisurf(nmds, env$start_depth)</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-1.png" width="1152" /></p>
+<pre class="r"><code>summary(start_depth)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## y ~ s(x1, x2, k = 10, bs = &quot;tp&quot;, fx = FALSE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  40.6472     0.3159   128.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##            edf Ref.df     F p-value   
+## s(x1,x2) 1.608      9 0.907 0.00708 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0404   Deviance explained = 4.83%
+## -REML = 567.47  Scale est. = 19.46     n = 195</code></pre>
 <pre class="r"><code>ordi.grid &lt;- start_depth$grid #extracts the ordisurf object
 #str(ordi.grid) #it&#39;s a list though - cannot be plotted as is
 ordi.mite &lt;- expand.grid(x = ordi.grid$x, y = ordi.grid$y) #get x and ys
 ordi.mite$z &lt;- as.vector(ordi.grid$z) #unravel the matrix for the z scores
 contour.vals &lt;- data.frame(na.omit(ordi.mite)) #gets rid of the nas
  
+p &lt;- ggplot()+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
+  labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
+  new_scale_color()+
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups, shape=Region_new), size = 3 )+  scale_color_colorblind()
 
 p1 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Year_groups), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Year_groups),level = 0.95,size=1)+
+  scale_color_colorblind()
   
 p2 &lt;- ggplot()+
-  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=2)+
+  stat_contour(data = contour.vals, aes(x, y, z=z, color = ..level..),position=&quot;identity&quot;,size=1.5)+
   labs(x = &quot;NMDS1&quot;, y = &quot;NMDS2&quot;, color=&quot;Depth&quot;)+
   new_scale_color()+
-  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 4 )+ scale_color_colorblind()
+  geom_point(data = data.scores, aes(NMDS1, NMDS2, color=Region_new), size = 2 )+stat_ellipse(data=data.scores, aes(x=NMDS1, y=NMDS2, color=Region_new),level = 0.95,size=1)+
+  scale_color_colorblind()
 
-p1</code></pre>
+p</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-2.png" width="1152" /></p>
-<pre class="r"><code>p2</code></pre>
+<pre class="r"><code>p1</code></pre>
 <p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-3.png" width="1152" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="env_NMDS_files/figure-html/unnamed-chunk-46-4.png" width="1152" /></p>
 </div>
 </div>
 </div>

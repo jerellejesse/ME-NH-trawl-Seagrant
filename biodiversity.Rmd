@@ -266,6 +266,8 @@ all_metrics<-full_join(richness,shannon, by="Year")%>%
   full_join(simpson)%>%
   full_join(d)
 
+#write.csv(all_metrics, here("Data/trawl_biodiversity_update.csv"))
+
 all_melt<-melt(all_metrics, id="Year")
 
 ggplot()+geom_line(data=all_melt, aes(Year,value))+facet_grid(rows = vars(variable), scales="free")+theme_bw()

@@ -15,6 +15,7 @@ trawl_data<-read.csv(here("Data/ME_trawl_NMDS_data.csv"))[,c(2:17, 20)]
 #updated data
 trawl_data_update<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
 
+table(trawl_data_update$COMMON_NAME)
 
 all_catch<-filter(trawl_data_update, Season=="Fall")%>%
   group_by(Year,Region,Stratum,Tow_Number)%>%
