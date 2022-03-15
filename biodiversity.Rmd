@@ -10,6 +10,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
+```
+
 ```{r, echo = FALSE}
 # Access GMRI CSS Style
 library(gmRi)
@@ -17,8 +22,9 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 ```
 
 
-## Diveristy metrics
-```{r, echo=FALSE}
+## ME-NH trawl diveristy metrics
+ By season and total
+```{r}
 library(here)
 library(ggplot2)
 library(dplyr)
@@ -71,7 +77,7 @@ data<-trawl_2
 ```
 
 ### Species richness
-```{r echo=FALSE, message=FALSE}
+```{r }
 richness<-group_by(data, Year,Season)%>%
   summarise(richness=length(unique(COMMON_NAME)))
 
@@ -87,7 +93,7 @@ rich
 
 ### Shannon-Weiner diversity
 
-```{r echo=FALSE, message=FALSE}
+```{r }
 shannon<-group_by(data, Year,Season,COMMON_NAME)%>%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
   group_by(Year, Season)%>%
@@ -110,7 +116,7 @@ diversity
 ```
 
 ### Simpson's diversity and evenness
-```{r echo=FALSE, message=FALSE}
+```{r }
 simpson<-group_by(data, Year, Season, COMMON_NAME)%>%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
   group_by(Year, Season)%>%
@@ -140,7 +146,7 @@ evenness
 ```
 
 ### Average taxinomic distinctness
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(taxize)
 library(purrr)
 library(mgcv)
@@ -258,7 +264,7 @@ tax.distinct
 ```
 
 Combo plot
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(reshape2)
 library(gridExtra)
 
@@ -277,7 +283,7 @@ grid.arrange(rich, diversity, evenness,tax.distinct, nrow=4)
 ```
 
 ## Regional diversity
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 data_regions<-data
 # group to east/west of Penobscot Bay
@@ -294,7 +300,7 @@ data_regions<-filter(data_regions,!is.na(group))%>%
 ```
 
 ### Species richness
-```{r echo=FALSE, message=FALSE}
+```{r }
 richness<-group_by(data_regions, group, Year)%>%
   summarise(richness=length(unique(SCIENTIFIC_NAME)))
 
@@ -305,7 +311,7 @@ ggplot()+ geom_line(data=richness, aes(Year, richness))+
 ```
 
 ### Shannon-Weiner diversity
-```{r echo=FALSE, message=FALSE}
+```{r }
 shannon<-group_by(data_regions, Year,group)%>%
   mutate(total=sum(Expanded_Weight_kg, na.rm=TRUE), prop=(Expanded_Weight_kg/total))%>%
   summarise(shannon=-1*(sum(prop*log(prop))))
@@ -317,7 +323,7 @@ ggplot()+geom_line(data=shannon, aes(Year, shannon))+
 ```
 
 ### Simpson's diversity and evenness
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 simpson<-group_by(data_regions, Year,group,SCIENTIFIC_NAME)%>%
   summarise(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>% #aggregate 
@@ -333,7 +339,7 @@ ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
 ```
 
 ### Average taxinomic distinctness
-```{r echo=FALSE, message=FALSE}
+```{r }
 library(taxize)
 library(purrr)
 library(mgcv)
@@ -608,7 +614,7 @@ pen_tax.distinct<-ggplot()+geom_line(data=subset(pen_d, year<2020), aes(year, de
 ```
 
 ### East of Penobscot Bay
-```{r echo=FALSE, message=FALSE}
+```{r }
 #combo plots
 
 #east
@@ -626,7 +632,7 @@ grid.arrange(r,s,e,t, nrow=4)
 ```
 
 ### West of Penobscot Bay
-```{r echo=FALSE, message=FALSE}
+```{r }
 #west
 r<-ggplot()+geom_line(data=subset(richness, group=="West" & Year<2020),aes(Year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
@@ -641,7 +647,7 @@ grid.arrange(r,s,e,t, nrow=4)
 
 
 ### Penobscot Bay
-```{r echo=FALSE, message=FALSE}
+```{r }
 #pen bay
 r<-ggplot()+geom_line(data=subset(richness, group=="Penobscot" & Year<2020),aes(Year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 

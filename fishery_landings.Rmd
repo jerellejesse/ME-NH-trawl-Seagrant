@@ -27,7 +27,7 @@ library(gmRi)
 gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 ```
 
-# Objective 4: Fishery Landings 
+# Fishery Landings 
 
 ## Maine DMR landings by county data
 * 2006-2020 specified by county

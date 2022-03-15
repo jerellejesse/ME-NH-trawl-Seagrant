@@ -6,10 +6,12 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "ME-NH Trawl"
-      href: Trawl_plots.html
+    - text: "Biodiversity Metrics"
+      href: biodiversity.html
     - text: "GAMMs"
       href: gamms.html
+    - text: "Functional Groups"
+      href: Trawl_plots.html
     - text: "NMDS"
       menu:
         - text: "Top 50 species biomass"
@@ -26,8 +28,6 @@ navbar:
       href: env_NMDS.html
     - text: "Fishery Landings"
       href: fishery_landings.html
-    - text: "Trawl Biodiversity Metrics"
-      href: biodiversity.html
 
 ---
 

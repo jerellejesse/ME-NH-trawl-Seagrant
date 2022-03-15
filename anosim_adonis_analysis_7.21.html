@@ -332,10 +332,13 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="Trawl_plots.html">ME-NH Trawl</a>
+  <a href="biodiversity.html">Biodiversity Metrics</a>
 </li>
 <li>
   <a href="gamms.html">GAMMs</a>
+</li>
+<li>
+  <a href="Trawl_plots.html">Functional Groups</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -366,9 +369,6 @@ div.tocify {
 </li>
 <li>
   <a href="fishery_landings.html">Fishery Landings</a>
-</li>
-<li>
-  <a href="biodiversity.html">Trawl Biodiversity Metrics</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -578,6 +578,26 @@ a {
 <li>average across depth strata using the <a href="https://noaa-edab.github.io/tech-doc/inshoresurvdat.html#data-analysis-29">NOAA IEA technical document</a></li>
 <li>calculate dissimilarity matrix with Bray-Curtis distances</li>
 </ul>
+<pre class="r"><code>#load libraries
+library(tidyverse)
+library(vegan)
+library(pairwiseAdonis)
+library(indicspecies)
+library(here)
+library(rmarkdown)
+library(gridExtra)
+
+#bring in species matrix for analysis
+trawl_data_arrange&lt;-read.csv(here(&quot;Data/species_biomass_matrix.csv&quot;))[-1]
+
+#separate meta data from matrix
+ME_group_data&lt;-trawl_data_arrange[, c(1,2,3,54,55,56,57,58)]
+ME_NMDS_data&lt;-as.matrix(trawl_data_arrange[,4:53])
+
+#calculate dissimilarity matrix for tests
+trawl_dist&lt;-vegdist(ME_NMDS_data,distance=&quot;bray&quot;)
+
+paged_table(head(trawl_data_arrange))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Season"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Region"],"name":[2],"type":["int"],"align":["right"]},{"label":["Year"],"name":[3],"type":["int"],"align":["right"]},{"label":["alewife"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["bass.striped"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["butterfish"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["cod.atlantic"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["crab.atlantic.rock"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["crab.green"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["crab.jonah"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["crab.northern.stone"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["crab.red"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["cucumber.sea"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["cunner"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["cusk"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["dogfish.spiny"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["flounder.atlantic.witch..gray.sole."],"name":[17],"type":["dbl"],"align":["right"]},{"label":["flounder.winter"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["flounder.yellowtail"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["haddock"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["hake.atlantic.red"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["hake.silver..whiting."],"name":[22],"type":["dbl"],"align":["right"]},{"label":["hake.white"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["halibut.atlantic"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["herring.atlantic"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["herring.blueback"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["lobster.american"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["lumpfish"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["mackerel.atlantic"],"name":[29],"type":["dbl"],"align":["right"]},{"label":["menhaden.atlantic"],"name":[30],"type":["dbl"],"align":["right"]},{"label":["monkfish"],"name":[31],"type":["dbl"],"align":["right"]},{"label":["mussel.horse"],"name":[32],"type":["dbl"],"align":["right"]},{"label":["plaice.american..dab."],"name":[33],"type":["dbl"],"align":["right"]},{"label":["pollock"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["pout.ocean"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["redfish.acadian.ocean.perch"],"name":[36],"type":["dbl"],"align":["right"]},{"label":["scallop.sea"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["sculpin.longhorn"],"name":[38],"type":["dbl"],"align":["right"]},{"label":["scup"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["sea.raven"],"name":[40],"type":["dbl"],"align":["right"]},{"label":["shad.american"],"name":[41],"type":["dbl"],"align":["right"]},{"label":["skate.barndoor"],"name":[42],"type":["dbl"],"align":["right"]},{"label":["skate.clearnose"],"name":[43],"type":["dbl"],"align":["right"]},{"label":["skate.little"],"name":[44],"type":["dbl"],"align":["right"]},{"label":["skate.smooth"],"name":[45],"type":["dbl"],"align":["right"]},{"label":["skate.thorny"],"name":[46],"type":["dbl"],"align":["right"]},{"label":["skate.winter"],"name":[47],"type":["dbl"],"align":["right"]},{"label":["smelt.rainbow"],"name":[48],"type":["dbl"],"align":["right"]},{"label":["squid.long.finned"],"name":[49],"type":["dbl"],"align":["right"]},{"label":["squid.short.finned"],"name":[50],"type":["dbl"],"align":["right"]},{"label":["sturgeon.atlantic"],"name":[51],"type":["dbl"],"align":["right"]},{"label":["torpedo.atlantic"],"name":[52],"type":["dbl"],"align":["right"]},{"label":["wolffish.atlantic"],"name":[53],"type":["dbl"],"align":["right"]},{"label":["YEAR_GROUPS"],"name":[54],"type":["chr"],"align":["left"]},{"label":["YEAR_DECADES"],"name":[55],"type":["chr"],"align":["left"]},{"label":["REGION_NEW"],"name":[56],"type":["chr"],"align":["left"]},{"label":["REGION_YEAR"],"name":[57],"type":["chr"],"align":["left"]},{"label":["SEASON_YEAR"],"name":[58],"type":["chr"],"align":["left"]}],"data":[{"1":"Fall","2":"1","3":"2000","4":"5.380384","5":"0","6":"0.3518519","7":"1.9828704","8":"0.2225000","9":"0","10":"0.0500000","11":"0.00","12":"0","13":"0.00","14":"1.0000000","15":"0","16":"44.11634","17":"0.7027451","18":"4.742141","19":"5.395752","20":"6.2352941","21":"7.149751","22":"30.53985","23":"2.798126","24":"0.00000000","25":"17.81296","26":"0.0000000","27":"16.758498","28":"0.00","29":"4.409524","30":"0.10","31":"2.937348","32":"0.0000000","33":"4.373399","34":"0.2656863","35":"0.1176471","36":"0.08722222","37":"0.93290123","38":"3.100891","39":"1.7625","40":"1.0441358","41":"0.2238095","42":"0","43":"0","44":"3.4877218","45":"0.0000000","46":"1.250000","47":"6.186275","48":"1.700000","49":"4.0241830","50":"2.4166667","51":"0","52":"0.00","53":"0","54":"2000-2004","55":"2000-2009","56":"West of Penobscot Bay","57":"West of Penobscot Bay, 2000-2004","58":"Fall, 2000-2004","_rn_":"1"},{"1":"Fall","2":"1","3":"2001","4":"11.422884","5":"0","6":"2.8428307","7":"0.3520811","8":"2.8416667","9":"0","10":"4.2580423","11":"0.00","12":"0","13":"0.00","14":"0.1833333","15":"0","16":"52.99815","17":"6.9391975","18":"5.182209","19":"3.365450","20":"0.9541975","21":"12.462081","22":"57.58884","23":"3.533351","24":"0.05333333","25":"19.80143","26":"0.0000000","27":"22.404339","28":"0.00","29":"0.850000","30":"0.00","31":"12.094885","32":"0.0000000","33":"7.515388","34":"0.1130952","35":"0.7717593","36":"7.82507937","37":"1.63925926","38":"2.517989","39":"0.0000","40":"1.1554321","41":"0.2928571","42":"0","43":"0","44":"4.3666667","45":"0.9185185","46":"7.772487","47":"3.075000","48":"0.000000","49":"0.9183333","50":"0.6295635","51":"0","52":"15.85","53":"0","54":"2000-2004","55":"2000-2009","56":"West of Penobscot Bay","57":"West of Penobscot Bay, 2000-2004","58":"Fall, 2000-2004","_rn_":"2"},{"1":"Fall","2":"1","3":"2002","4":"4.145476","5":"0","6":"3.3043183","7":"2.2230952","8":"0.0600000","9":"0","10":"0.4711905","11":"0.00","12":"0","13":"0.28","14":"0.0200000","15":"0","16":"66.77318","17":"4.0015476","18":"1.036341","19":"2.077436","20":"0.4200000","21":"9.136105","22":"30.65977","23":"2.895794","24":"0.00000000","25":"14.02362","26":"1.8000000","27":"11.501465","28":"0.00","29":"0.759707","30":"0.00","31":"20.115376","32":"0.0000000","33":"2.812863","34":"4.4200000","35":"0.0000000","36":"0.07539683","37":"0.07538462","38":"1.249212","39":"0.0000","40":"0.3047619","41":"0.1000000","42":"0","43":"0","44":"3.9692308","45":"0.0000000","46":"0.000000","47":"0.000000","48":"0.020000","49":"1.0656929","50":"0.6200000","51":"0","52":"0.00","53":"0","54":"2000-2004","55":"2000-2009","56":"West of Penobscot Bay","57":"West of Penobscot Bay, 2000-2004","58":"Fall, 2000-2004","_rn_":"3"},{"1":"Fall","2":"1","3":"2003","4":"4.924375","5":"0","6":"3.5231250","7":"10.3700000","8":"0.0000000","9":"0","10":"0.4400000","11":"0.48","12":"0","13":"0.00","14":"1.4350000","15":"0","16":"50.67396","17":"4.2188889","18":"10.550833","19":"3.030000","20":"2.0283333","21":"14.719444","22":"33.14333","23":"3.740000","24":"0.00000000","25":"16.66604","26":"1.2691667","27":"24.885208","28":"4.73","29":"6.347500","30":"0.00","31":"10.677222","32":"0.0100000","33":"12.456250","34":"0.4266667","35":"0.5000000","36":"14.00500000","37":"0.05000000","38":"1.584167","39":"0.2400","40":"0.8600000","41":"0.2583333","42":"0","43":"0","44":"4.6900000","45":"1.1950000","46":"7.680000","47":"0.000000","48":"0.057500","49":"0.3700000","50":"0.6866667","51":"0","52":"0.00","53":"0","54":"2000-2004","55":"2000-2009","56":"West of Penobscot Bay","57":"West of Penobscot Bay, 2000-2004","58":"Fall, 2000-2004","_rn_":"4"},{"1":"Fall","2":"1","3":"2004","4":"6.528253","5":"0","6":"3.2305702","7":"4.6161111","8":"0.0000000","9":"0","10":"0.2907602","11":"0.00","12":"0","13":"0.00","14":"3.4933333","15":"0","16":"259.05598","17":"3.7309844","18":"6.398399","19":"6.137895","20":"0.4566667","21":"6.651579","22":"57.10577","23":"5.161520","24":"0.00000000","25":"100.39212","26":"0.3391667","27":"5.305099","28":"4.58","29":"0.880000","30":"0.02","31":"9.480523","32":"0.1333333","33":"10.083402","34":"0.4800000","35":"0.5925000","36":"7.90777778","37":"0.08000000","38":"2.433041","39":"19.6000","40":"1.3908772","41":"0.6025000","42":"0","43":"0","44":"2.6150000","45":"0.0000000","46":"4.574600","47":"6.140000","48":"3.500000","49":"2.3141910","50":"0.4816667","51":"0","52":"0.00","53":"0","54":"2000-2004","55":"2000-2009","56":"West of Penobscot Bay","57":"West of Penobscot Bay, 2000-2004","58":"Fall, 2000-2004","_rn_":"5"},{"1":"Fall","2":"1","3":"2005","4":"3.781491","5":"0","6":"0.7742105","7":"13.4031579","8":"0.2315789","9":"0","10":"0.4454386","11":"0.00","12":"0","13":"0.00","14":"0.5400000","15":"0","16":"157.54439","17":"0.6000000","18":"6.596784","19":"2.490000","20":"18.1527193","21":"4.337778","22":"8.86500","23":"1.384444","24":"0.05000000","25":"18.53346","26":"0.7422222","27":"31.561345","28":"0.00","29":"8.702749","30":"0.10","31":"3.708889","32":"0.0000000","33":"12.036667","34":"0.8600000","35":"0.3100000","36":"192.64333333","37":"0.07315789","38":"2.156667","39":"0.0000","40":"1.2022222","41":"1.1450000","42":"0","43":"0","44":"0.7165789","45":"1.8400000","46":"2.417500","47":"0.000000","48":"3.853333","49":"0.2905848","50":"0.5600000","51":"0","52":"0.00","53":"0","54":"2005-2009","55":"2000-2009","56":"West of Penobscot Bay","57":"West of Penobscot Bay, 2005-2009","58":"Fall, 2005-2009","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -728,8 +748,6 @@ ano_year #years are statistically different communities</code></pre>
 ## 2018      12 3428.00  9051.0 13573.00 17500    45
 ## 2019      16 1930.00  4588.0  9241.00 16238    45</code></pre>
 <pre class="r"><code>plot(ano_year)</code></pre>
-<pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
-## notches went outside hinges (&#39;box&#39;): maybe set notch=FALSE</code></pre>
 <p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="year-blocks" class="section level4">
@@ -1961,8 +1979,6 @@ ano_year #years are statistically different communities</code></pre>
 ## 2018     93 5938.00 11633.0 14598.00 17441    45
 ## 2019    715 3296.00  5494.0  9564.00 15911    45</code></pre>
 <pre class="r"><code>plot(ano_year)</code></pre>
-<pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
-## notches went outside hinges (&#39;box&#39;): maybe set notch=FALSE</code></pre>
 <p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
 <div id="year-blocks-2" class="section level4">
@@ -3125,8 +3141,6 @@ ano_year #years are statistically different communities</code></pre>
 ## 2018     33 3676.00  8425.0 14101.00 17419    45
 ## 2019     35 3091.00  5574.0 10645.00 15825    45</code></pre>
 <pre class="r"><code>plot(ano_year)</code></pre>
-<pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
-## notches went outside hinges (&#39;box&#39;): maybe set notch=FALSE</code></pre>
 <p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
 </div>
 <div id="year-blocks-4" class="section level4">
@@ -3841,10 +3855,8 @@ permutest(bd)</code></pre>
 <div id="year-8" class="section level4">
 <h4>Year</h4>
 <pre class="r"><code>#Year
-bd&lt;-betadisper(trawl_dist,ME_group_data$Year) </code></pre>
-<pre><code>## Warning in betadisper(trawl_dist, ME_group_data$Year): some squared distances
-## are negative and changed to zero</code></pre>
-<pre class="r"><code>bd</code></pre>
+bd&lt;-betadisper(trawl_dist,ME_group_data$Year) 
+bd</code></pre>
 <pre><code>## 
 ##  Homogeneity of multivariate dispersions
 ## 
@@ -4172,8 +4184,6 @@ ano_year #years are statistically different communities</code></pre>
 ## 2018      87 2901.00  8080.0 11820.00 15719    45
 ## 2019     249 2087.00  5031.5  9283.50 14875    36</code></pre>
 <pre class="r"><code>plot(ano_year)</code></pre>
-<pre><code>## Warning in (function (z, notch = FALSE, width = NULL, varwidth = FALSE, : some
-## notches went outside hinges (&#39;box&#39;): maybe set notch=FALSE</code></pre>
 <p><img src="anosim_adonis_analysis_7.21_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
 </div>
 <div id="year-blocks-6" class="section level4">
@@ -4890,10 +4900,8 @@ permutest(bd)</code></pre>
 <div id="year-11" class="section level4">
 <h4>Year</h4>
 <pre class="r"><code>#Year
-bd&lt;-betadisper(trawl_dist,ME_group_data$Year) </code></pre>
-<pre><code>## Warning in betadisper(trawl_dist, ME_group_data$Year): some squared distances
-## are negative and changed to zero</code></pre>
-<pre class="r"><code>bd</code></pre>
+bd&lt;-betadisper(trawl_dist,ME_group_data$Year) 
+bd</code></pre>
 <pre><code>## 
 ##  Homogeneity of multivariate dispersions
 ## 

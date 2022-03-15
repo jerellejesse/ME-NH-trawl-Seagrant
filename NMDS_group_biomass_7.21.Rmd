@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 knitr::opts_chunk$set(fig.width=12, fig.height=8) 
 ```
 
@@ -26,7 +26,7 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 * functional groups based on [NOAA IEA feeding guilds](https://noaa-edab.github.io/tech-doc/aggroups.html)
 * average across depth strata using the [NOAA IEA procedure](https://noaa-edab.github.io/tech-doc/inshoresurvdat.html#data-analysis-29)
 
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 #load packages
 library(tidyverse)
@@ -127,7 +127,7 @@ centers<-full_join(d,id)
 ### Plots
 
 #### Region
-```{r echo=FALSE, warning=FALSE}
+```{r }
 
 #both seasons
 data.scores_region<-filter(data.scores,Region_new!="Penobscot Bay")
@@ -299,7 +299,7 @@ p4
 ```
 
 #### Time
-```{r echo=FALSE, warning=FALSE}
+```{r }
 
 #both seasons
 data.scores_region<-filter(data.scores,Region_new!="Penobscot Bay")
@@ -512,7 +512,7 @@ p4
 ```
 
 #### Season
-```{r echo=FALSE, warning=FALSE}
+```{r }
 
 # both regions
 

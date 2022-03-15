@@ -9,7 +9,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
 ```
 
 ```{r, echo = FALSE}
@@ -18,7 +19,7 @@ library(gmRi)
 gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 ```
 
-## Objective 1 GAMMs
+## Generalized additive mixed models
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 

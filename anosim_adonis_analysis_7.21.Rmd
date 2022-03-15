@@ -10,7 +10,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
 ```
 
 ```{r, echo = FALSE}
@@ -25,7 +26,7 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 * average across depth strata using the [NOAA IEA technical document](https://noaa-edab.github.io/tech-doc/inshoresurvdat.html#data-analysis-29)
 * calculate dissimilarity matrix with Bray-Curtis distances
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r }
 #load libraries
 library(tidyverse)
 library(vegan)
@@ -57,7 +58,7 @@ paged_table(head(trawl_data_arrange))
 * R statistic closer to 1 is more dissimilar
 
 #### Region
-```{r warning=FALSE}
+```{r }
 #region
 ano_region<- anosim(trawl_dist, trawl_data_arrange$Region, permutations = 999)
 ano_region #regions are statistically different communities 
@@ -69,7 +70,7 @@ plot(ano_region) #regions don't look very different in plot though...confidence 
 ```
 
 #### Region grouped
-```{r warning=FALSE}
+```{r }
 #region
 ano_region_groups<- anosim(trawl_dist, trawl_data_arrange$REGION_NEW, permutations = 999)
 ano_region_groups #regions are statistically different communities 
@@ -380,7 +381,7 @@ paged_table(head(trawl_data_arrange))
 * R statistic closer to 1 is more dissimilar
 
 #### Region
-```{r warning=FALSE}
+```{r }
 #region
 ano_region<- anosim(trawl_dist, trawl_data_arrange$Region, permutations = 999)
 ano_region #regions are statistically different communities 
@@ -392,7 +393,7 @@ plot(ano_region) #regions don't look very different in plot though...confidence 
 ```
 
 #### Region grouped
-```{r warning=FALSE}
+```{r }
 #region
 ano_region_groups<- anosim(trawl_dist, trawl_data_arrange$REGION_NEW, permutations = 999)
 ano_region_groups #regions are statistically different communities 
@@ -639,7 +640,7 @@ paged_table(head(trawl_data_arrange))
 * R statistic closer to 1 is more dissimilar
 
 #### Region
-```{r warning=FALSE}
+```{r }
 #region
 ano_region<- anosim(trawl_dist, trawl_data_arrange$Region, permutations = 999)
 ano_region #regions are statistically different communities 
@@ -651,7 +652,7 @@ plot(ano_region) #regions don't look very different in plot though...confidence 
 ```
 
 #### Region grouped
-```{r warning=FALSE}
+```{r }
 #region
 ano_region_groups<- anosim(trawl_dist, trawl_data_arrange$REGION_NEW, permutations = 999)
 ano_region_groups #regions are statistically different communities 
@@ -899,7 +900,7 @@ paged_table(head(trawl_data_arrange))
 * R statistic closer to 1 is more dissimilar
 
 #### Region
-```{r warning=FALSE}
+```{r }
 #region
 ano_region<- anosim(trawl_dist, trawl_data_arrange$Region, permutations = 999)
 ano_region #regions are statistically different communities 
@@ -911,7 +912,7 @@ plot(ano_region) #regions don't look very different in plot though...confidence 
 ```
 
 #### Region grouped
-```{r warning=FALSE}
+```{r }
 #region
 ano_region_groups<- anosim(trawl_dist, trawl_data_arrange$REGION_NEW, permutations = 999)
 ano_region_groups #regions are statistically different communities 

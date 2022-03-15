@@ -14,92 +14,116 @@ library(gmRi)
 gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 ```
 
-## Seagrant: Understanding climate impacts on the Maine coastal fish and invertebrate community through synthesis of the Maine-New Hampshire Inshore Trawl Survey
+## Understanding climate impacts on the Maine coastal fish and invertebrate community through synthesis of the Maine-New Hampshire Inshore Trawl Survey
+<br>
 
+Lisa Kerr <sup>1 </sup>, Kathy Mills <sup>1</sup>, Riley Young Morse <sup>1</sup> , Rebecca Peters <sup>2</sup> , Andrew Allyn <sup>1</sup>, Jerelle Jesse <sup>1</sup>, Ashley Weston <sup>1</sup>
+<br>
+
+ <sup>1</sup> Gulf of Maine Research Institute<br>
+ 350 Commercial Street<br>
+ Portland, ME 04101
+<br>
+
+ <sup>2</sup> Maine Department of Marine Resources<br>
+ 194 McKown Point Road<br>
+ West Boothbay Harbor, ME 04575
+ <br>
+ 
+**Funding provided by Maine Sea Grant**
+<br>
+<br>
+ 
 ### Project Description
-
-#### From the proposal:
 
 > The overarching goal of this research is to synthesize data collected through the Maine-New Hampshire Inshore Trawl Survey to understand how climate change, fishing, and other environmental drivers are impacting key fish and invertebrate communities in coastal Maine waters.
 
-### Objective 1
+#### The ME-NH inshore trawl survey samples in 5 Regions and 4 depth strata from the MA-NH border to the ME-Canada.
+![Survey Design](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ME_survey.png)<br>
 
--   Analyze changes in biodiversity in space and time and evaluate associations with environmental factors and fishing
--   To be rerun with updated Maine DMR data
+#### The ME-NH survey can be compared to the MDMF and NEFSC surveys which provide larger spatial coverage and a longer time series.
+![Survey Spatial Coverage](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/surveys_spatial.jpg) ![Survey Duration](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/surveys_temporal.png)
 
-#### Analysis
+### Analysis
+#### Objective 1: Analyze changes in biodiversity in space and time and evaluate associations with environmental factors and fishing<br>
 
--   biodiversity metrics/ maps
--   GAMMs
+#### **Biodiversity metrics** <br>
+![indices](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/indices.png)![indices](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/selected_indices.png)
 
-#### Data
+<br>
 
--   Will double check that all necessary data is available in data folder
+#### **GAMMs** <br>
+![ME-NH table](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ME_gamms.png){width=90%}![GOM table](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/GOM_gamms.png){width=90%}  
+  
+<br>
+![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_richness.png){width=75%}
+![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_shannon.png){width=75%}
+![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_evenness.png){width=75%}
+![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_tax.png){width=75%}
+<br>
+<br>
 
-#### Scripts
+#### Objective 2: Identify species groups and assess changes in habitat suitability if functional groups and communities in space and time<br>
 
--   See Ashley's code folder for scripts
--   pulled relevant scripts from original Seagrant directory
+#### **NMDS**
+Functional Groups
+![NMDS](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/NMDS_groups.png){width=90%}
+<br>
+<br>
+Top species<br>
+![NMDS](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/NMDS_species.png){width=90%}
+<br>
+<br>
 
-### Objective 2
+#### **Analysis of variance**
+![adonis](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/adonis_regions.png){width=55%}
+<br>
+<br>
 
--   Identify species groups and assess changes in habitat suitability if functional groups and communities in space and time
+![adonis](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/adonis_years.png){width=90%}
+<br>
+<br>
 
-#### Analysis
+#### **Environmental relationships** (linear and non-linear approaches)
+![envfit](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/envfit.png){width=90%}
+<br>
+<br>
 
--   removed shrimp and other unimportant invertebrates from top 50 species analysis
--   feeding guilds from [NOAA IEA definitions](https://noaa-edab.github.io/tech-doc/aggroups.html)
--   stratified mean for NMDS convergence and simplified plotting using [NOAA IEA procedure](https://noaa-edab.github.io/tech-doc/inshoresurvdat.html#data-analysis-29)
--   Bray-Curtis dissimilarity matrix for NMDS and anosim/adonis
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ordisurf.png){width=90%}
+<br>
+<br>
 
-#### Data
+#### Objective 3: Analyze joint distribution of key predator-prey species within the community, with a particular focus on lobster and cod
 
--   raw data from [Maine DMR portal](https://mainedmr.shinyapps.io/MaineDMR_Trawl_Survey_Portal/) (MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv)
--   old data (full-me-dmr-expcatch.csv)
--   species with feeding guild designation (species_groups.csv)
--   4 community matrices for top 50 species and functional groups (biomass and abundance) - output from ME_trawl_NMDS_species_7.21.R and ME_trawl_NMDS_groups_7.21.R saved for future use in Rmarkdowns or NMDS so you don't have to run beginning cleaning code
+<br>
 
-#### Scripts
+#### Objective 4: Evaluate how ecosystem changes align with shifts in diversity and composition of fishery landings over time in ports along Maine's coastline
 
--   set up with here function, so directory paths should work on any computer
--   Scripts located in code subfolder of objective 2 folder
--   Scripts that end in 7.21 are updated scripts from July 2021, the older versions are saved and have more versions of plots but are pretty messy
--   basic plotting that is not for NMDS in ME_trawl_plots.R
--   old script (ME_trawl_NMDS.R) went with the old data and trying out different NMDS plots
--   Pretty self explanatory anosim_adonis_analysis_7.21.R
--   NEFSC_NMDS_groups.R putting science center data into functional groups- not needed anymore
--   All Rmarkdowns in subfolder
+#### **Biodiversity metrics** <br>
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/landings_trawl.png){width=90%}
 
-### Objective 3
+#### **Functional groups** <br>
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/landings_groups.png){width=90%}
+<br>
 
--   Analyze joint distribution of key predator-prey species within the community, with a particular focus on lobster and cod
--   contact Andrew Allyn ([aallyn\@gmri.org](mailto:aallyn@gmri.org)) for questions or code
+#### **Correlation analysis** <br>
 
-### Objective 4
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/correlation_matrix.png){width=55%}
+<br>
 
--   Evaluate how ecosystem changes align with shifts in diversity and composition of fishery landings over time in ports along Maine's coastline
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/correlation_table.png){width=50%}  
+<br>
 
-#### Analysis
-- Biodiversity metrics for landings data (by county and grouped into year)
-- calculated with catch weight not abundance
-- richness, shannon-weiner diversity, simpson's evenness, average taxonomic distinctness
-- compare to new trawl biodiversity metrics calculated as fall and spring combined and with weight for most relevant comparison to landings metrics
-- trawl region definitions applied to landings data for comparison
-- Functional groups defined for landings and plots based on NOAA IEA feeding guilds
+## Conclusions
+* Communities are changing over time in Maine waters 
+* Environmental factors are playing a key role in those changes
+  + Temperature is the largest contributing factor
+* Maine inshore waters match up well with offshore signal for biodiversity indices and environmental effects
+* Maine landings are missing a large part of community structure with the piscivores functional group
+* There is a benefit to using shorter time series surveys when put in context of a longer timeline and larger spatial coverage<br>
+<br>
+* see tabs for more indepth analysis and figures<br>
 
-#### Data
-
--   Landings data from [DMR portal](https://mainedmr.shinyapps.io/Landings_Portal/)
--   In data folder MaineDMR_Modern_Landings_Data_All.csv
--   County and species specific landings 2008-2020
--   2006-2007 data from Rob Watts excel sheet JerelleJesse_06-07_Non-ConfidentialSpeciesByCounty_8-20-2021
--   reformatted for csv MaineDMR_2006_2007_Landings.csv ([rob.watts\@maine.gov](mailto:rob.watts@maine.gov))
-
-#### Scripts
-
-- fishery_landings.Rmd for landings biodiversity and functional group plots
-- biodiversity.Rmd for new trawl biodiversity metrics calculated for comparison
-
-### Contact
-
-Jerelle Jesse ([jjesse\@gmri.org](mailto:jjesse@gmri.org))
+#### Contact: <br>
+Jerelle Jesse ([jjesse\@gmri.org](mailto:jjesse@gmri.org)) <br>
+Andrew Allyn ([aallyn\@gmri.org](mailto:aallyn@gmri.org))

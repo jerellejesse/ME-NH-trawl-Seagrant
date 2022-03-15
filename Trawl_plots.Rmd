@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(dplyr)
 library(here)
 library(rmarkdown)
@@ -25,7 +25,7 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 ## Trawl plots
 
 ### Top 5 species
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 #load packages
 library(tidyverse)
@@ -80,7 +80,7 @@ ggplot(cpue_species)+
 <br>
 
 ## Functional Groups
-```{r echo=FALSE, message=FALSE}
+```{r }
 groups<-read.csv(here("Data/species_groups.csv"))
 trawl<-read.csv(here("Data/full_me_dmr_expcatch.csv"))
 groups<-full_join(groups,trawl,by="COMMON_NAME")%>%
@@ -140,7 +140,7 @@ ggplot(cpue_year)+
 
 
 ### Benthivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 ####Each functional group####
 benthivore<-filter(trawl_3_groups, functional_group=="benthivore")
 cpue_benthivore<-group_by(benthivore,Year,Season)%>%
@@ -181,7 +181,7 @@ ggplot(cpue_benthivore)+
 <br>
 
 ### Benthos
-```{r echo=FALSE, message=FALSE}
+```{r }
 benthos<-filter(trawl_3_groups, functional_group=="benthos")
 cpue_benthos<-group_by(benthos,Year,Season)%>%
   mutate(tows=n_distinct(Tow_Number))%>%
@@ -218,7 +218,7 @@ ggplot(cpue_benthos)+
 <br>
 
 ### Piscivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 piscivore<-filter(trawl_3_groups, functional_group=="piscivore")
 cpue_piscivore<-group_by(piscivore,Year,Season)%>%
@@ -258,7 +258,7 @@ ggplot(cpue_piscivore)+
 <br>
 
 ### Planktivore
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 planktivore<-filter(trawl_3_groups, functional_group=="planktivore")
 cpue_planktivore<-group_by(planktivore,Year,Season)%>%
@@ -296,7 +296,7 @@ ggplot(cpue_planktivore)+
 <br>
 
 ### Undefined
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 undefined<-filter(trawl_3_groups, functional_group=="undefined")
 cpue_undefined<-group_by(undefined,Year,Season)%>%
@@ -330,7 +330,7 @@ ggplot(cpue_undefined)+
 <br>
 
 #### No shrimp
-```{r echo=FALSE, message=FALSE}
+```{r }
 
 #no shrimp
 no_shrimp<-filter(trawl_3_groups, functional_group=="undefined")%>%
