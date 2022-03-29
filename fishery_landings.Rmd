@@ -263,6 +263,7 @@ p2
 * options for...
   - #1 all landings or
   - #2 species filtered for best comparison
+* ME-NH Inshore Trawl Survey and ME landings biodiversity indices are not a direct comparison as the first is calculated on a tow basis and the other an annual basis.
 
 ### Species richness
 #### County specified data

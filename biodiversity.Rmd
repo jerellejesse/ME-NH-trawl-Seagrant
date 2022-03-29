@@ -1034,5 +1034,14 @@ all_avgtaxdistinct<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_s
 all_vartaxdistinct<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_var, color=Survey))+
   scale_color_colorblind()+theme_classic()
 
+all_rich
+all_shannon
+all_simpsonD
+allSimpsonE
+all_taxdiversity
+all_taxdistinct
+all_avgtaxdistinct
+all_vartaxdistinct
+
 ```
 
