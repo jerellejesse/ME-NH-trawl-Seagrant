@@ -361,3 +361,72 @@ ggplot(cpue_no_shrimp)+
   #       legend.key=element_blank())
 ```
 
+## Regional functional groups
+### West of the Penobscot
+```{r}
+
+trawl_3_groups$group[trawl_3_groups$Region==1]<-"West"
+trawl_3_groups$group[trawl_3_groups$Region==2]<-"West"
+trawl_3_groups$group[trawl_3_groups$Region==3]<-"Penobscot"
+trawl_3_groups$group[trawl_3_groups$Region==4]<-"East"
+trawl_3_groups$group[trawl_3_groups$Region==5]<-"East"
+
+west_groups<-filter(trawl_3_groups, group=="West")
+
+#cpue each year for weight and catch
+cpue_year_west<-group_by(west_groups,Year,Season)%>%
+  mutate(tows=n_distinct(Tow_Number))%>%
+  group_by(functional_group,Year,Season)%>%
+  mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%>%
+  mutate(weight_percent=biomass/tows, catch_percent=catch/tows)%>%
+  group_by(Year,functional_group)%>%
+  summarise(weight_prop=mean(weight_percent),catch_prop=mean(catch_percent))
+
+ggplot(cpue_year_west)+
+  geom_bar(aes(x=Year, y=weight_prop, fill=functional_group), position="fill", stat = "identity")+
+  scale_fill_colorblind(name="Functional Group")+
+  labs(x="Year", y="Proportion of Biomass/ tow (kg)", color="Functional group")
+
+```
+
+### Penobscot
+```{r}
+pen_groups<-filter(trawl_3_groups, group=="Penobscot")
+
+#cpue each year for weight and catch
+cpue_year_pen<-group_by(pen_groups,Year,Season)%>%
+  mutate(tows=n_distinct(Tow_Number))%>%
+  group_by(functional_group,Year,Season)%>%
+  mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%>%
+  mutate(weight_percent=biomass/tows, catch_percent=catch/tows)%>%
+  group_by(Year,functional_group)%>%
+  summarise(weight_prop=mean(weight_percent),catch_prop=mean(catch_percent))
+
+ggplot(cpue_year_pen)+
+  geom_bar(aes(x=Year, y=weight_prop, fill=functional_group), position="fill", stat = "identity")+
+  scale_fill_colorblind(name="Functional Group")+
+  labs(x="Year", y="Proportion of Biomass/ tow (kg)", color="Functional group")
+```
+
+### East
+```{r}
+east_groups<-filter(trawl_3_groups, group=="East")
+
+#cpue each year for weight and catch
+cpue_year_east<-group_by(east_groups,Year,Season)%>%
+  mutate(tows=n_distinct(Tow_Number))%>%
+  group_by(functional_group,Year,Season)%>%
+  mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%>%
+  mutate(weight_percent=biomass/tows, catch_percent=catch/tows)%>%
+  group_by(Year,functional_group)%>%
+  summarise(weight_prop=mean(weight_percent),catch_prop=mean(catch_percent))
+
+ggplot(cpue_year_east)+
+  geom_bar(aes(x=Year, y=weight_prop, fill=functional_group), position="fill", stat = "identity")+
+  scale_fill_colorblind(name="Functional Group")+
+  labs(x="Year", y="Proportion of Biomass/ tow (kg)", color="Functional group")
+
+```
+
+
+

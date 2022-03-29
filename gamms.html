@@ -322,7 +322,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Seagrant: ME-NH inshore trawl survey</a>
+      <a class="navbar-brand" href="index.html">Seagrant: ME-NH Inshore Trawl Survey</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -738,7 +738,25 @@ plot(N_Fall_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>H_Fall &lt;-  gamm4(H_index ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = fall) 
 
-summary(H_Fall$gam)</code></pre>
+gam.check(H_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value   
+## s(WATER_TEMP_C)                    9.00  3.21    0.95   0.020 * 
+## s(SURFACE_TEMP_C)                  9.00  1.32    0.98   0.150   
+## s(SALINITY)                        9.00  1.23    0.96   0.045 * 
+## s(SURFACE_SALINITY)                9.00  1.00    0.99   0.330   
+## s(START_DEPTH)                     9.00  5.98    0.97   0.115   
+## s(START_LATITUDE,START_LONGITUDE) 29.00 13.59    1.00   0.440   
+## s(metric_tons)                     9.00  1.00    0.91   0.005 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(H_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -769,13 +787,31 @@ summary(H_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.256   
 ## lmer.REML = 1437.2  Scale est. = 0.1609    n = 1309</code></pre>
 <pre class="r"><code>plot(H_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-6-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-6-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>H_Fall_FV &lt;- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
-summary(H_Fall_FV$gam)</code></pre>
+gam.check(H_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  2.53    1.06    0.99    
+## s(FV_surf_temp)                    9.00  4.43    0.93  &lt;2e-16 ***
+## s(FV_bot_sal)                      9.00  1.00    1.01    0.61    
+## s(metric_tons)                     9.00  1.00    0.91  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.66    0.99    0.30    
+## s(START_DEPTH)                     9.00  5.88    0.99    0.40    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 13.98    1.00    0.54    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(H_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -806,7 +842,7 @@ summary(H_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.241   
 ## lmer.REML = 1596.1  Scale est. = 0.16608   n = 1417</code></pre>
 <pre class="r"><code>plot(H_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-7-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-7-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-7-8.png" width="672" /></p>
 </div>
 </div>
 <div id="simpsons-diversity" class="section level3">
@@ -816,7 +852,25 @@ summary(H_Fall_FV$gam)</code></pre>
 <pre class="r"><code>D_Fall &lt;- gamm4(D_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +
                   s(SURFACE_SALINITY)  + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = fall)
 
-summary(D_Fall$gam)</code></pre>
+gam.check(D_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  1.00    0.97   0.145    
+## s(SURFACE_TEMP_C)                  9.00  1.15    0.96   0.095 .  
+## s(SALINITY)                        9.00  1.00    0.95   0.015 *  
+## s(SURFACE_SALINITY)                9.00  1.00    1.00   0.475    
+## s(START_DEPTH)                     9.00  5.80    0.98   0.225    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 10.59    1.01   0.580    
+## s(metric_tons)                     9.00  1.00    0.90  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(D_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -847,13 +901,31 @@ summary(D_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.171   
 ## lmer.REML = 4643.5  Scale est. = 1.9157    n = 1309</code></pre>
 <pre class="r"><code>plot(D_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-8-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-8-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-8-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-1" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>D_Fall_FV &lt;- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
-summary(D_Fall_FV$gam)</code></pre>
+gam.check(D_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.60    1.06   0.970    
+## s(FV_surf_temp)                    9.00  5.55    0.96   0.065 .  
+## s(FV_bot_sal)                      9.00  1.00    1.01   0.655    
+## s(metric_tons)                     9.00  1.00    0.91  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.41    0.97   0.145    
+## s(START_DEPTH)                     9.00  6.31    1.01   0.575    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 11.72    1.00   0.395    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(D_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -884,7 +956,7 @@ summary(D_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.179   
 ## lmer.REML = 5041.1  Scale est. = 1.9254    n = 1417</code></pre>
 <pre class="r"><code>plot(D_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-9-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-9-8.png" width="672" /></p>
 </div>
 </div>
 <div id="simpsons-evenness" class="section level3">
@@ -893,7 +965,25 @@ summary(D_Fall_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>E_Fall &lt;- gamm4(E_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = fall) 
 
-summary(E_Fall$gam)</code></pre>
+gam.check(E_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value   
+## s(WATER_TEMP_C)                    9.00  1.00    0.99   0.345   
+## s(SURFACE_TEMP_C)                  9.00  1.00    0.99   0.250   
+## s(SALINITY)                        9.00  1.00    0.95   0.065 . 
+## s(SURFACE_SALINITY)                9.00  1.13    0.98   0.255   
+## s(START_DEPTH)                     9.00  3.69    0.98   0.260   
+## s(START_LATITUDE,START_LONGITUDE) 29.00  8.92    0.97   0.100 . 
+## s(metric_tons)                     9.00  1.00    0.94   0.005 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(E_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -924,13 +1014,31 @@ summary(E_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.117   
 ## lmer.REML = -3109.4  Scale est. = 0.0049795  n = 1309</code></pre>
 <pre class="r"><code>plot(E_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-10-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-10-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-2" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>E_Fall_FV &lt;- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
-summary(E_Fall_FV$gam)</code></pre>
+gam.check(E_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value   
+## s(FV_bot_temp)                     9.00  1.00    1.06    1.00   
+## s(FV_surf_temp)                    9.00  1.00    0.95    0.02 * 
+## s(FV_bot_sal)                      9.00  1.70    1.01    0.62   
+## s(metric_tons)                     9.00  1.00    0.94    0.01 **
+## s(FV_surf_sal)                     9.00  1.00    1.01    0.60   
+## s(START_DEPTH)                     9.00  4.02    1.00    0.43   
+## s(START_LATITUDE,START_LONGITUDE) 29.00  9.87    0.97    0.13   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(E_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -961,7 +1069,7 @@ summary(E_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =   0.12   
 ## lmer.REML = -3374.5  Scale est. = 0.0049853  n = 1417</code></pre>
 <pre class="r"><code>plot(E_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-11-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-11-8.png" width="672" /></p>
 </div>
 </div>
 <div id="taxonomic-diversity" class="section level3">
@@ -970,7 +1078,25 @@ summary(E_Fall_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_Fall &lt;- gamm4(delta ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall)
 
-summary(delta_Fall$gam)</code></pre>
+gam.check(delta_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value   
+## s(WATER_TEMP_C)                    9.00  1.86    0.98   0.140   
+## s(SURFACE_TEMP_C)                  9.00  1.00    1.00   0.475   
+## s(SALINITY)                        9.00  1.00    0.99   0.190   
+## s(SURFACE_SALINITY)                9.00  1.00    0.99   0.175   
+## s(START_DEPTH)                     9.00  4.90    1.01   0.595   
+## s(START_LATITUDE,START_LONGITUDE) 29.00 16.09    0.71   0.005 **
+## s(metric_tons)                     9.00  4.25    0.97   0.065 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1000,13 +1126,31 @@ summary(delta_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.114   
 ## lmer.REML =  39345  Scale est. = 7.4988e+11  n = 1309</code></pre>
 <pre class="r"><code>plot(delta_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-12-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-12-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-12-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-3" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_Fall_FV &lt;- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
-summary(delta_Fall_FV$gam)</code></pre>
+gam.check(delta_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  2.89    1.03   0.975    
+## s(FV_surf_temp)                    9.00  1.13    1.00   0.320    
+## s(FV_bot_sal)                      9.00  1.00    0.98   0.090 .  
+## s(metric_tons)                     9.00  3.32    0.97   0.035 *  
+## s(FV_surf_sal)                     9.00  1.00    0.99   0.225    
+## s(START_DEPTH)                     9.00  5.15    1.00   0.485    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 17.33    0.70  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1036,7 +1180,7 @@ summary(delta_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.118   
 ## lmer.REML =  42494  Scale est. = 6.8927e+11  n = 1417</code></pre>
 <pre class="r"><code>plot(delta_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-13-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-13-8.png" width="672" /></p>
 </div>
 </div>
 <div id="taxonomic-distinctness" class="section level3">
@@ -1045,7 +1189,25 @@ summary(delta_Fall_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_star_Fall &lt;- gamm4(delta_star ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall)
 
-summary(delta_star_Fall$gam)</code></pre>
+gam.check(delta_star_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  4.02    0.89  &lt;2e-16 ***
+## s(SURFACE_TEMP_C)                  9.00  2.29    0.94   0.010 ** 
+## s(SALINITY)                        9.00  3.61    0.94   0.025 *  
+## s(SURFACE_SALINITY)                9.00  1.45    0.98   0.290    
+## s(START_DEPTH)                     9.00  4.32    0.99   0.320    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 22.09    0.95   0.015 *  
+## s(metric_tons)                     9.00  1.44    0.82  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_star_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1076,13 +1238,31 @@ summary(delta_star_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.169   
 ## lmer.REML = 2601.4  Scale est. = 0.38293   n = 1309</code></pre>
 <pre class="r"><code>plot(delta_star_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-14-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-14-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-14-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-4" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_star_Fall_FV &lt;- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom)
 
-summary(delta_star_Fall_FV$gam)</code></pre>
+gam.check(delta_star_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  4.18    0.99   0.395    
+## s(FV_surf_temp)                    9.00  2.92    0.91  &lt;2e-16 ***
+## s(FV_bot_sal)                      9.00  5.23    1.01   0.720    
+## s(metric_tons)                     9.00  2.13    0.83  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  2.15    1.02   0.715    
+## s(START_DEPTH)                     9.00  4.55    0.99   0.270    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 20.33    0.96   0.015 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_star_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1113,7 +1293,7 @@ summary(delta_star_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =   0.18   
 ## lmer.REML = 2785.4  Scale est. = 0.37805   n = 1417</code></pre>
 <pre class="r"><code>plot(delta_star_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-15-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-15-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-15-8.png" width="672" /></p>
 </div>
 </div>
 <div id="average-taxonomic-distinctness" class="section level3">
@@ -1122,7 +1302,25 @@ summary(delta_star_Fall_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_plus_Fall &lt;- gamm4(delta_plus ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall_fvcom)
 
-summary(delta_plus_Fall$gam)</code></pre>
+gam.check(delta_plus_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  2.05    0.90  &lt;2e-16 ***
+## s(SURFACE_TEMP_C)                  9.00  1.00    0.89  &lt;2e-16 ***
+## s(SALINITY)                        9.00  3.06    0.94    0.01 ** 
+## s(SURFACE_SALINITY)                9.00  1.00    0.97    0.18    
+## s(START_DEPTH)                     9.00  5.39    1.03    0.84    
+## s(START_LATITUDE,START_LONGITUDE) 29.00  2.40    0.99    0.32    
+## s(metric_tons)                     9.00  1.64    0.77  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_plus_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1153,13 +1351,31 @@ summary(delta_plus_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.115   
 ## lmer.REML = -1064.8  Scale est. = 0.023743  n = 1309</code></pre>
 <pre class="r"><code>plot(delta_plus_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-16-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-16-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-16-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-5" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_plus_Fall_FV &lt;- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom)
 
-summary(delta_plus_Fall_FV$gam)</code></pre>
+gam.check(delta_plus_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.00    1.00    0.43    
+## s(FV_surf_temp)                    9.00  3.68    0.96    0.07 .  
+## s(FV_bot_sal)                      9.00  3.40    0.95    0.04 *  
+## s(metric_tons)                     9.00  5.60    0.84  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  4.75    1.00    0.54    
+## s(START_DEPTH)                     9.00  5.57    1.02    0.81    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 11.17    0.98    0.17    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_plus_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1190,7 +1406,7 @@ summary(delta_plus_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.202   
 ## lmer.REML = -1138.8  Scale est. = 0.023605  n = 1417</code></pre>
 <pre class="r"><code>plot(delta_plus_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-17-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-17-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-17-8.png" width="672" /></p>
 </div>
 </div>
 <div id="variation-in-taxonomic-distinctness" class="section level3">
@@ -1199,7 +1415,25 @@ summary(delta_plus_Fall_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_var_Fall &lt;- gamm4(delta_var ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall)
 
-summary(delta_var_Fall$gam)</code></pre>
+gam.check(delta_var_Fall$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  4.36    0.90  &lt;2e-16 ***
+## s(SURFACE_TEMP_C)                  9.00  3.02    0.97    0.10 .  
+## s(SALINITY)                        9.00  1.00    0.97    0.13    
+## s(SURFACE_SALINITY)                9.00  1.00    0.96    0.07 .  
+## s(START_DEPTH)                     9.00  3.72    0.99    0.41    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 18.96    1.00    0.46    
+## s(metric_tons)                     9.00  1.99    0.81  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_var_Fall$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1230,13 +1464,31 @@ summary(delta_var_Fall$gam)</code></pre>
 ## R-sq.(adj) =  0.242   
 ## lmer.REML = -1032.4  Scale est. = 0.023577  n = 1309</code></pre>
 <pre class="r"><code>plot(delta_var_Fall$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-18-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-18-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-18-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-6" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_var_Fall_FV &lt;- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +   s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom)
 
-summary(delta_var_Fall_FV$gam)</code></pre>
+gam.check(delta_var_Fall_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  2.08    1.01    0.64    
+## s(FV_surf_temp)                    9.00  1.00    0.96    0.04 *  
+## s(FV_bot_sal)                      9.00  5.19    1.00    0.42    
+## s(metric_tons)                     9.00  1.61    0.82  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.00    0.98    0.30    
+## s(START_DEPTH)                     9.00  2.90    1.01    0.66    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 18.84    0.99    0.34    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_var_Fall_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1267,7 +1519,7 @@ summary(delta_var_Fall_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.215   
 ## lmer.REML = -1036.5  Scale est. = 0.025338  n = 1417</code></pre>
 <pre class="r"><code>plot(delta_var_Fall_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-19-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-19-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-19-8.png" width="672" /></p>
 </div>
 </div>
 </div>
@@ -1318,11 +1570,11 @@ gam.check(N_spring_2$gam)</code></pre>
 ## 
 ##                                      k&#39;   edf k-index p-value    
 ## s(WATER_TEMP_C)                    9.00  3.27    0.93  &lt;2e-16 ***
-## s(SURFACE_TEMP_C)                  9.00  4.62    0.97    0.12    
-## s(SALINITY)                        9.00  1.00    0.95    0.01 ** 
+## s(SURFACE_TEMP_C)                  9.00  4.62    0.97   0.135    
+## s(SALINITY)                        9.00  1.00    0.95   0.005 ** 
 ## s(metric_tons)                     9.00  1.53    0.81  &lt;2e-16 ***
-## s(SURFACE_SALINITY)                9.00  3.64    1.00    0.40    
-## s(START_DEPTH)                     9.00  5.72    1.04    0.95    
+## s(SURFACE_SALINITY)                9.00  3.64    1.00   0.425    
+## s(START_DEPTH)                     9.00  5.72    1.04   0.940    
 ## s(START_LATITUDE,START_LONGITUDE) 29.00 21.77    0.87  &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -1396,12 +1648,12 @@ gam.check(N_spring_FV$gam)</code></pre>
 ## indicate that k is too low, especially if edf is close to k&#39;.
 ## 
 ##                                      k&#39;   edf k-index p-value    
-## s(FV_bot_temp)                     9.00  1.00    1.01    0.58    
-## s(FV_surf_temp)                    9.00  4.73    0.94    0.01 ** 
-## s(FV_bot_sal)                      9.00  1.00    0.96    0.04 *  
+## s(FV_bot_temp)                     9.00  1.00    1.01   0.590    
+## s(FV_surf_temp)                    9.00  4.73    0.94   0.005 ** 
+## s(FV_bot_sal)                      9.00  1.00    0.96   0.080 .  
 ## s(metric_tons)                     9.00  1.00    0.77  &lt;2e-16 ***
-## s(FV_surf_sal)                     9.00  2.15    0.95    0.03 *  
-## s(START_DEPTH)                     9.00  5.73    1.02    0.84    
+## s(FV_surf_sal)                     9.00  2.15    0.95   0.030 *  
+## s(START_DEPTH)                     9.00  5.73    1.02   0.850    
 ## s(START_LATITUDE,START_LONGITUDE) 29.00 20.54    0.89  &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -1447,7 +1699,25 @@ gam.check(N_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>H_spring &lt;-  gamm4(H_index ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = spring) 
 
-summary(H_spring$gam)</code></pre>
+gam.check(H_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  1.00    0.92  &lt;2e-16 ***
+## s(SURFACE_TEMP_C)                  9.00  1.00    0.93  &lt;2e-16 ***
+## s(SALINITY)                        9.00  1.00    1.00    0.41    
+## s(SURFACE_SALINITY)                9.00  3.60    1.00    0.44    
+## s(START_DEPTH)                     9.00  6.39    1.00    0.50    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 21.54    0.92  &lt;2e-16 ***
+## s(metric_tons)                     9.00  1.26    0.81  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(H_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1478,13 +1748,31 @@ summary(H_spring$gam)</code></pre>
 ## R-sq.(adj) =  0.266   
 ## lmer.REML = 2169.2  Scale est. = 0.1901    n = 1714</code></pre>
 <pre class="r"><code>plot(H_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-23-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-23-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-23-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-7" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>H_spring_FV &lt;- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
-summary(H_spring_FV$gam)</code></pre>
+gam.check(H_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.00    1.00   0.500    
+## s(FV_surf_temp)                    9.00  4.72    0.97   0.050 *  
+## s(FV_bot_sal)                      9.00  2.71    0.96   0.035 *  
+## s(metric_tons)                     9.00  1.00    0.81  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  2.39    0.99   0.310    
+## s(START_DEPTH)                     9.00  6.53    1.01   0.585    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 20.83    0.93  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(H_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1515,7 +1803,7 @@ summary(H_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =   0.27   
 ## lmer.REML = 2241.9  Scale est. = 0.18926   n = 1778</code></pre>
 <pre class="r"><code>plot(H_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-24-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-24-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-24-8.png" width="672" /></p>
 </div>
 </div>
 <div id="simpsons-diversity-1" class="section level3">
@@ -1524,7 +1812,25 @@ summary(H_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>D_spring &lt;- gamm4(D_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY)  + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = spring)
 
-summary(D_spring$gam)</code></pre>
+gam.check(D_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  1.91    0.95   0.010 ** 
+## s(SURFACE_TEMP_C)                  9.00  1.00    0.95   0.035 *  
+## s(SALINITY)                        9.00  1.00    1.00   0.620    
+## s(SURFACE_SALINITY)                9.00  1.00    1.01   0.745    
+## s(START_DEPTH)                     9.00  6.37    1.01   0.575    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 20.92    0.92  &lt;2e-16 ***
+## s(metric_tons)                     9.00  1.00    0.90  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(D_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1555,13 +1861,31 @@ summary(D_spring$gam)</code></pre>
 ## R-sq.(adj) =  0.212   
 ## lmer.REML = 5918.9  Scale est. = 1.7293    n = 1714</code></pre>
 <pre class="r"><code>plot(D_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-25-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-25-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-25-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-8" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>D_spring_FV &lt;- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
-summary(D_spring_FV$gam)</code></pre>
+gam.check(D_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.00    1.01    0.58    
+## s(FV_surf_temp)                    9.00  3.72    0.98    0.20    
+## s(FV_bot_sal)                      9.00  1.00    0.98    0.10    
+## s(metric_tons)                     9.00  1.00    0.89  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  2.79    1.00    0.49    
+## s(START_DEPTH)                     9.00  6.41    1.00    0.56    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 20.44    0.93  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(D_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1592,7 +1916,7 @@ summary(D_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.212   
 ## lmer.REML = 6173.9  Scale est. = 1.7601    n = 1778</code></pre>
 <pre class="r"><code>plot(D_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-26-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-26-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-26-8.png" width="672" /></p>
 </div>
 </div>
 <div id="simpsons-evenness-1" class="section level3">
@@ -1601,7 +1925,25 @@ summary(D_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>E_spring &lt;- gamm4(E_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = spring) 
 
-summary(E_spring$gam)</code></pre>
+gam.check(E_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  2.61    0.94   0.005 ** 
+## s(SURFACE_TEMP_C)                  9.00  1.00    0.97   0.095 .  
+## s(SALINITY)                        9.00  3.24    0.99   0.315    
+## s(SURFACE_SALINITY)                9.00  3.78    1.04   0.965    
+## s(START_DEPTH)                     9.00  5.70    1.00   0.495    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 21.67    0.89  &lt;2e-16 ***
+## s(metric_tons)                     9.00  1.00    0.93  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(E_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1632,13 +1974,31 @@ summary(E_spring$gam)</code></pre>
 ## R-sq.(adj) =   0.23   
 ## lmer.REML = -3753.4  Scale est. = 0.0059014  n = 1714</code></pre>
 <pre class="r"><code>plot(E_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-27-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-27-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-27-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-9" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>E_spring_FV &lt;- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
-summary(E_spring_FV$gam)</code></pre>
+gam.check(E_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.82    1.01   0.715    
+## s(FV_surf_temp)                    9.00  1.00    0.97   0.095 .  
+## s(FV_bot_sal)                      9.00  1.00    0.97   0.120    
+## s(metric_tons)                     9.00  1.00    0.92  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  2.82    1.02   0.740    
+## s(START_DEPTH)                     9.00  5.64    1.00   0.575    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 21.61    0.89  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(E_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1669,7 +2029,7 @@ summary(E_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =   0.22   
 ## lmer.REML = -3867.3  Scale est. = 0.006036  n = 1778</code></pre>
 <pre class="r"><code>plot(E_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-28-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-28-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-28-8.png" width="672" /></p>
 </div>
 </div>
 <div id="taxonomic-diversity-1" class="section level3">
@@ -1678,7 +2038,25 @@ summary(E_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_spring &lt;- gamm4(delta ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring)
 
-summary(delta_spring$gam)</code></pre>
+gam.check(delta_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  1.00    1.01   0.650    
+## s(SURFACE_TEMP_C)                  9.00  1.78    0.97   0.095 .  
+## s(SALINITY)                        9.00  1.00    1.00   0.495    
+## s(SURFACE_SALINITY)                9.00  3.78    1.03   0.980    
+## s(START_DEPTH)                     9.00  4.50    1.01   0.745    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 15.42    1.00   0.485    
+## s(metric_tons)                     9.00  1.00    0.86  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1708,13 +2086,31 @@ summary(delta_spring$gam)</code></pre>
 ## R-sq.(adj) =  0.0768   
 ## lmer.REML =  52239  Scale est. = 1.1032e+12  n = 1714</code></pre>
 <pre class="r"><code>plot(delta_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-29-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-29-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-29-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-10" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_spring_FV &lt;- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
-summary(delta_spring_FV$gam)</code></pre>
+gam.check(delta_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.00    1.00   0.420    
+## s(FV_surf_temp)                    9.00  1.00    0.98   0.130    
+## s(FV_bot_sal)                      9.00  1.00    1.02   0.870    
+## s(metric_tons)                     9.00  1.00    0.85  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.00    0.93   0.005 ** 
+## s(START_DEPTH)                     9.00  5.06    1.01   0.615    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 16.28    1.01   0.535    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1744,7 +2140,7 @@ summary(delta_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.0655   
 ## lmer.REML =  54157  Scale est. = 1.0802e+12  n = 1778</code></pre>
 <pre class="r"><code>plot(delta_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-30-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-30-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-30-8.png" width="672" /></p>
 </div>
 </div>
 <div id="taxonomic-distinctness-1" class="section level3">
@@ -1753,7 +2149,25 @@ summary(delta_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_star_spring &lt;- gamm4(delta_star ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring)
 
-summary(delta_star_spring$gam)</code></pre>
+gam.check(delta_star_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  1.50    0.86  &lt;2e-16 ***
+## s(SURFACE_TEMP_C)                  9.00  2.84    0.91  &lt;2e-16 ***
+## s(SALINITY)                        9.00  1.00    0.97   0.110    
+## s(SURFACE_SALINITY)                9.00  4.37    1.00   0.430    
+## s(START_DEPTH)                     9.00  4.54    1.00   0.450    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 24.99    0.95   0.005 ** 
+## s(metric_tons)                     9.00  1.00    0.74  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_star_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1784,13 +2198,31 @@ summary(delta_star_spring$gam)</code></pre>
 ## R-sq.(adj) =  0.292   
 ## lmer.REML = 4137.2  Scale est. = 0.59711   n = 1714</code></pre>
 <pre class="r"><code>plot(delta_star_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-31-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-31-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-31-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-11" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_star_spring_FV &lt;- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom)
 
-summary(delta_star_spring_FV$gam)</code></pre>
+gam.check(delta_star_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  1.00    0.95   0.010 ** 
+## s(FV_surf_temp)                    9.00  1.00    0.94   0.005 ** 
+## s(FV_bot_sal)                      9.00  6.86    0.97   0.120    
+## s(metric_tons)                     9.00  1.00    0.75  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.00    0.96   0.045 *  
+## s(START_DEPTH)                     9.00  4.64    1.01   0.550    
+## s(START_LATITUDE,START_LONGITUDE) 29.00 24.76    0.95   0.010 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_star_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1821,7 +2253,7 @@ summary(delta_star_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.292   
 ## lmer.REML = 4245.3  Scale est. = 0.58191   n = 1778</code></pre>
 <pre class="r"><code>plot(delta_star_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-32-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-32-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-32-8.png" width="672" /></p>
 </div>
 </div>
 <div id="average-taxonomic-distinctness-1" class="section level3">
@@ -1830,7 +2262,25 @@ summary(delta_star_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_plus_spring &lt;- gamm4(delta_plus ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring_fvcom)
 
-summary(delta_plus_spring$gam)</code></pre>
+gam.check(delta_plus_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(WATER_TEMP_C)                    9.00  1.63    0.98   0.230    
+## s(SURFACE_TEMP_C)                  9.00  3.19    1.00   0.490    
+## s(SALINITY)                        9.00  1.00    0.98   0.155    
+## s(SURFACE_SALINITY)                9.00  2.16    0.97   0.105    
+## s(START_DEPTH)                     9.00  4.88    0.94   0.015 *  
+## s(START_LATITUDE,START_LONGITUDE) 29.00 23.30    0.93  &lt;2e-16 ***
+## s(metric_tons)                     9.00  1.99    0.90  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_plus_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1861,13 +2311,31 @@ summary(delta_plus_spring$gam)</code></pre>
 ## R-sq.(adj) =  0.247   
 ## lmer.REML = -976.84  Scale est. = 0.030083  n = 1714</code></pre>
 <pre class="r"><code>plot(delta_plus_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-33-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-33-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-33-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-12" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_plus_spring_FV &lt;- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom)
 
-summary(delta_plus_spring_FV$gam)</code></pre>
+gam.check(delta_plus_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  3.12    1.01    0.67    
+## s(FV_surf_temp)                    9.00  3.89    0.99    0.34    
+## s(FV_bot_sal)                      9.00  4.20    0.98    0.23    
+## s(metric_tons)                     9.00  1.89    0.90  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.29    1.00    0.58    
+## s(START_DEPTH)                     9.00  5.00    0.96    0.05 *  
+## s(START_LATITUDE,START_LONGITUDE) 29.00 23.85    0.93  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_plus_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1898,7 +2366,7 @@ summary(delta_plus_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.251   
 ## lmer.REML = -1034.5  Scale est. = 0.02958   n = 1778</code></pre>
 <pre class="r"><code>plot(delta_plus_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-34-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-34-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-34-8.png" width="672" /></p>
 </div>
 </div>
 <div id="variation-in-taxonomic-distinctness-1" class="section level3">
@@ -1907,7 +2375,25 @@ summary(delta_plus_spring_FV$gam)</code></pre>
 <h4>survey environmental data</h4>
 <pre class="r"><code>delta_var_spring &lt;- gamm4(delta_var ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring)
 
-summary(delta_var_spring$gam)</code></pre>
+gam.check(delta_var_spring$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value   
+## s(WATER_TEMP_C)                    9.00  3.20    0.96   0.060 . 
+## s(SURFACE_TEMP_C)                  9.00  3.80    1.00   0.495   
+## s(SALINITY)                        9.00  2.45    1.00   0.405   
+## s(SURFACE_SALINITY)                9.00  1.00    0.98   0.115   
+## s(START_DEPTH)                     9.00  4.32    0.93   0.005 **
+## s(START_LATITUDE,START_LONGITUDE) 29.00 15.52    1.00   0.515   
+## s(metric_tons)                     9.00  1.00    0.94   0.005 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_var_spring$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1938,13 +2424,31 @@ summary(delta_var_spring$gam)</code></pre>
 ## R-sq.(adj) =  0.196   
 ## lmer.REML = -614.44  Scale est. = 0.037737  n = 1714</code></pre>
 <pre class="r"><code>plot(delta_var_spring$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-35-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-35-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-35-8.png" width="672" /></p>
 </div>
 <div id="fvcom-data-13" class="section level4">
 <h4>FVCOM data</h4>
 <pre class="r"><code>delta_var_spring_FV &lt;- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +   s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom)
 
-summary(delta_var_spring_FV$gam)</code></pre>
+gam.check(delta_var_spring_FV$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                      k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                     9.00  3.76    1.04    0.94    
+## s(FV_surf_temp)                    9.00  1.21    0.99    0.28    
+## s(FV_bot_sal)                      9.00  1.00    0.97    0.10    
+## s(metric_tons)                     9.00  1.00    0.92  &lt;2e-16 ***
+## s(FV_surf_sal)                     9.00  1.00    1.02    0.87    
+## s(START_DEPTH)                     9.00  4.84    0.92  &lt;2e-16 ***
+## s(START_LATITUDE,START_LONGITUDE) 29.00 15.64    0.99    0.47    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(delta_var_spring_FV$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -1975,7 +2479,7 @@ summary(delta_var_spring_FV$gam)</code></pre>
 ## R-sq.(adj) =  0.179   
 ## lmer.REML = -637.79  Scale est. = 0.037899  n = 1778</code></pre>
 <pre class="r"><code>plot(delta_var_spring_FV$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-36-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-7.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-36-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-7.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-36-8.png" width="672" /></p>
 </div>
 </div>
 </div>
@@ -1993,7 +2497,24 @@ GOM_spring &lt;- read.csv(&quot;GOM_spring_full.csv&quot;)</code></pre>
 <h3>Species richness</h3>
 <pre class="r"><code>FV_GOM_N_FL &lt;- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_N_FL$gam)</code></pre>
+gam.check(FV_GOM_N_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  5.41    0.95  &lt;2e-16 ***
+## s(FV_surf_temp)                 9.00  6.36    0.93  &lt;2e-16 ***
+## s(FV_bot_sal)                   9.00  2.30    1.01   0.705    
+## s(FV_surf_sal)                  9.00  3.94    0.96   0.005 ** 
+## s(SETDEPTH)                     9.00  7.77    0.99   0.260    
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 24.05    0.98   0.040 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_N_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2022,13 +2543,30 @@ summary(FV_GOM_N_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.201   
 ## lmer.REML =  27853  Scale est. = 11.485    n = 5215</code></pre>
 <pre class="r"><code>plot(FV_GOM_N_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-38-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-38-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-38-7.png" width="672" /></p>
 </div>
 <div id="shannon-wiener" class="section level3">
 <h3>Shannon-Wiener</h3>
 <pre class="r"><code>FV_GOM_H_FL &lt;- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_H_FL$gam)</code></pre>
+gam.check(FV_GOM_H_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value  
+## s(FV_bot_temp)                  9.00  5.38    0.98    0.07 .
+## s(FV_surf_temp)                 9.00  3.84    1.00    0.44  
+## s(FV_bot_sal)                   9.00  5.61    1.00    0.59  
+## s(FV_surf_sal)                  9.00  3.87    1.01    0.66  
+## s(SETDEPTH)                     9.00  6.42    0.98    0.09 .
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 17.69    0.99    0.23  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_H_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2057,13 +2595,28 @@ summary(FV_GOM_H_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.0768   
 ## lmer.REML = 7272.6  Scale est. = 0.23797   n = 5055</code></pre>
 <pre class="r"><code>plot(FV_GOM_H_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-39-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-39-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-39-7.png" width="672" /></p>
 </div>
 <div id="simpsons-dversity" class="section level3">
 <h3>Simpson’s Dversity</h3>
 <pre class="r"><code>FV_GOM_D_FL &lt;- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_D_FL$gam)</code></pre>
+gam.check(FV_GOM_D_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value
+## s(FV_bot_temp)                  9.00  2.43    0.99    0.30
+## s(FV_surf_temp)                 9.00  3.52    0.99    0.32
+## s(FV_bot_sal)                   9.00  4.85    0.99    0.20
+## s(FV_surf_sal)                  9.00  3.21    1.01    0.70
+## s(SETDEPTH)                     9.00  5.91    1.01    0.78
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 14.48    0.99    0.19</code></pre>
+<pre class="r"><code>summary(FV_GOM_D_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2092,13 +2645,30 @@ summary(FV_GOM_D_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.058   
 ## lmer.REML =  19847  Scale est. = 2.5627    n = 5214</code></pre>
 <pre class="r"><code>plot(FV_GOM_D_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-40-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-40-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-40-7.png" width="672" /></p>
 </div>
 <div id="simpsons-evenness-2" class="section level3">
 <h3>Simpson’s Evenness</h3>
 <pre class="r"><code>FV_GOM_E_FL &lt;- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_E_FL$gam)</code></pre>
+gam.check(FV_GOM_E_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value  
+## s(FV_bot_temp)                  9.00  1.00    0.99   0.160  
+## s(FV_surf_temp)                 9.00  3.58    0.98   0.035 *
+## s(FV_bot_sal)                   9.00  5.06    0.99   0.230  
+## s(FV_surf_sal)                  9.00  1.08    0.99   0.340  
+## s(SETDEPTH)                     9.00  5.38    1.01   0.630  
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 14.33    0.99   0.160  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_E_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2127,13 +2697,28 @@ summary(FV_GOM_E_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.0548   
 ## lmer.REML = -6784.4  Scale est. = 0.015165  n = 5214</code></pre>
 <pre class="r"><code>plot(FV_GOM_E_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-41-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-41-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-41-7.png" width="672" /></p>
 </div>
 <div id="taxonomic-diversity-2" class="section level3">
 <h3>Taxonomic diversity</h3>
 <pre class="r"><code>FV_GOM_delta_FL &lt;- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_delta_FL$gam)</code></pre>
+gam.check(FV_GOM_delta_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value
+## s(FV_bot_temp)                  9.00  1.29    1.00    0.62
+## s(FV_surf_temp)                 9.00  1.00    1.00    0.26
+## s(FV_bot_sal)                   9.00  2.81    1.00    0.34
+## s(FV_surf_sal)                  9.00  1.52    1.00    0.29
+## s(SETDEPTH)                     9.00  1.00    1.00    0.68
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00  9.42    1.07    0.79</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2162,13 +2747,30 @@ summary(FV_GOM_delta_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.0193   
 ## lmer.REML = 1.3706e+05  Scale est. = 1.5374e+10  n = 5215</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-42-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-42-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-42-7.png" width="672" /></p>
 </div>
 <div id="taxonomic-distinctness-2" class="section level3">
 <h3>Taxonomic distinctness</h3>
 <pre class="r"><code>FV_GOM_delta_star_FL &lt;- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_delta_star_FL$gam)</code></pre>
+gam.check(FV_GOM_delta_star_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  5.65    1.00    0.46    
+## s(FV_surf_temp)                 9.00  2.47    1.01    0.76    
+## s(FV_bot_sal)                   9.00  1.67    0.97    0.03 *  
+## s(FV_surf_sal)                  9.00  3.34    0.99    0.22    
+## s(SETDEPTH)                     9.00  5.52    1.00    0.34    
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 23.15    0.93  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_star_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2197,13 +2799,30 @@ summary(FV_GOM_delta_star_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.198   
 ## lmer.REML =  10283  Scale est. = 0.40419   n = 5214</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_star_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-43-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-43-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-43-7.png" width="672" /></p>
 </div>
 <div id="average-taxonomic-distinctness-2" class="section level3">
 <h3>Average taxonomic distinctness</h3>
 <pre class="r"><code>FV_GOM_delta_plus_FL &lt;- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_delta_plus_FL$gam)</code></pre>
+gam.check(FV_GOM_delta_plus_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value   
+## s(FV_bot_temp)                  9.00  4.69    0.96    0.01 **
+## s(FV_surf_temp)                 9.00  3.70    0.97    0.04 * 
+## s(FV_bot_sal)                   9.00  3.56    1.00    0.56   
+## s(FV_surf_sal)                  9.00  1.00    1.00    0.64   
+## s(SETDEPTH)                     9.00  5.64    0.99    0.30   
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 23.02    0.98    0.09 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_plus_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2232,13 +2851,30 @@ summary(FV_GOM_delta_plus_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.255   
 ## lmer.REML = 1585.4  Scale est. = 0.07552   n = 5215</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_plus_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-44-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-44-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-44-7.png" width="672" /></p>
 </div>
 <div id="variation-in-taxonomic-distinctness-2" class="section level3">
 <h3>Variation in taxonomic distinctness</h3>
 <pre class="r"><code>FV_GOM_delta_var_FL &lt;- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
-summary(FV_GOM_delta_var_FL$gam)</code></pre>
+gam.check(FV_GOM_delta_var_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value  
+## s(FV_bot_temp)                  9.00  7.11    1.00   0.515  
+## s(FV_surf_temp)                 9.00  4.94    0.99   0.295  
+## s(FV_bot_sal)                   9.00  1.00    0.99   0.205  
+## s(FV_surf_sal)                  9.00  1.06    0.98   0.115  
+## s(SETDEPTH)                     9.00  4.75    0.98   0.085 .
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 22.47    0.97   0.020 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_var_FL$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2267,7 +2903,7 @@ summary(FV_GOM_delta_var_FL$gam)</code></pre>
 ## R-sq.(adj) =  0.122   
 ## lmer.REML =   1538  Scale est. = 0.075284  n = 5215</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_var_FL$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-45-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-45-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-45-7.png" width="672" /></p>
 </div>
 </div>
 <div id="spring-gom-gamms" class="section level2">
@@ -2276,7 +2912,24 @@ summary(FV_GOM_delta_var_FL$gam)</code></pre>
 <h3>Species richness</h3>
 <pre class="r"><code>FV_GOM_N_SP &lt;- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_N_SP$gam)</code></pre>
+gam.check(FV_GOM_N_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  3.16    0.95  &lt;2e-16 ***
+## s(FV_surf_temp)                 9.00  4.53    0.91  &lt;2e-16 ***
+## s(FV_bot_sal)                   9.00  2.61    0.97   0.010 ** 
+## s(FV_surf_sal)                  9.00  5.69    0.97   0.025 *  
+## s(SETDEPTH)                     9.00  7.10    1.01   0.665    
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 24.64    0.99   0.220    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_N_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2305,13 +2958,30 @@ summary(FV_GOM_N_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.282   
 ## lmer.REML =  26806  Scale est. = 11.265    n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_N_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-46-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-46-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-46-7.png" width="672" /></p>
 </div>
 <div id="shannon-wiener-diversity" class="section level3">
 <h3>Shannon-Wiener diversity</h3>
 <pre class="r"><code>FV_GOM_H_SP &lt;- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_H_SP$gam)</code></pre>
+gam.check(FV_GOM_H_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  3.86    0.99   0.200    
+## s(FV_surf_temp)                 9.00  3.20    0.99   0.190    
+## s(FV_bot_sal)                   9.00  1.00    0.97   0.015 *  
+## s(FV_surf_sal)                  9.00  3.67    1.01   0.780    
+## s(SETDEPTH)                     9.00  5.72    0.94  &lt;2e-16 ***
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 17.33    0.97  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_H_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2340,13 +3010,30 @@ summary(FV_GOM_H_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.0507   
 ## lmer.REML =   6734  Scale est. = 0.24557   n = 4577</code></pre>
 <pre class="r"><code>plot(FV_GOM_H_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-47-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-47-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-47-7.png" width="672" /></p>
 </div>
 <div id="simpsons-diversity-2" class="section level3">
 <h3>Simpson’s diversity</h3>
 <pre class="r"><code>FV_GOM_D_SP &lt;- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_D_SP$gam)</code></pre>
+gam.check(FV_GOM_D_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  3.86    0.99    0.17    
+## s(FV_surf_temp)                 9.00  3.11    0.99    0.29    
+## s(FV_bot_sal)                   9.00  1.00    0.98    0.08 .  
+## s(FV_surf_sal)                  9.00  4.29    1.01    0.80    
+## s(SETDEPTH)                     9.00  6.22    0.99    0.19    
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 16.71    0.97  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_D_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2375,13 +3062,30 @@ summary(FV_GOM_D_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.0596   
 ## lmer.REML =  19330  Scale est. = 2.6261    n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_D_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-48-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-48-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-48-7.png" width="672" /></p>
 </div>
 <div id="simpsons-evenness-3" class="section level3">
 <h3>Simpson’s evenness</h3>
 <pre class="r"><code>FV_GOM_E_SP &lt;- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_E_SP$gam)</code></pre>
+gam.check(FV_GOM_E_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  4.40    0.99    0.27    
+## s(FV_surf_temp)                 9.00  2.06    0.97    0.01 ** 
+## s(FV_bot_sal)                   9.00  1.00    1.01    0.76    
+## s(FV_surf_sal)                  9.00  4.07    0.97    0.03 *  
+## s(SETDEPTH)                     9.00  5.42    1.03    0.97    
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 22.21    0.96  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_E_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2410,13 +3114,30 @@ summary(FV_GOM_E_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.141   
 ## lmer.REML = -5091.7  Scale est. = 0.020138  n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_E_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-49-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-49-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-49-7.png" width="672" /></p>
 </div>
 <div id="taxonomic-diversity-3" class="section level3">
 <h3>Taxonomic diversity</h3>
 <pre class="r"><code>FV_GOM_delta_SP &lt;- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_delta_SP$gam)</code></pre>
+gam.check(FV_GOM_delta_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value   
+## s(FV_bot_temp)                  9.00  3.16    0.95   0.010 **
+## s(FV_surf_temp)                 9.00  1.00    1.00   0.315   
+## s(FV_bot_sal)                   9.00  6.93    1.01   0.995   
+## s(FV_surf_sal)                  9.00  1.00    1.01   0.915   
+## s(SETDEPTH)                     9.00  1.00    1.00   0.305   
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00  7.77    0.84   0.095 . 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2445,13 +3166,30 @@ summary(FV_GOM_delta_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.0148   
 ## lmer.REML = 1.286e+05  Scale est. = 7.1955e+09  n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-50-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-50-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-50-7.png" width="672" /></p>
 </div>
 <div id="taxonomic-distinctness-3" class="section level3">
 <h3>Taxonomic distinctness</h3>
 <pre class="r"><code>FV_GOM_delta_star_SP &lt;- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_delta_star_SP$gam)</code></pre>
+gam.check(FV_GOM_delta_star_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value    
+## s(FV_bot_temp)                  9.00  1.00    0.97    0.01 ** 
+## s(FV_surf_temp)                 9.00  1.00    0.99    0.26    
+## s(FV_bot_sal)                   9.00  4.16    0.99    0.32    
+## s(FV_surf_sal)                  9.00  3.73    1.01    0.67    
+## s(SETDEPTH)                     9.00  5.23    0.99    0.28    
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 23.21    0.93  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_star_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2480,13 +3218,30 @@ summary(FV_GOM_delta_star_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.0724   
 ## lmer.REML = 9792.6  Scale est. = 0.39141   n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_star_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-51-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-51-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-51-7.png" width="672" /></p>
 </div>
 <div id="average-taxonomic-distinctness-3" class="section level3">
 <h3>Average taxonomic distinctness</h3>
 <pre class="r"><code>FV_GOM_delta_plus_SP &lt;- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_delta_plus_SP$gam)</code></pre>
+gam.check(FV_GOM_delta_plus_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value  
+## s(FV_bot_temp)                  9.00  5.97    0.98   0.070 .
+## s(FV_surf_temp)                 9.00  4.07    0.98   0.060 .
+## s(FV_bot_sal)                   9.00  3.15    1.02   0.910  
+## s(FV_surf_sal)                  9.00  5.67    0.99   0.250  
+## s(SETDEPTH)                     9.00  5.55    0.98   0.155  
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 24.04    0.98   0.055 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_plus_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2515,13 +3270,30 @@ summary(FV_GOM_delta_plus_SP$gam)</code></pre>
 ## R-sq.(adj) =  0.137   
 ## lmer.REML = 2090.5  Scale est. = 0.083654  n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_plus_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-52-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-52-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-52-7.png" width="672" /></p>
 </div>
 <div id="variation-in-taxonomic-distinctness-3" class="section level3">
 <h3>Variation in taxonomic distinctness</h3>
 <pre class="r"><code>FV_GOM_delta_var_SP &lt;- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
-summary(FV_GOM_delta_var_SP$gam)</code></pre>
+gam.check(FV_GOM_delta_var_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                                   k&#39;   edf k-index p-value  
+## s(FV_bot_temp)                  9.00  1.00    0.97    0.03 *
+## s(FV_surf_temp)                 9.00  1.00    1.01    0.70  
+## s(FV_bot_sal)                   9.00  2.11    1.00    0.54  
+## s(FV_surf_sal)                  9.00  4.68    0.99    0.23  
+## s(SETDEPTH)                     9.00  4.94    0.99    0.18  
+## s(DECDEG_BEGLAT,DECDEG_BEGLON) 29.00 24.58    0.98    0.02 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_GOM_delta_var_SP$gam)</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -2550,7 +3322,868 @@ summary(FV_GOM_delta_var_SP$gam)</code></pre>
 ## R-sq.(adj) =   0.21   
 ## lmer.REML = 3003.5  Scale est. = 0.10117   n = 5038</code></pre>
 <pre class="r"><code>plot(FV_GOM_delta_var_SP$gam)</code></pre>
-<p><img src="gamms_files/figure-html/unnamed-chunk-53-1.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-6.png" width="672" /></p>
+<p><img src="gamms_files/figure-html/unnamed-chunk-53-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-53-7.png" width="672" /></p>
+</div>
+</div>
+<div id="fall-madmf-gamms" class="section level2">
+<h2>Fall MADMF GAMMs</h2>
+<ul>
+<li>all with FVCOM data</li>
+</ul>
+<pre class="r"><code>setwd(&quot;C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/Results/GAMMs&quot;)
+
+MA_fall &lt;- read.csv(&quot;MA_fall_full.csv&quot;)
+
+MA_spring &lt;- read.csv(&quot;MA_spring_full.csv&quot;)</code></pre>
+<div id="species-richness-4" class="section level3">
+<h3>Species richness</h3>
+<pre class="r"><code>library(gamm4)
+# number of species
+FV_MA_N_FL &lt;- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_N_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  4.59    1.01    0.79    
+## s(FV_surf_temp)        9.00  3.07    1.00    0.40    
+## s(FV_bot_sal)          9.00  2.12    0.99    0.34    
+## s(FV_surf_sal)         9.00  4.42    0.99    0.23    
+## s(DEPTH_M)             9.00  6.00    0.90  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 26.59    0.88  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_N_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  14.6227     0.1937   75.47   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F p-value    
+## s(FV_bot_temp)         4.590  4.590  4.636 0.00667 ** 
+## s(FV_surf_temp)        3.072  3.072  1.989 0.08939 .  
+## s(FV_bot_sal)          2.119  2.119  0.293 0.66174    
+## s(FV_surf_sal)         4.415  4.415  2.020 0.06811 .  
+## s(DEPTH_M)             6.000  6.000 22.340 &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 26.591 26.591 16.652 &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.317   
+## lmer.REML =  19657  Scale est. = 12.272    n = 3635</code></pre>
+<pre class="r"><code>plot(FV_MA_N_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-55-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-55-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-55-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-55-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-55-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-55-7.png" width="672" /></p>
+</div>
+<div id="shannon-weiner-diversity-2" class="section level3">
+<h3>Shannon-Weiner diversity</h3>
+<pre class="r"><code># S-W
+FV_MA_H_FL &lt;- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_H_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  3.78    0.99   0.215    
+## s(FV_surf_temp)        9.00  4.48    1.00   0.485    
+## s(FV_bot_sal)          9.00  2.38    0.99   0.375    
+## s(FV_surf_sal)         9.00  1.00    0.98   0.095 .  
+## s(DEPTH_M)             9.00  5.77    0.94  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 26.30    0.90  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_H_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.25872    0.01521   82.78   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F  p-value    
+## s(FV_bot_temp)         3.776  3.776  6.395 0.000139 ***
+## s(FV_surf_temp)        4.483  4.483  1.708 0.194021    
+## s(FV_bot_sal)          2.378  2.378  2.317 0.157322    
+## s(FV_surf_sal)         1.000  1.000  0.053 0.817116    
+## s(DEPTH_M)             5.771  5.771 17.225  &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 26.302 26.302 12.817  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.419   
+## lmer.REML = 4449.8  Scale est. = 0.18764   n = 3635</code></pre>
+<pre class="r"><code>plot(FV_MA_H_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-56-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-56-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-56-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-56-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-56-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-56-7.png" width="672" /></p>
+</div>
+<div id="simpsons-diveristy" class="section level3">
+<h3>Simpson’s diveristy</h3>
+<pre class="r"><code># Simpsons D
+FV_MA_D_FL &lt;- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_D_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  4.17    0.99    0.26    
+## s(FV_surf_temp)        9.00  4.02    0.98    0.12    
+## s(FV_bot_sal)          9.00  1.19    0.99    0.23    
+## s(FV_surf_sal)         9.00  1.00    0.99    0.35    
+## s(DEPTH_M)             9.00  6.32    0.94  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 25.36    0.94  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_D_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.99939    0.04777   62.79   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F p-value    
+## s(FV_bot_temp)         4.172  4.172  6.368   9e-05 ***
+## s(FV_surf_temp)        4.017  4.017  2.002   0.101    
+## s(FV_bot_sal)          1.192  1.192  0.317   0.719    
+## s(FV_surf_sal)         1.000  1.000  0.623   0.430    
+## s(DEPTH_M)             6.324  6.324 23.306  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 25.361 25.361  8.783  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.327   
+## lmer.REML =  12777  Scale est. = 1.8684    n = 3635</code></pre>
+<pre class="r"><code>plot(FV_MA_D_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-57-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-57-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-57-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-57-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-57-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-57-7.png" width="672" /></p>
+</div>
+<div id="simpsons-evenness-4" class="section level3">
+<h3>Simpson’s Evenness</h3>
+<pre class="r"><code>#simpsons e
+FV_MA_E_FL &lt;- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_E_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  2.99    0.99    0.32    
+## s(FV_surf_temp)        9.00  1.56    1.01    0.66    
+## s(FV_bot_sal)          9.00  1.00    0.99    0.35    
+## s(FV_surf_sal)         9.00  2.06    0.99    0.34    
+## s(DEPTH_M)             9.00  5.39    0.96    0.01 ** 
+## s(LATITUDE,LONGITUDE) 29.00 21.96    0.95  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_E_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.210254   0.002704   77.76   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F p-value    
+## s(FV_bot_temp)         2.990  2.990  3.543  0.0156 *  
+## s(FV_surf_temp)        1.560  1.560  0.253  0.7932    
+## s(FV_bot_sal)          1.000  1.000  0.017  0.8951    
+## s(FV_surf_sal)         2.056  2.056  0.843  0.3619    
+## s(DEPTH_M)             5.387  5.387 10.277  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 21.964 21.964  8.653  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.177   
+## lmer.REML = -6541.4  Scale est. = 0.0092084  n = 3635</code></pre>
+<pre class="r"><code>plot(FV_MA_E_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-58-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-58-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-58-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-58-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-58-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-58-7.png" width="672" /></p>
+</div>
+<div id="taxonomic-diversity-4" class="section level3">
+<h3>Taxonomic diversity</h3>
+<pre class="r"><code>#tax diversity
+FV_MA_delta_FL &lt;- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_delta_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value   
+## s(FV_bot_temp)         9.00  2.85    1.00   0.465   
+## s(FV_surf_temp)        9.00  1.90    1.01   0.700   
+## s(FV_bot_sal)          9.00  1.60    0.94   0.005 **
+## s(FV_surf_sal)         9.00  1.00    1.01   0.590   
+## s(DEPTH_M)             9.00  2.48    0.97   0.030 * 
+## s(LATITUDE,LONGITUDE) 29.00 17.82    1.00   0.570   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + s(FV_surf_sal) + 
+##     s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   239001      29054   8.226 2.67e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df     F p-value    
+## s(FV_bot_temp)         2.850  2.850 5.001 0.00262 ** 
+## s(FV_surf_temp)        1.896  1.896 0.205 0.83902    
+## s(FV_bot_sal)          1.599  1.599 0.807 0.55624    
+## s(FV_surf_sal)         1.000  1.000 0.106 0.74526    
+## s(DEPTH_M)             2.477  2.477 4.097 0.02409 *  
+## s(LATITUDE,LONGITUDE) 17.824 17.824 4.104 &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0588   
+## lmer.REML = 1.1107e+05  Scale est. = 1.1711e+12  n = 3630</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-59-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-59-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-59-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-59-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-59-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-59-7.png" width="672" /></p>
+</div>
+<div id="taxonomic-distinctness-4" class="section level3">
+<h3>Taxonomic distinctness</h3>
+<pre class="r"><code># tax distinctness
+FV_MA_delta_star_FL &lt;- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall)
+
+gam.check(FV_MA_delta_star_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  7.10    1.00   0.560    
+## s(FV_surf_temp)        9.00  4.85    0.99   0.220    
+## s(FV_bot_sal)          9.00  1.00    0.95   0.005 ** 
+## s(FV_surf_sal)         9.00  1.00    0.99   0.290    
+## s(DEPTH_M)             9.00  3.80    0.91  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 24.31    0.95  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_star_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  4.88882    0.02734   178.8   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F  p-value    
+## s(FV_bot_temp)         7.099  7.099 17.531  &lt; 2e-16 ***
+## s(FV_surf_temp)        4.854  4.854  5.823 2.75e-05 ***
+## s(FV_bot_sal)          1.000  1.000 12.383 0.000438 ***
+## s(FV_surf_sal)         1.000  1.000  4.918 0.026647 *  
+## s(DEPTH_M)             3.802  3.802 10.309 2.77e-07 ***
+## s(LATITUDE,LONGITUDE) 24.307 24.307  9.257  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =   0.26   
+## lmer.REML = 6580.3  Scale est. = 0.33751   n = 3630</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_star_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-60-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-60-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-60-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-60-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-60-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-60-7.png" width="672" /></p>
+</div>
+<div id="average-taxonomic-distinctness-4" class="section level3">
+<h3>Average taxonomic distinctness</h3>
+<pre class="r"><code># avg tax distinctness
+FV_MA_delta_plus_FL &lt;- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_delta_plus_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  7.40    1.00    0.48    
+## s(FV_surf_temp)        9.00  3.62    0.98    0.12    
+## s(FV_bot_sal)          9.00  1.00    1.00    0.48    
+## s(FV_surf_sal)         9.00  3.58    0.98    0.13    
+## s(DEPTH_M)             9.00  7.07    0.90  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 27.40    0.91  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_plus_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 4.845865   0.008204   590.7   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F  p-value    
+## s(FV_bot_temp)         7.402  7.402 11.285  &lt; 2e-16 ***
+## s(FV_surf_temp)        3.615  3.615 11.189 1.62e-07 ***
+## s(FV_bot_sal)          1.000  1.000 20.806 5.91e-06 ***
+## s(FV_surf_sal)         3.583  3.583  3.996  0.00601 ** 
+## s(DEPTH_M)             7.067  7.067 18.593  &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 27.405 27.405 21.370  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.336   
+## lmer.REML = -628.87  Scale est. = 0.04571   n = 3635</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_plus_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-61-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-61-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-61-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-61-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-61-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-61-7.png" width="672" /></p>
+</div>
+<div id="variation-in-taxonomic-distinctness-4" class="section level3">
+<h3>Variation in taxonomic distinctness</h3>
+<pre class="r"><code># var in tax distinctness
+FV_MA_delta_var_FL &lt;- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_delta_var_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  5.57    0.98   0.110    
+## s(FV_surf_temp)        9.00  1.00    1.01   0.620    
+## s(FV_bot_sal)          9.00  1.00    0.98   0.145    
+## s(FV_surf_sal)         9.00  3.93    0.97   0.015 *  
+## s(DEPTH_M)             9.00  1.00    0.96  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 22.82    0.95  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_var_FL$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.285889   0.006556   196.1   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df     F p-value    
+## s(FV_bot_temp)         5.571  5.571 3.539 0.00197 ** 
+## s(FV_surf_temp)        1.000  1.000 4.540 0.03318 *  
+## s(FV_bot_sal)          1.000  1.000 0.291 0.58967    
+## s(FV_surf_sal)         3.926  3.926 1.366 0.23957    
+## s(DEPTH_M)             1.000  1.000 1.132 0.28738    
+## s(LATITUDE,LONGITUDE) 22.823 22.823 7.802 &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0881   
+## lmer.REML = -1345.6  Scale est. = 0.038411  n = 3635</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_var_FL$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-62-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-62-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-62-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-62-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-62-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-62-7.png" width="672" /></p>
+</div>
+</div>
+<div id="madmf-spring-gamms" class="section level2">
+<h2>MADMF spring GAMMs</h2>
+<div id="species-richness-5" class="section level3">
+<h3>Species richness</h3>
+<pre class="r"><code># number of species
+FV_MA_N_SP &lt;- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_N_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  4.51    0.98   0.130    
+## s(FV_surf_temp)        9.00  1.00    0.98   0.065 .  
+## s(FV_bot_sal)          9.00  3.00    1.00   0.510    
+## s(FV_surf_sal)         9.00  1.00    0.98   0.190    
+## s(DEPTH_M)             9.00  4.80    0.89  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 26.32    0.87  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_N_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  13.7601     0.2051    67.1   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F p-value    
+## s(FV_bot_temp)         4.506  4.506  5.367 0.00015 ***
+## s(FV_surf_temp)        1.000  1.000  1.925 0.16534    
+## s(FV_bot_sal)          3.005  3.005  3.112 0.02426 *  
+## s(FV_surf_sal)         1.000  1.000  5.768 0.01637 *  
+## s(DEPTH_M)             4.798  4.798 47.362 &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 26.320 26.320 23.225 &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.342   
+## lmer.REML =  20245  Scale est. = 10.235    n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_N_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-63-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-63-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-63-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-63-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-63-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-63-7.png" width="672" /></p>
+</div>
+<div id="shannon-weiner-diversity-3" class="section level3">
+<h3>Shannon-Weiner diversity</h3>
+<pre class="r"><code># S-W
+FV_MA_H_SP &lt;- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_H_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  4.88    1.00    0.57    
+## s(FV_surf_temp)        9.00  1.99    0.99    0.19    
+## s(FV_bot_sal)          9.00  1.00    1.00    0.43    
+## s(FV_surf_sal)         9.00  1.00    0.99    0.23    
+## s(DEPTH_M)             9.00  4.88    0.92  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 25.93    0.95  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_H_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.51614    0.01899   79.84   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F p-value    
+## s(FV_bot_temp)         4.881  4.881  3.537 0.00278 ** 
+## s(FV_surf_temp)        1.991  1.991  0.294 0.74361    
+## s(FV_bot_sal)          1.000  1.000  0.014 0.90738    
+## s(FV_surf_sal)         1.000  1.000  0.015 0.90201    
+## s(DEPTH_M)             4.883  4.883 14.725 &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 25.929 25.929 15.312 &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.177   
+## lmer.REML = 4986.9  Scale est. = 0.20015   n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_N_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-64-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-64-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-64-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-64-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-64-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-64-7.png" width="672" /></p>
+</div>
+<div id="simpsons-diversity-3" class="section level3">
+<h3>Simpson’s diversity</h3>
+<pre class="r"><code># Simpsons D
+FV_MA_D_SP &lt;- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_D_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  4.48    1.00    0.61    
+## s(FV_surf_temp)        9.00  1.00    1.00    0.58    
+## s(FV_bot_sal)          9.00  1.00    1.00    0.49    
+## s(FV_surf_sal)         9.00  1.00    0.99    0.35    
+## s(DEPTH_M)             9.00  5.45    0.93  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 24.84    0.97    0.05 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_D_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   3.6568     0.0532   68.74   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F p-value    
+## s(FV_bot_temp)         4.480  4.480  2.135  0.0452 *  
+## s(FV_surf_temp)        1.000  1.000  0.013  0.9093    
+## s(FV_bot_sal)          1.000  1.000  0.821  0.3650    
+## s(FV_surf_sal)         1.000  1.000  0.103  0.7482    
+## s(DEPTH_M)             5.447  5.447 10.202  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 24.836 24.836 11.526  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.131   
+## lmer.REML =  14546  Scale est. = 2.3839    n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_D_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-65-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-65-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-65-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-65-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-65-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-65-7.png" width="672" /></p>
+</div>
+<div id="simpsons-evenness-5" class="section level3">
+<h3>Simpson’s Evenness</h3>
+<pre class="r"><code>#simpsons e
+FV_MA_E_SP &lt;- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_E_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  2.35    1.00    0.57    
+## s(FV_surf_temp)        9.00  1.00    0.99    0.41    
+## s(FV_bot_sal)          9.00  3.44    0.99    0.36    
+## s(FV_surf_sal)         9.00  1.00    1.01    0.72    
+## s(DEPTH_M)             9.00  3.21    0.93  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 22.81    0.94  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_E_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.280270   0.004333   64.68   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df     F p-value    
+## s(FV_bot_temp)         2.349  2.349 1.009  0.3751    
+## s(FV_surf_temp)        1.000  1.000 0.204  0.6518    
+## s(FV_bot_sal)          3.435  3.435 3.059  0.0151 *  
+## s(FV_surf_sal)         1.000  1.000 4.506  0.0338 *  
+## s(DEPTH_M)             3.212  3.212 7.556   4e-05 ***
+## s(LATITUDE,LONGITUDE) 22.805 22.805 7.016  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0946   
+## lmer.REML = -4960.9  Scale est. = 0.015485  n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_E_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-66-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-66-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-66-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-66-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-66-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-66-7.png" width="672" /></p>
+</div>
+<div id="taxonomic-diversity-5" class="section level3">
+<h3>Taxonomic diversity</h3>
+<pre class="r"><code>#tax diversity
+FV_MA_delta_SP &lt;- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value
+## s(FV_bot_temp)         9.00  4.21    1.02    0.99
+## s(FV_surf_temp)        9.00  7.86    1.01    0.98
+## s(FV_bot_sal)          9.00  1.00    1.01    0.96
+## s(FV_surf_sal)         9.00  1.00    1.01    0.76
+## s(DEPTH_M)             9.00  1.00    1.00    0.28
+## s(LATITUDE,LONGITUDE) 29.00  9.98    1.04    0.66</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + s(FV_surf_sal) + 
+##     s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    11853       1727   6.864  7.8e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                         edf Ref.df     F  p-value    
+## s(FV_bot_temp)        4.212  4.212 1.960 0.088425 .  
+## s(FV_surf_temp)       7.864  7.864 3.154 0.000835 ***
+## s(FV_bot_sal)         1.000  1.000 0.188 0.664754    
+## s(FV_surf_sal)        1.000  1.000 0.195 0.658598    
+## s(DEPTH_M)            1.000  1.000 0.721 0.395821    
+## s(LATITUDE,LONGITUDE) 9.978  9.978 1.143 0.327603    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0226   
+## lmer.REML =  97314  Scale est. = 4.7362e+09  n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-67-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-67-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-67-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-67-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-67-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-67-7.png" width="672" /></p>
+</div>
+<div id="taxonomic-distinctness-5" class="section level3">
+<h3>Taxonomic distinctness</h3>
+<pre class="r"><code># tax distinctness
+FV_MA_delta_star_SP &lt;- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_star_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  5.05    1.00    0.52    
+## s(FV_surf_temp)        9.00  4.88    1.01    0.68    
+## s(FV_bot_sal)          9.00  3.62    1.00    0.41    
+## s(FV_surf_sal)         9.00  4.48    0.98    0.12    
+## s(DEPTH_M)             9.00  5.04    0.88  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 26.57    0.94  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_star_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  4.65256    0.02162   215.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F  p-value    
+## s(FV_bot_temp)         5.046  5.046  3.081 0.008280 ** 
+## s(FV_surf_temp)        4.881  4.881  0.807 0.541894    
+## s(FV_bot_sal)          3.622  3.622  3.261 0.032213 *  
+## s(FV_surf_sal)         4.476  4.476  4.294 0.000844 ***
+## s(DEPTH_M)             5.044  5.044 10.550  &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 26.567 26.567 15.607  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.375   
+## lmer.REML = 5628.6  Scale est. = 0.23433   n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_star_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-68-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-68-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-68-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-68-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-68-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-68-7.png" width="672" /></p>
+</div>
+<div id="average-taxonomic-distinctness-5" class="section level3">
+<h3>Average taxonomic distinctness</h3>
+<pre class="r"><code># avg tax distinctness
+FV_MA_delta_plus_SP &lt;- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_plus_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  4.00    0.98   0.045 *  
+## s(FV_surf_temp)        9.00  5.53    1.01   0.780    
+## s(FV_bot_sal)          9.00  4.88    0.97   0.035 *  
+## s(FV_surf_sal)         9.00  6.30    0.99   0.295    
+## s(DEPTH_M)             9.00  2.65    0.89  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 27.02    0.92  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_plus_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  4.74139    0.01175   403.6   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df      F  p-value    
+## s(FV_bot_temp)         4.004  4.004  4.277 0.001847 ** 
+## s(FV_surf_temp)        5.532  5.532  4.020 0.000549 ***
+## s(FV_bot_sal)          4.878  4.878  5.159 0.000132 ***
+## s(FV_surf_sal)         6.300  6.300  4.834 5.12e-05 ***
+## s(DEPTH_M)             2.645  2.645 18.525  &lt; 2e-16 ***
+## s(LATITUDE,LONGITUDE) 27.024 27.024 15.123  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.361   
+## lmer.REML = 256.85  Scale est. = 0.058239  n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_plus_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-69-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-69-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-69-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-69-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-69-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-69-7.png" width="672" /></p>
+</div>
+<div id="variation-in-taxonomic-distinctness-5" class="section level3">
+<h3>Variation in taxonomic distinctness</h3>
+<pre class="r"><code># var in tax distinctness
+FV_MA_delta_var_SP &lt;- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_var_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<pre><code>## 
+## &#39;gamm&#39; based fit - care required with interpretation.
+## Checks based on working residuals may be misleading.
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##                          k&#39;   edf k-index p-value    
+## s(FV_bot_temp)         9.00  3.37    1.04    0.99    
+## s(FV_surf_temp)        9.00  1.00    1.00    0.34    
+## s(FV_bot_sal)          9.00  2.53    0.97    0.06 .  
+## s(FV_surf_sal)         9.00  1.00    0.99    0.25    
+## s(DEPTH_M)             9.00  3.66    0.95  &lt;2e-16 ***
+## s(LATITUDE,LONGITUDE) 29.00 23.28    0.95  &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>summary(FV_MA_delta_var_SP$gam)</code></pre>
+<pre><code>## 
+## Family: gaussian 
+## Link function: identity 
+## 
+## Formula:
+## delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) + 
+##     s(FV_surf_sal) + s(DEPTH_M) + s(LATITUDE, LONGITUDE)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.181246   0.007778   151.9   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##                          edf Ref.df     F p-value    
+## s(FV_bot_temp)         3.371  3.371 1.945 0.19760    
+## s(FV_surf_temp)        1.000  1.000 1.271 0.25959    
+## s(FV_bot_sal)          2.535  2.535 3.266 0.02213 *  
+## s(FV_surf_sal)         1.000  1.000 0.850 0.35652    
+## s(DEPTH_M)             3.660  3.660 4.088 0.00351 ** 
+## s(LATITUDE,LONGITUDE) 23.276 23.276 7.305 &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =  0.0807   
+## lmer.REML = -269.57  Scale est. = 0.052028  n = 3877</code></pre>
+<pre class="r"><code>plot(FV_MA_delta_var_SP$gam)</code></pre>
+<p><img src="gamms_files/figure-html/unnamed-chunk-70-2.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-70-3.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-70-4.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-70-5.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-70-6.png" width="672" /><img src="gamms_files/figure-html/unnamed-chunk-70-7.png" width="672" /></p>
 </div>
 </div>
 

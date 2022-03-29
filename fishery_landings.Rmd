@@ -185,6 +185,7 @@ species_full<-group_by(landings_full,species, year)%>%
       filter(year>2005)
 paged_table(species_full)
 
+unique(species_full$species)
 
 ```
 
@@ -1030,11 +1031,11 @@ landings_county$Region[landings_county$county=="Washington"]<-5
 
 # group to east/west of Penobscot Bay
 landings_county$group<-NULL
-landings_county$group[landings_county$Region==1]<-"East"
-landings_county$group[landings_county$Region==2]<-"East"
+landings_county$group[landings_county$Region==1]<-"West"
+landings_county$group[landings_county$Region==2]<-"West"
 landings_county$group[landings_county$Region==3]<-"Penobscot"
-landings_county$group[landings_county$Region==4]<-"West"
-landings_county$group[landings_county$Region==5]<-"West"
+landings_county$group[landings_county$Region==4]<-"East"
+landings_county$group[landings_county$Region==5]<-"East"
 
 landings_county<-filter(landings_county,!is.na(landings_county$group))
 ```
@@ -1572,40 +1573,40 @@ ggplot(undefined_prop)+
 ### Full data
 ```{r }
 groups<-read.csv(here("Data/species_groups.csv"))
-landings_groups<-mutate(landings_full,COMMON_NAME=tolower(species))%>%
+landings_groups_full<-mutate(landings_full,COMMON_NAME=tolower(species))%>%
   left_join(groups, by="COMMON_NAME")
 
 #fill in missing functional groups for new species
-landings_missing<-filter(landings_groups, is.na(functional_group))
+landings_missing<-filter(landings_groups_full, is.na(functional_group))
 
 #landings_groups$functional_group[landings_groups$functional_group==""]<-""
 
 #create undefined group
-landings_groups$functional_group[landings_groups$functional_group==""]<-"undefined"
-landings_groups$functional_group[is.na(landings_groups$functional_group)]<-"undefined"
+landings_groups_full$functional_group[landings_groups_full$functional_group==""]<-"undefined"
+landings_groups_full$functional_group[is.na(landings_groups_full$functional_group)]<-"undefined"
 
 #average weight of each group/ year
-year_group<-group_by(landings_groups,year, functional_group)%>%
+year_group_full<-group_by(landings_groups_full,year, functional_group)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))%>%
   group_by(year, functional_group)%>%
   summarise(average_weight=mean(weight_avg, na.rm=TRUE))
 
 #proportion of groups per year
-year_group_prop<-group_by(landings_groups,year)%>%
+year_group_prop_full<-group_by(landings_groups_full,year)%>%
  mutate(weight_total=sum(total_weight))%>%
   mutate(prop=total_weight/weight_total)%>%
   group_by(year, functional_group)%>%
   summarise(mean_prop=mean(prop, na.rm=TRUE))
   
-ggplot(year_group)+
+ggplot(year_group_full)+
   geom_line(aes(x=year, y=average_weight, color=functional_group))+
   scale_color_colorblind()+ theme_classic()
 
-ggplot(year_group_prop)+
+ggplot(year_group_prop_full)+
   geom_bar(aes(x=year, y=mean_prop, fill=functional_group), position="fill", stat = "identity")+
   scale_fill_colorblind(name="Functional Group")+ theme_classic()+ ylab("Proportion of biomass (kg)")+theme(text=element_text(size=18))
 
-ggplot(subset(year_group_prop, year>2005))+
+ggplot(subset(year_group_prop_full, year>2005))+
   geom_bar(aes(x=year, y=mean_prop, fill=functional_group), position="fill", stat = "identity")+
   scale_fill_colorblind(name="Functional Group")+ theme_classic()+ ylab("Proportion of biomass (kg)")+theme(text=element_text(size=18))
 
@@ -1615,7 +1616,7 @@ ggplot(subset(year_group_prop, year>2005))+
 
 #### Benthivore
 ```{r }
-benthivore<-filter(landings_groups, functional_group=="benthivore")
+benthivore<-filter(landings_groups_full, functional_group=="benthivore")
 group_benthivore<-group_by(benthivore,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))
 
@@ -1642,7 +1643,7 @@ ggplot(subset(benthivore_prop, year>2005))+
 
 #### Benthos
 ```{r }
-benthos<-filter(landings_groups, functional_group=="benthos")
+benthos<-filter(landings_groups_full, functional_group=="benthos")
 group_benthos<-group_by(benthos,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))
 
@@ -1670,7 +1671,7 @@ ggplot(subset(benthos_prop, year>2005))+
 
 #### Piscivore
 ```{r }
-piscivore<-filter(landings_groups, functional_group=="piscivore")
+piscivore<-filter(landings_groups_full, functional_group=="piscivore")
 
 order<-group_by(piscivore, COMMON_NAME)%>%
   summarise(avg_weight=mean(total_weight, na.rm=TRUE))%>%
@@ -1705,7 +1706,7 @@ ggplot(subset(piscivore_prop, year>2005))+
 
 #### Planktivore
 ```{r }
-planktivore<-filter(landings_groups, functional_group=="planktivore")
+planktivore<-filter(landings_groups_full, functional_group=="planktivore")
 group_planktivore<-group_by(planktivore,year, COMMON_NAME)%>%
  summarise(weight_avg=mean(total_weight, na.rm=TRUE))
 
@@ -1733,7 +1734,7 @@ ggplot(subset(planktivore_prop, year>2005))+
 
 #### Undefined
 ```{r }
-undefined<-filter(landings_groups, functional_group=="undefined")
+undefined<-filter(landings_groups_full, functional_group=="undefined")
 
 order<-group_by(undefined, COMMON_NAME)%>%
   summarise(avg_weight=mean(total_weight, na.rm=TRUE))%>%
@@ -1767,4 +1768,93 @@ ggplot(subset(undefined_prop, year>2005))+
 ```
 
 
+### Regional functional groups
+#### West 
+```{r}
+
+landings_groups$Region<-NULL
+landings_groups$Region[landings_groups$county=="York"]<-1
+landings_groups$Region[landings_groups$county=="Cumberland"]<-2
+landings_groups$Region[landings_groups$county=="Sagadahoc"]<-2
+landings_groups$Region[landings_groups$county=="Lincoln"]<-2
+landings_groups$Region[landings_groups$county=="Knox"]<-3
+landings_groups$Region[landings_groups$county=="Waldo"]<-3
+landings_groups$Region[landings_groups$county=="Hancock"]<-4
+landings_groups$Region[landings_groups$county=="Washington"]<-5
+
+# group to east/west of Penobscot Bay
+landings_groups$group<-NULL
+landings_groups$group[landings_groups$Region==1]<-"West"
+landings_groups$group[landings_groups$Region==2]<-"West"
+landings_groups$group[landings_groups$Region==3]<-"Penobscot"
+landings_groups$group[landings_groups$Region==4]<-"East"
+landings_groups$group[landings_groups$Region==5]<-"East"
+
+west_groups<-filter(landings_groups, group=="West")
+
+#average weight of each group/ year
+year_group_west<-group_by(west_groups,year,group, functional_group)%>%
+ summarise(weight_avg=mean(weight, na.rm=TRUE))%>%
+  group_by(year, functional_group)%>%
+  summarise(average_weight=mean(weight_avg, na.rm=TRUE))
+
+#proportion of groups per county/year
+year_group_prop_west<-group_by(west_groups,year,county)%>%
+ mutate(weight_total=sum(weight))%>%
+  mutate(prop=weight/weight_total)%>%
+  group_by(year, functional_group)%>%
+  summarise(mean_prop=mean(prop, na.rm=TRUE))
+  
+
+ggplot(year_group_prop_west)+
+  geom_bar(aes(x=year, y=mean_prop, fill=functional_group), position="fill", stat = "identity")+
+  scale_fill_colorblind(name="Functional Group")+ theme_classic()+ ylab("Proportion of biomass (kg)")+theme(text=element_text(size=18))
+
+```
+
+#### Penobscot
+```{r}
+pen_groups<-filter(landings_groups, group=="Penobscot")
+
+#average weight of each group/ year
+year_group_pen<-group_by(pen_groups,year,group, functional_group)%>%
+ summarise(weight_avg=mean(weight, na.rm=TRUE))%>%
+  group_by(year, functional_group)%>%
+  summarise(average_weight=mean(weight_avg, na.rm=TRUE))
+
+#proportion of groups per county/year
+year_group_prop_pen<-group_by(pen_groups,year,county)%>%
+ mutate(weight_total=sum(weight))%>%
+  mutate(prop=weight/weight_total)%>%
+  group_by(year, functional_group)%>%
+  summarise(mean_prop=mean(prop, na.rm=TRUE))
+  
+
+ggplot(year_group_prop_pen)+
+  geom_bar(aes(x=year, y=mean_prop, fill=functional_group), position="fill", stat = "identity")+
+  scale_fill_colorblind(name="Functional Group")+ theme_classic()+ ylab("Proportion of biomass (kg)")+theme(text=element_text(size=18))
+```
+
+#### East
+```{r}
+east_groups<-filter(landings_groups, group=="East")
+
+#average weight of each group/ year
+year_group_east<-group_by(east_groups,year,group, functional_group)%>%
+ summarise(weight_avg=mean(weight, na.rm=TRUE))%>%
+  group_by(year, functional_group)%>%
+  summarise(average_weight=mean(weight_avg, na.rm=TRUE))
+
+#proportion of groups per county/year
+year_group_prop_east<-group_by(east_groups,year,county)%>%
+ mutate(weight_total=sum(weight))%>%
+  mutate(prop=weight/weight_total)%>%
+  group_by(year, functional_group)%>%
+  summarise(mean_prop=mean(prop, na.rm=TRUE))
+  
+
+ggplot(year_group_prop_east)+
+  geom_bar(aes(x=year, y=mean_prop, fill=functional_group), position="fill", stat = "identity")+
+  scale_fill_colorblind(name="Functional Group")+ theme_classic()+ ylab("Proportion of biomass (kg)")+theme(text=element_text(size=18))
+```
 

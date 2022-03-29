@@ -38,24 +38,29 @@ Lisa Kerr <sup>1 </sup>, Kathy Mills <sup>1</sup>, Riley Young Morse <sup>1</sup
 
 > The overarching goal of this research is to synthesize data collected through the Maine-New Hampshire Inshore Trawl Survey to understand how climate change, fishing, and other environmental drivers are impacting key fish and invertebrate communities in coastal Maine waters.
 
-#### The ME-NH inshore trawl survey samples in 5 Regions and 4 depth strata from the MA-NH border to the ME-Canada.
+#### The ME-NH Inshore Trawl Survey samples in 5 Regions and 4 depth strata from the MA-NH border to the ME-Canada border.
 ![Survey Design](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ME_survey.png)<br>
 
-#### The ME-NH survey can be compared to the MDMF and NEFSC surveys which provide larger spatial coverage and a longer time series.
+#### The ME-NH Inshore Trawl Survey can be compared to the MADMF Inshore Trawl Survey and NEFSC Bottom Trawl Survey which provide larger spatial coverage and duration.
 ![Survey Spatial Coverage](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/surveys_spatial.jpg) ![Survey Duration](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/surveys_temporal.png)
 
 ### Analysis
 #### Objective 1: Analyze changes in biodiversity in space and time and evaluate associations with environmental factors and fishing<br>
 
 #### **Biodiversity metrics** <br>
+#### The ME-NH Inshore Trawl Survey (2000-2017) and NEFSC Bottom Trawl Survey (1963-2017) average fall biodiversity indices
 ![indices](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/indices.png)![indices](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/selected_indices.png)
 
 <br>
 
-#### **GAMMs** <br>
+#### **Generalized Additive Mixed Models** 
+#### ME-NH Inshore Trawl Survey and NEFSC GOM/GB Bottom Trawl Survey fall GAMMs with FVCOM data
+
 ![ME-NH table](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ME_gamms.png){width=90%}![GOM table](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/GOM_gamms.png){width=90%}  
   
 <br>
+
+#### ME-NH Inshore Trawl Survey and NEFSC GOM/GB Bottom Trawl Survey GAMMs: Bottom temperature 
 ![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_richness.png){width=75%}
 ![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_shannon.png){width=75%}
 ![GAMM curves](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/gamm_evenness.png){width=75%}
@@ -65,17 +70,19 @@ Lisa Kerr <sup>1 </sup>, Kathy Mills <sup>1</sup>, Riley Young Morse <sup>1</sup
 
 #### Objective 2: Identify species groups and assess changes in habitat suitability if functional groups and communities in space and time<br>
 
-#### **NMDS**
-Functional Groups
+#### **Non-metric Multidimensional Scaling**
+#### ME-NH Inshore Trawl Survey functional group NMDS for spring and fall
 ![NMDS](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/NMDS_groups.png){width=90%}
 <br>
+
+#### ME-NH Inshore Trawl Survey top species NMDS for spring and fall
 <br>
-Top species<br>
 ![NMDS](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/NMDS_species.png){width=90%}
 <br>
 <br>
 
 #### **Analysis of variance**
+#### ME-NH Inshore Trawl Survey analysis of variance for regions and year blocks
 ![adonis](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/adonis_regions.png){width=55%}
 <br>
 <br>
@@ -84,8 +91,9 @@ Top species<br>
 <br>
 <br>
 
-#### **Environmental relationships** (linear and non-linear approaches)
-![envfit](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/envfit.png){width=90%}
+#### **Environmental relationships** 
+#### ME-NH Inshore Trawl Survey linear and non-linear correlations of NMDS with environmental factors
+![envfit](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/envfit.png){width=95%}
 <br>
 <br>
 
@@ -94,36 +102,51 @@ Top species<br>
 <br>
 
 #### Objective 3: Analyze joint distribution of key predator-prey species within the community, with a particular focus on lobster and cod
+#### **Vector Autoregressive Spatio-Temporal models**
+#### Schoener's D overlap index for lobster and predators calculated from occurence stage predictions of single species VAST models and AB ratio and Schoener's D overlap index for lobster and predators calculated from density predictions of single species VAST models.
 
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/schoenerD.png){width=50%}![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/ABratio.png){width=50%}
+<br>
+
+#### Predicted log density of lobster and cod from fitted single species VAST models and gridded GLORYsv12.1 environmnetal data
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/lobster.jpg){width=45%}![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/cod.jpg){width=45%}
+
+#### Spatio-temporal correlations for species occurence from the VAST joint species distribution model
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/corr3.jpg){width=50%}
 <br>
 
 #### Objective 4: Evaluate how ecosystem changes align with shifts in diversity and composition of fishery landings over time in ports along Maine's coastline
 
 #### **Biodiversity metrics** <br>
+#### ME landings and ME-NH Inshore Trawl Survey average biodiversity indices
 ![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/landings_trawl.png){width=90%}
 
 #### **Functional groups** <br>
+#### ME landings and ME-NH Inshore Trawl Survey functional group proportions
 ![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/landings_groups.png){width=90%}
 <br>
 
 #### **Correlation analysis** <br>
-
-![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/correlation_matrix.png){width=55%}
+#### ME landings and ME-NH Inshore Trawl Survey correlation matrix for biodiversity indices
+![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/correlation_matrix.png){width=48%}![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/correlation_table.png){width=40%} 
+<br>
 <br>
 
-![](C:/Users/jjesse/Desktop/GMRI/ME-NH-trawl-Seagrant/correlation_table.png){width=50%}  
+## **Conclusions**
+* Communities are changing over time in Maine waters and environmental factors are playing a key role, potentially changing predator-prey dynamics
+* In general, species richness and average taxonomic distinctness are increasing, while evenness is decreasing indicating that taxonomically distinct species are emerging in a disproportionate way
+* Temperature is a key driver for changes in indices.
+* Maine inshore waters align well with the offshore signal for biodiversity indices and environmental drivers
+* There is a decadal shift in Maine community structure indicated by NMDS
+* Functional groups show an increase in benthivores driven by American lobster. Recent years show an increase in piscivores driven by hake species and a decrease in planktivores driven by Atlantic herring.
+* There is a decline in overlap between lobster and cod as lobster suitable habitat has increased with declines in cod suitable habitat
+* Interactions likely increased between lobster and other potential predator species, including skate and sculpin
+* Maine landings have a smaller proportion of piscivores than the ME-NH Inshore Trawl Survey
+* There is a benefit to using shorter time series surveys when put in context with surveys of larger spatial coverage and duration
 <br>
-
-## Conclusions
-* Communities are changing over time in Maine waters 
-* Environmental factors are playing a key role in those changes
-  + Temperature is the largest contributing factor
-* Maine inshore waters match up well with offshore signal for biodiversity indices and environmental effects
-* Maine landings are missing a large part of community structure with the piscivores functional group
-* There is a benefit to using shorter time series surveys when put in context of a longer timeline and larger spatial coverage<br>
 <br>
 * see tabs for more indepth analysis and figures<br>
+<br>
 
 #### Contact: <br>
-Jerelle Jesse ([jjesse\@gmri.org](mailto:jjesse@gmri.org)) <br>
-Andrew Allyn ([aallyn\@gmri.org](mailto:aallyn@gmri.org))
+Jerelle Jesse ([jjesse\@gmri.org](mailto:jjesse@gmri.org)) 

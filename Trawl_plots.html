@@ -323,7 +323,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Seagrant: ME-NH inshore trawl survey</a>
+      <a class="navbar-brand" href="index.html">Seagrant: ME-NH Inshore Trawl Survey</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -903,6 +903,72 @@ ggplot(cpue_no_shrimp)+
   #       panel.background = element_blank(), panel.border = element_rect(colour = &quot;black&quot;, fill = NA, size = 0.5),
   #       legend.key=element_blank())</code></pre>
 </div>
+</div>
+</div>
+<div id="regional-functional-groups" class="section level2">
+<h2>Regional functional groups</h2>
+<div id="west-of-the-penobscot" class="section level3">
+<h3>West of the Penobscot</h3>
+<pre class="r"><code>trawl_3_groups$group[trawl_3_groups$Region==1]&lt;-&quot;West&quot;
+trawl_3_groups$group[trawl_3_groups$Region==2]&lt;-&quot;West&quot;
+trawl_3_groups$group[trawl_3_groups$Region==3]&lt;-&quot;Penobscot&quot;
+trawl_3_groups$group[trawl_3_groups$Region==4]&lt;-&quot;East&quot;
+trawl_3_groups$group[trawl_3_groups$Region==5]&lt;-&quot;East&quot;
+
+west_groups&lt;-filter(trawl_3_groups, group==&quot;West&quot;)
+
+#cpue each year for weight and catch
+cpue_year_west&lt;-group_by(west_groups,Year,Season)%&gt;%
+  mutate(tows=n_distinct(Tow_Number))%&gt;%
+  group_by(functional_group,Year,Season)%&gt;%
+  mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%&gt;%
+  mutate(weight_percent=biomass/tows, catch_percent=catch/tows)%&gt;%
+  group_by(Year,functional_group)%&gt;%
+  summarise(weight_prop=mean(weight_percent),catch_prop=mean(catch_percent))
+
+ggplot(cpue_year_west)+
+  geom_bar(aes(x=Year, y=weight_prop, fill=functional_group), position=&quot;fill&quot;, stat = &quot;identity&quot;)+
+  scale_fill_colorblind(name=&quot;Functional Group&quot;)+
+  labs(x=&quot;Year&quot;, y=&quot;Proportion of Biomass/ tow (kg)&quot;, color=&quot;Functional group&quot;)</code></pre>
+<p><img src="Trawl_plots_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="penobscot" class="section level3">
+<h3>Penobscot</h3>
+<pre class="r"><code>pen_groups&lt;-filter(trawl_3_groups, group==&quot;Penobscot&quot;)
+
+#cpue each year for weight and catch
+cpue_year_pen&lt;-group_by(pen_groups,Year,Season)%&gt;%
+  mutate(tows=n_distinct(Tow_Number))%&gt;%
+  group_by(functional_group,Year,Season)%&gt;%
+  mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%&gt;%
+  mutate(weight_percent=biomass/tows, catch_percent=catch/tows)%&gt;%
+  group_by(Year,functional_group)%&gt;%
+  summarise(weight_prop=mean(weight_percent),catch_prop=mean(catch_percent))
+
+ggplot(cpue_year_pen)+
+  geom_bar(aes(x=Year, y=weight_prop, fill=functional_group), position=&quot;fill&quot;, stat = &quot;identity&quot;)+
+  scale_fill_colorblind(name=&quot;Functional Group&quot;)+
+  labs(x=&quot;Year&quot;, y=&quot;Proportion of Biomass/ tow (kg)&quot;, color=&quot;Functional group&quot;)</code></pre>
+<p><img src="Trawl_plots_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="east" class="section level3">
+<h3>East</h3>
+<pre class="r"><code>east_groups&lt;-filter(trawl_3_groups, group==&quot;East&quot;)
+
+#cpue each year for weight and catch
+cpue_year_east&lt;-group_by(east_groups,Year,Season)%&gt;%
+  mutate(tows=n_distinct(Tow_Number))%&gt;%
+  group_by(functional_group,Year,Season)%&gt;%
+  mutate(biomass=sum(Expanded_Weight_kg, na.rm = T),catch=sum(Expanded_Catch, na.rm=T))%&gt;%
+  mutate(weight_percent=biomass/tows, catch_percent=catch/tows)%&gt;%
+  group_by(Year,functional_group)%&gt;%
+  summarise(weight_prop=mean(weight_percent),catch_prop=mean(catch_percent))
+
+ggplot(cpue_year_east)+
+  geom_bar(aes(x=Year, y=weight_prop, fill=functional_group), position=&quot;fill&quot;, stat = &quot;identity&quot;)+
+  scale_fill_colorblind(name=&quot;Functional Group&quot;)+
+  labs(x=&quot;Year&quot;, y=&quot;Proportion of Biomass/ tow (kg)&quot;, color=&quot;Functional group&quot;)</code></pre>
+<p><img src="Trawl_plots_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 </div>
 

@@ -99,6 +99,7 @@ plot(N_Fall_FV$gam)
 ```{r}
 H_Fall <-  gamm4(H_index ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = fall) 
 
+gam.check(H_Fall$gam)
 summary(H_Fall$gam)
 plot(H_Fall$gam)
 
@@ -108,6 +109,7 @@ plot(H_Fall$gam)
 ```{r}
 H_Fall_FV <- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
+gam.check(H_Fall_FV$gam)
 summary(H_Fall_FV$gam)
 plot(H_Fall_FV$gam)
 
@@ -120,6 +122,7 @@ plot(H_Fall_FV$gam)
 D_Fall <- gamm4(D_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +
                   s(SURFACE_SALINITY)  + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = fall)
 
+gam.check(D_Fall$gam)
 summary(D_Fall$gam)
 plot(D_Fall$gam)
 ```
@@ -128,6 +131,7 @@ plot(D_Fall$gam)
 ```{r}
 D_Fall_FV <- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
+gam.check(D_Fall_FV$gam)
 summary(D_Fall_FV$gam)
 plot(D_Fall_FV$gam)
 ```
@@ -139,6 +143,7 @@ plot(D_Fall_FV$gam)
 ```{r}
 E_Fall <- gamm4(E_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = fall) 
 
+gam.check(E_Fall$gam)
 summary(E_Fall$gam)
 plot(E_Fall$gam)
 
@@ -148,6 +153,7 @@ plot(E_Fall$gam)
 ```{r}
 E_Fall_FV <- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
+gam.check(E_Fall_FV$gam)
 summary(E_Fall_FV$gam)
 plot(E_Fall_FV$gam)
 
@@ -160,6 +166,7 @@ plot(E_Fall_FV$gam)
 ```{r}
 delta_Fall <- gamm4(delta ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall)
 
+gam.check(delta_Fall$gam)
 summary(delta_Fall$gam)
 plot(delta_Fall$gam)
 ```
@@ -168,6 +175,7 @@ plot(delta_Fall$gam)
 ```{r}
 delta_Fall_FV <- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom) 
 
+gam.check(delta_Fall_FV$gam)
 summary(delta_Fall_FV$gam)
 plot(delta_Fall_FV$gam)
 ```
@@ -179,6 +187,7 @@ plot(delta_Fall_FV$gam)
 ```{r}
 delta_star_Fall <- gamm4(delta_star ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall)
 
+gam.check(delta_star_Fall$gam)
 summary(delta_star_Fall$gam)
 plot(delta_star_Fall$gam)
 ```
@@ -187,6 +196,7 @@ plot(delta_star_Fall$gam)
 ```{r}
 delta_star_Fall_FV <- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom)
 
+gam.check(delta_star_Fall_FV$gam)
 summary(delta_star_Fall_FV$gam)
 plot(delta_star_Fall_FV$gam)
 ```
@@ -198,6 +208,7 @@ plot(delta_star_Fall_FV$gam)
 ```{r}
 delta_plus_Fall <- gamm4(delta_plus ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall_fvcom)
 
+gam.check(delta_plus_Fall$gam)
 summary(delta_plus_Fall$gam)
 plot(delta_plus_Fall$gam)
 ```
@@ -206,6 +217,7 @@ plot(delta_plus_Fall$gam)
 ```{r}
 delta_plus_Fall_FV <- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom)
 
+gam.check(delta_plus_Fall_FV$gam)
 summary(delta_plus_Fall_FV$gam)
 plot(delta_plus_Fall_FV$gam)
 ```
@@ -217,6 +229,7 @@ plot(delta_plus_Fall_FV$gam)
 ```{r}
 delta_var_Fall <- gamm4(delta_var ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = fall)
 
+gam.check(delta_var_Fall$gam)
 summary(delta_var_Fall$gam)
 plot(delta_var_Fall$gam)
 ```
@@ -225,6 +238,7 @@ plot(delta_var_Fall$gam)
 ```{r}
 delta_var_Fall_FV <- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +   s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = fall_fvcom)
 
+gam.check(delta_var_Fall_FV$gam)
 summary(delta_var_Fall_FV$gam)
 plot(delta_var_Fall_FV$gam)
 ```
@@ -302,6 +316,7 @@ plot(N_spring_FV$gam)
 ```{r}
 H_spring <-  gamm4(H_index ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = spring) 
 
+gam.check(H_spring$gam)
 summary(H_spring$gam)
 plot(H_spring$gam)
 
@@ -311,6 +326,7 @@ plot(H_spring$gam)
 ```{r}
 H_spring_FV <- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
+gam.check(H_spring_FV$gam)
 summary(H_spring_FV$gam)
 plot(H_spring_FV$gam)
 
@@ -322,6 +338,7 @@ plot(H_spring_FV$gam)
 ```{r}
 D_spring <- gamm4(D_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY)  + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = spring)
 
+gam.check(D_spring$gam)
 summary(D_spring$gam)
 plot(D_spring$gam)
 ```
@@ -330,6 +347,7 @@ plot(D_spring$gam)
 ```{r}
 D_spring_FV <- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
+gam.check(D_spring_FV$gam)
 summary(D_spring_FV$gam)
 plot(D_spring_FV$gam)
 ```
@@ -341,6 +359,7 @@ plot(D_spring_FV$gam)
 ```{r}
 E_spring <- gamm4(E_index  ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) + s(metric_tons), random = ~ (1|YEAR), data = spring) 
 
+gam.check(E_spring$gam)
 summary(E_spring$gam)
 plot(E_spring$gam)
 
@@ -350,6 +369,7 @@ plot(E_spring$gam)
 ```{r}
 E_spring_FV <- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
+gam.check(E_spring_FV$gam)
 summary(E_spring_FV$gam)
 plot(E_spring_FV$gam)
 
@@ -362,6 +382,7 @@ plot(E_spring_FV$gam)
 ```{r}
 delta_spring <- gamm4(delta ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) + s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring)
 
+gam.check(delta_spring$gam)
 summary(delta_spring$gam)
 plot(delta_spring$gam)
 ```
@@ -370,6 +391,7 @@ plot(delta_spring$gam)
 ```{r}
 delta_spring_FV <- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom) 
 
+gam.check(delta_spring_FV$gam)
 summary(delta_spring_FV$gam)
 plot(delta_spring_FV$gam)
 ```
@@ -381,6 +403,7 @@ plot(delta_spring_FV$gam)
 ```{r}
 delta_star_spring <- gamm4(delta_star ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring)
 
+gam.check(delta_star_spring$gam)
 summary(delta_star_spring$gam)
 plot(delta_star_spring$gam)
 ```
@@ -389,6 +412,7 @@ plot(delta_star_spring$gam)
 ```{r}
 delta_star_spring_FV <- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom)
 
+gam.check(delta_star_spring_FV$gam)
 summary(delta_star_spring_FV$gam)
 plot(delta_star_spring_FV$gam)
 ```
@@ -400,6 +424,7 @@ plot(delta_star_spring_FV$gam)
 ```{r}
 delta_plus_spring <- gamm4(delta_plus ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring_fvcom)
 
+gam.check(delta_plus_spring$gam)
 summary(delta_plus_spring$gam)
 plot(delta_plus_spring$gam)
 ```
@@ -408,6 +433,7 @@ plot(delta_plus_spring$gam)
 ```{r}
 delta_plus_spring_FV <- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) + s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom)
 
+gam.check(delta_plus_spring_FV$gam)
 summary(delta_plus_spring_FV$gam)
 plot(delta_plus_spring_FV$gam)
 ```
@@ -419,6 +445,7 @@ plot(delta_plus_spring_FV$gam)
 ```{r}
 delta_var_spring <- gamm4(delta_var ~ s(WATER_TEMP_C) + s(SURFACE_TEMP_C) + s(SALINITY) +  s(SURFACE_SALINITY) + s(START_DEPTH)+ s(START_LATITUDE, START_LONGITUDE) +  s(metric_tons), random = ~ (1|YEAR), data = spring)
 
+gam.check(delta_var_spring$gam)
 summary(delta_var_spring$gam)
 plot(delta_var_spring$gam)
 ```
@@ -427,6 +454,7 @@ plot(delta_var_spring$gam)
 ```{r}
 delta_var_spring_FV <- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(metric_tons) +   s(FV_surf_sal) +  s(START_DEPTH) + s(START_LATITUDE, START_LONGITUDE), random = ~ (1|YEAR) , data = spring_fvcom)
 
+gam.check(delta_var_spring_FV$gam)
 summary(delta_var_spring_FV$gam)
 plot(delta_var_spring_FV$gam)
 ```
@@ -446,6 +474,7 @@ GOM_spring <- read.csv("GOM_spring_full.csv")
 ```{r}
 FV_GOM_N_FL <- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_N_FL$gam)
 summary(FV_GOM_N_FL$gam)
 plot(FV_GOM_N_FL$gam)
 ```
@@ -454,6 +483,7 @@ plot(FV_GOM_N_FL$gam)
 ```{r}
 FV_GOM_H_FL <- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_H_FL$gam)
 summary(FV_GOM_H_FL$gam)
 plot(FV_GOM_H_FL$gam)
 ```
@@ -462,6 +492,7 @@ plot(FV_GOM_H_FL$gam)
 ```{r}
 FV_GOM_D_FL <- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_D_FL$gam)
 summary(FV_GOM_D_FL$gam)
 plot(FV_GOM_D_FL$gam)
 ```
@@ -471,6 +502,7 @@ plot(FV_GOM_D_FL$gam)
 ```{r}
 FV_GOM_E_FL <- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_E_FL$gam)
 summary(FV_GOM_E_FL$gam)
 plot(FV_GOM_E_FL$gam)
 ```
@@ -480,6 +512,7 @@ plot(FV_GOM_E_FL$gam)
 ```{r}
 FV_GOM_delta_FL <- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_delta_FL$gam)
 summary(FV_GOM_delta_FL$gam)
 plot(FV_GOM_delta_FL$gam)
 ```
@@ -489,6 +522,7 @@ plot(FV_GOM_delta_FL$gam)
 ```{r}
 FV_GOM_delta_star_FL <- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_delta_star_FL$gam)
 summary(FV_GOM_delta_star_FL$gam)
 plot(FV_GOM_delta_star_FL$gam)
 ```
@@ -498,6 +532,7 @@ plot(FV_GOM_delta_star_FL$gam)
 ```{r}
 FV_GOM_delta_plus_FL <- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_delta_plus_FL$gam)
 summary(FV_GOM_delta_plus_FL$gam)
 plot(FV_GOM_delta_plus_FL$gam)
 ```
@@ -507,6 +542,7 @@ plot(FV_GOM_delta_plus_FL$gam)
 ```{r}
 FV_GOM_delta_var_FL <- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_fall) 
 
+gam.check(FV_GOM_delta_var_FL$gam)
 summary(FV_GOM_delta_var_FL$gam)
 plot(FV_GOM_delta_var_FL$gam)
 ```
@@ -516,6 +552,7 @@ plot(FV_GOM_delta_var_FL$gam)
 ```{r}
 FV_GOM_N_SP <- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_N_SP$gam)
 summary(FV_GOM_N_SP$gam)
 plot(FV_GOM_N_SP$gam)
 ```
@@ -525,6 +562,7 @@ plot(FV_GOM_N_SP$gam)
 ```{r}
 FV_GOM_H_SP <- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_H_SP$gam)
 summary(FV_GOM_H_SP$gam)
 plot(FV_GOM_H_SP$gam)
 ```
@@ -534,6 +572,7 @@ plot(FV_GOM_H_SP$gam)
 ```{r}
 FV_GOM_D_SP <- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_D_SP$gam)
 summary(FV_GOM_D_SP$gam)
 plot(FV_GOM_D_SP$gam)
 ```
@@ -543,6 +582,7 @@ plot(FV_GOM_D_SP$gam)
 ```{r}
 FV_GOM_E_SP <- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_E_SP$gam)
 summary(FV_GOM_E_SP$gam)
 plot(FV_GOM_E_SP$gam)
 ```
@@ -553,6 +593,7 @@ plot(FV_GOM_E_SP$gam)
 
 FV_GOM_delta_SP <- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_delta_SP$gam)
 summary(FV_GOM_delta_SP$gam)
 plot(FV_GOM_delta_SP$gam)
 ```
@@ -562,6 +603,7 @@ plot(FV_GOM_delta_SP$gam)
 ```{r}
 FV_GOM_delta_star_SP <- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_delta_star_SP$gam)
 summary(FV_GOM_delta_star_SP$gam)
 plot(FV_GOM_delta_star_SP$gam)
 ```
@@ -571,6 +613,7 @@ plot(FV_GOM_delta_star_SP$gam)
 ```{r}
 FV_GOM_delta_plus_SP <- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_delta_plus_SP$gam)
 summary(FV_GOM_delta_plus_SP$gam)
 plot(FV_GOM_delta_plus_SP$gam)
 ```
@@ -580,7 +623,195 @@ plot(FV_GOM_delta_plus_SP$gam)
 ```{r}
 FV_GOM_delta_var_SP <- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(SETDEPTH)+ s(DECDEG_BEGLAT, DECDEG_BEGLON) , random = ~ (1|EST_YEAR), data = GOM_spring) 
 
+gam.check(FV_GOM_delta_var_SP$gam)
 summary(FV_GOM_delta_var_SP$gam)
 plot(FV_GOM_delta_var_SP$gam)
 ```
+
+
+## Fall MADMF GAMMs
+* all with FVCOM data
+```{r}
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/Results/GAMMs")
+
+MA_fall <- read.csv("MA_fall_full.csv")
+
+MA_spring <- read.csv("MA_spring_full.csv")
+```
+
+### Species richness
+```{r}
+library(gamm4)
+# number of species
+FV_MA_N_FL <- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_N_FL$gam)
+summary(FV_MA_N_FL$gam)
+plot(FV_MA_N_FL$gam)
+
+
+```
+
+
+### Shannon-Weiner diversity
+```{r}
+# S-W
+FV_MA_H_FL <- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_H_FL$gam)
+summary(FV_MA_H_FL$gam)
+plot(FV_MA_H_FL$gam)
+
+```
+
+### Simpson's diveristy
+```{r}
+
+# Simpsons D
+FV_MA_D_FL <- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_D_FL$gam)
+summary(FV_MA_D_FL$gam)
+plot(FV_MA_D_FL$gam)
+
+```
+
+### Simpson's Evenness
+```{r}
+#simpsons e
+FV_MA_E_FL <- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_E_FL$gam)
+summary(FV_MA_E_FL$gam)
+plot(FV_MA_E_FL$gam)
+
+```
+
+### Taxonomic diversity
+```{r}
+#tax diversity
+FV_MA_delta_FL <- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_delta_FL$gam)
+summary(FV_MA_delta_FL$gam)
+plot(FV_MA_delta_FL$gam)
+```
+
+### Taxonomic distinctness
+```{r}
+# tax distinctness
+FV_MA_delta_star_FL <- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall)
+
+gam.check(FV_MA_delta_star_FL$gam)
+summary(FV_MA_delta_star_FL$gam)
+plot(FV_MA_delta_star_FL$gam)
+
+```
+
+### Average taxonomic distinctness
+```{r}
+# avg tax distinctness
+FV_MA_delta_plus_FL <- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_delta_plus_FL$gam)
+summary(FV_MA_delta_plus_FL$gam)
+plot(FV_MA_delta_plus_FL$gam)
+
+```
+
+### Variation in taxonomic distinctness
+```{r}
+# var in tax distinctness
+FV_MA_delta_var_FL <- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_fall) 
+
+gam.check(FV_MA_delta_var_FL$gam)
+summary(FV_MA_delta_var_FL$gam)
+plot(FV_MA_delta_var_FL$gam)
+
+```
+
+## MADMF spring GAMMs
+### Species richness
+```{r}
+# number of species
+FV_MA_N_SP <- gamm4(N_species ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +   s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_N_SP$gam)
+summary(FV_MA_N_SP$gam)
+plot(FV_MA_N_SP$gam)
+
+```
+
+### Shannon-Weiner diversity
+```{r}
+# S-W
+FV_MA_H_SP <- gamm4(H_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_H_SP$gam)
+summary(FV_MA_H_SP$gam)
+plot(FV_MA_N_SP$gam)
+```
+
+### Simpson's diversity
+```{r}
+# Simpsons D
+FV_MA_D_SP <- gamm4(D_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_D_SP$gam)
+summary(FV_MA_D_SP$gam)
+plot(FV_MA_D_SP$gam)
+```
+
+### Simpson's Evenness
+```{r}
+#simpsons e
+FV_MA_E_SP <- gamm4(E_index ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_E_SP$gam)
+summary(FV_MA_E_SP$gam)
+plot(FV_MA_E_SP$gam)
+```
+
+### Taxonomic diversity
+```{r}
+#tax diversity
+FV_MA_delta_SP <- gamm4(delta ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_SP$gam)
+summary(FV_MA_delta_SP$gam)
+plot(FV_MA_delta_SP$gam)
+```
+
+
+### Taxonomic distinctness
+```{r}
+# tax distinctness
+FV_MA_delta_star_SP <- gamm4(delta_star ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_star_SP$gam)
+summary(FV_MA_delta_star_SP$gam)
+plot(FV_MA_delta_star_SP$gam)
+```
+
+### Average taxonomic distinctness
+```{r}
+# avg tax distinctness
+FV_MA_delta_plus_SP <- gamm4(delta_plus ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) + s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_plus_SP$gam)
+summary(FV_MA_delta_plus_SP$gam)
+plot(FV_MA_delta_plus_SP$gam)
+```
+
+### Variation in taxonomic distinctness
+```{r}
+# var in tax distinctness
+FV_MA_delta_var_SP <- gamm4(delta_var ~ s(FV_bot_temp) + s(FV_surf_temp) + s(FV_bot_sal) +  s(FV_surf_sal) +  s(DEPTH_M)+ s(LATITUDE, LONGITUDE) , random = ~ (1|YEAR), data = MA_spring) 
+
+gam.check(FV_MA_delta_var_SP$gam)
+summary(FV_MA_delta_var_SP$gam)
+plot(FV_MA_delta_var_SP$gam)
+```
+
+
 

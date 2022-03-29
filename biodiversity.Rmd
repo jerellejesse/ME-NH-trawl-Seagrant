@@ -28,7 +28,9 @@ gmRi::use_gmri_style_rmd(css_file = "gmri_rmarkdown.css")
 library(here)
 library(ggplot2)
 library(dplyr)
-new_data<-read.csv(here("Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv"))
+
+setwd("C:/Users/jjesse/Desktop/GMRI/ME-NH-Trawl-Seagrant/Data")
+new_data<-read.csv("MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv")
 
 #remove unnecessary species by getting scientific name from old data
 setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI")
@@ -78,38 +80,45 @@ data<-trawl_2
 
 ### Species richness
 ```{r }
-richness<-group_by(data, Year,Season)%>%
-  summarise(richness=length(unique(COMMON_NAME)))
+me_richness<-group_by(data, Year,Season, Tow_Number)%>%
+  summarise(richness=length(unique(COMMON_NAME)))%>%
+  group_by(Year, Season)%>%
+  summarise(avg_richness=mean(richness))
 
-ggplot()+ geom_line(data=richness, aes(Year, richness))+facet_grid(rows = vars(Season))+theme_bw()
+ggplot()+ geom_line(data=me_richness, aes(Year, avg_richness))+facet_grid(rows = vars(Season))+theme_bw()
 
-richness<-group_by(data, Year)%>%
-  summarise(richness=length(unique(COMMON_NAME)))
+richness<-group_by(data, Year, Season, Tow_Number)%>%
+  summarise(richness=length(unique(COMMON_NAME)))%>%
+  group_by(Year)%>%
+  summarise(avg_richness=mean(richness))
 
-rich<-ggplot()+ geom_line(data=subset(richness,Year>2005 & Year<2020), aes(Year, richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+rich<-ggplot()+ geom_line(data=subset(richness,Year>2005 & Year<2020), aes(Year, avg_richness))+ theme_classic()+ ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 rich
 ```
 
 ### Shannon-Weiner diversity
-
 ```{r }
-shannon<-group_by(data, Year,Season,COMMON_NAME)%>%
+me_shannon<-group_by(data, Year,Season, Tow_Number, COMMON_NAME)%>%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
-  group_by(Year, Season)%>%
+  group_by(Year, Season, Tow_Number)%>%
   mutate(total=sum(species_total), prop=(species_total/total))%>%
-  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))
+  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))%>%
+  group_by(Year, Season)%>%
+  summarise(avg_shannon=mean(shannon))
 
-ggplot()+geom_line(data=shannon, aes(Year, shannon))+ 
+ggplot()+geom_line(data=me_shannon, aes(Year, avg_shannon))+ 
   facet_grid(rows=vars(Season))+theme_bw()
 
-shannon<-group_by(data, Year,COMMON_NAME)%>%
+shannon<-group_by(data, Year,Tow_Number,COMMON_NAME)%>%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
-  group_by(Year)%>%
+  group_by(Year, Tow_Number)%>%
   mutate(total=sum(species_total),prop=(species_total/total))%>%
-  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))
+  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))%>%
+  group_by(Year)%>%
+  summarise(avg_shannon=mean(shannon))
 
-diversity<-ggplot()+geom_line(data=subset(shannon,Year>2005 & Year <2020), aes(Year, shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+diversity<-ggplot()+geom_line(data=subset(shannon,Year>2005 & Year <2020), aes(Year, avg_shannon))+theme_classic()+ ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 diversity
 
@@ -117,16 +126,18 @@ diversity
 
 ### Simpson's diversity and evenness
 ```{r }
-simpson<-group_by(data, Year, Season, COMMON_NAME)%>%
+me_simpson<- group_by(data, Year, COMMON_NAME, Season, Tow_Number)%>%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
-  group_by(Year, Season)%>%
+  group_by(Year, Season, Tow_Number)%>%
   mutate(richness=length(unique(COMMON_NAME)))%>%
   mutate(total=sum(species_total))%>%
   mutate(prop=(species_total/total))%>%
-  summarise(simpsonD=1/(sum(prop^2)), simpsonE=simpsonD*(1/richness))
+  summarise(simpsonD=1/(sum(prop^2)), simpsonE=simpsonD*(1/richness))%>%
+  group_by(Year, Season)%>%
+  summarise(avg_simpsonD=mean(simpsonD), avg_simpsonE=mean(simpsonE))
 # this code is not working properly, very high simpson's d and e??
 
-ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
+ggplot()+geom_line(data=me_simpson, aes(Year, avg_simpsonE))+
   facet_grid(rows=vars(Season))+theme_bw()
 
 simpson<-group_by(data, Year,COMMON_NAME)%>%
@@ -135,11 +146,13 @@ simpson<-group_by(data, Year,COMMON_NAME)%>%
   mutate(richness=length(unique(COMMON_NAME)))%>%
   mutate(total=sum(species_total))%>%
   mutate(prop=(species_total/total))%>%
-  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+  summarise(simpsonD=1/(sum(prop^2)), simpsonE=simpsonD*(1/richness))%>%
+  group_by(Year)%>%
+  summarise(avg_simpsonD=mean(simpsonD), avg_simpsonE=mean(simpsonE))
    
-ggplot()+geom_line(data=simpson, aes(Year, simpsonD))+theme_classic()
+ggplot()+geom_line(data=simpson, aes(Year, avg_simpsonD))+theme_classic()
 
-evenness<-ggplot()+geom_line(data=subset(simpson,Year>2005 & Year <2020), aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+evenness<-ggplot()+geom_line(data=subset(simpson,Year>2005 & Year <2020), aes(Year, avg_simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
 evenness
 
@@ -184,7 +197,7 @@ merge<-left_join(species,phylo, by="Species")
 data_tax<-merge%>%
   filter(!is.na(Species))
 
-data_tax_groups<-group_by(data_tax, Year,Species)%>%
+data_tax_groups<-group_by(data_tax, Year, Season, Tow_Number, Species)%>%
   summarise(catch=sum(Expanded_Weight_kg, na.rm=TRUE))%>%
   mutate(indicator=cur_group_id())%>%
   left_join(phylo)
@@ -247,19 +260,31 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
   delta_var <- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
 }
 }
-years<-2006:2020
-delta<-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+tow <- group_by(data,Year, Season, Tow_Number)%>%
+  summarise()
+tax_indices <- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul <- cbind(tow, tax_indices)
 
-d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(d)<-c("Year", "delta", "delta_star", "delta_plus","delta_var")
+# delta# taxonomic diversity
+# delta_star # taxonomic distinctness
+# delta_plus # average taxonomic distinctness
+# delta_var # variation in taxonomic distinctness
+
+
+d_season<-group_by(ind_by_haul,Year, Season)%>%
+  summarise(avg_delta=mean(delta), avg_delta_star=mean(delta_star), avg_delta_plus=mean(delta_plus), avg_delta_var=mean(delta_var))
 
 #write.csv(d, here("Data/tax_metrics.csv"))
 
-tax.distinct<-ggplot()+geom_line(data=subset(d,Year>2005 & Year <2020), aes(Year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+tax.distinct_season<-ggplot()+geom_line(data=subset(d_season,Year>2005 & Year <2020), aes(Year, avg_delta_plus))+theme_bw()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))+ facet_grid(rows=vars(Season))
                                                                                      
+tax.distinct_season
+
+d<-group_by(ind_by_haul,Year)%>%
+  summarise(avg_delta=mean(delta), avg_delta_star=mean(delta_star), avg_delta_plus=mean(delta_plus), avg_delta_var=mean(delta_var))
+
+tax.distinct<-ggplot()+geom_line(data=subset(d,Year>2005 & Year <2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+
 tax.distinct
 ```
 
@@ -301,10 +326,12 @@ data_regions<-filter(data_regions,!is.na(group))%>%
 
 ### Species richness
 ```{r }
-richness<-group_by(data_regions, group, Year)%>%
-  summarise(richness=length(unique(SCIENTIFIC_NAME)))
+richness<-group_by(data_regions, group, Year, Tow_Number)%>%
+  summarise(richness=length(unique(SCIENTIFIC_NAME)))%>%
+  group_by(Year, group)%>%
+  summarise(avg_richness=mean(richness, na.rm=TRUE))
 
-ggplot()+ geom_line(data=richness, aes(Year, richness))+
+ggplot()+ geom_line(data=richness, aes(Year, avg_richness))+
   facet_grid(rows=vars(group))+theme_bw()
 
 
@@ -312,11 +339,13 @@ ggplot()+ geom_line(data=richness, aes(Year, richness))+
 
 ### Shannon-Weiner diversity
 ```{r }
-shannon<-group_by(data_regions, Year,group)%>%
+shannon<-group_by(data_regions, Year,group, Tow_Number)%>%
   mutate(total=sum(Expanded_Weight_kg, na.rm=TRUE), prop=(Expanded_Weight_kg/total))%>%
-  summarise(shannon=-1*(sum(prop*log(prop))))
+  summarise(shannon=-1*(sum(prop*log(prop))))%>%
+  group_by(Year, group)%>%
+  summarise(avg_shannon=mean(shannon, na.rm=TRUE))
 
-ggplot()+geom_line(data=shannon, aes(Year, shannon))+
+ggplot()+geom_line(data=shannon, aes(Year, avg_shannon))+
   facet_grid(rows=vars(group))+theme_bw()
 
 
@@ -325,15 +354,17 @@ ggplot()+geom_line(data=shannon, aes(Year, shannon))+
 ### Simpson's diversity and evenness
 ```{r }
 
-simpson<-group_by(data_regions, Year,group,SCIENTIFIC_NAME)%>%
+simpson<-group_by(data_regions, Year,group, Tow_Number,SCIENTIFIC_NAME)%>%
   summarise(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%>% #aggregate 
-  group_by(Year, group)%>%
+  group_by(Year, group, Tow_Number)%>%
   mutate(richness=length(unique(SCIENTIFIC_NAME)))%>%
   mutate(total=sum(species_total))%>%
   mutate(prop=species_total/total)%>%
-  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))%>%
+  group_by(Year, group)%>%
+  summarise(avg_simpsonE=mean(simpsonE, na.rm=TRUE))
 
-ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
+ggplot()+geom_line(data=simpson, aes(Year, avg_simpsonE))+
   facet_grid(rows=vars(group))+theme_bw()
 
 ```
@@ -372,19 +403,19 @@ landings_tax<-rename(data_regions, Species=SCIENTIFIC_NAME)
 
 #break into groups
 east_species<-filter(landings_tax, group=="East")%>%
-  group_by(Year,group,Species)%>%
+  group_by(Year,group,Season,Tow_Number,Species)%>%
   summarise(weight=sum(weight))%>%
   mutate(indicator=cur_group_id())%>%
   left_join(phylo)
   
 west_species<-filter(landings_tax, group=="West")%>%
-  group_by(Year,group,Species)%>%
+  group_by(Year,group,Season, Tow_Number,Species)%>%
   summarise(weight=sum(weight))%>%
   mutate(indicator=cur_group_id())%>%
   left_join(phylo)
 
 pen_species<-filter(landings_tax, group=="Penobscot")%>%
-  group_by(Year,group,Species)%>%
+  group_by(Year,group,Season,Tow_Number,Species)%>%
   summarise(weight=sum(weight))%>%
   mutate(indicator=cur_group_id())%>%
   left_join(phylo)
@@ -449,21 +480,19 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
 }
 }
 
-years<-2006:2020
-delta<-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+tow <- group_by(east_species,Year, Season, Tow_Number)%>%
+  summarise()
+tax_indices <- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul <- cbind(tow, tax_indices)
 
-east_d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(east_d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+east_d<-group_by(ind_by_haul,Year, Season)%>%
+  summarise(avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
 
 #write.csv(d, here("Data/tax_metrics.csv"))
 
-east_tax.distinct<-ggplot()+geom_line(data=subset(east_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("East\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
+east_tax.distinct<-ggplot()+geom_line(data=subset(east_d, Year<2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("East\nAverage\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
                                                                         
-
-                                                                        #west
+#west
 hauls <- unique(west_species$indicator)   
 N_hauls <- length(hauls) # number of hauls
 N_species <- NULL #N species
@@ -523,21 +552,20 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
 }
 }
 
-years<-2006:2020
-delta<-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+tow <- group_by(west_species,Year, Season, Tow_Number)%>%
+  summarise()
+tax_indices <- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul <- cbind(tow, tax_indices)
 
-west_d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(west_d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+west_d<-group_by(ind_by_haul,Year, Season)%>%
+  summarise(avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
 
 #write.csv(d, here("Data/tax_metrics.csv"))
 
-west_tax.distinct<-ggplot()+geom_line(data=subset(west_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("West\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
+west_tax.distinct<-ggplot()+geom_line(data=subset(west_d, Year<2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("West\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
                                                                          
-                                                                        
-                                                                        #Penobscot
+
+#Penobscot
 hauls <- unique(pen_species$indicator)   
 N_hauls <- length(hauls) # number of hauls
 N_species <- NULL #N species
@@ -597,20 +625,21 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
 }
 }
 
-years<-2006:2020
-delta<-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star<-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus<-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var<-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
 
-pen_d<-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(pen_d)<-c("year", "delta", "delta_star", "delta_plus","delta_var")
+
+tow <- group_by(pen_species,Year, Season, Tow_Number)%>%
+  summarise()
+tax_indices <- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul <- cbind(tow, tax_indices)
+
+pen_d<-group_by(ind_by_haul, Year, Season)%>%
+  summarise(avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
 
 #write.csv(d, here("Data/tax_metrics.csv"))
 
-pen_tax.distinct<-ggplot()+geom_line(data=subset(pen_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Penobscot\nAverage\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
+pen_tax.distinct<-ggplot()+geom_line(data=subset(pen_d, Year<2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("Penobscot\nAverage\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 35))
 
-                                                                        grid.arrange(east_tax.distinct, west_tax.distinct, pen_tax.distinct, nrow=3)                                                                        
+grid.arrange(east_tax.distinct, west_tax.distinct, pen_tax.distinct, nrow=3)                                                                        
 ```
 
 ### East of Penobscot Bay
@@ -618,13 +647,13 @@ pen_tax.distinct<-ggplot()+geom_line(data=subset(pen_d, year<2020), aes(year, de
 #combo plots
 
 #east
-r<-ggplot()+geom_line(data=subset(richness, group=="East" & Year<2020),aes(Year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+r<-ggplot()+geom_line(data=subset(richness, group=="East" & Year<2020),aes(Year, avg_richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-s<-ggplot()+geom_line(data=subset(shannon, group=="East" & Year<2020),aes(Year, shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+s<-ggplot()+geom_line(data=subset(shannon, group=="East" & Year<2020),aes(Year, avg_shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-e<-ggplot()+geom_line(data=subset(simpson, group=="East" & Year<2020),aes(Year, simpsonE))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+e<-ggplot()+geom_line(data=subset(simpson, group=="East" & Year<2020),aes(Year, avg_simpsonE))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-t<-ggplot()+geom_line(data = subset(east_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+t<-ggplot()+geom_line(data = subset(east_d, Year<2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
 
 grid.arrange(r,s,e,t, nrow=4)
 
@@ -634,13 +663,13 @@ grid.arrange(r,s,e,t, nrow=4)
 ### West of Penobscot Bay
 ```{r }
 #west
-r<-ggplot()+geom_line(data=subset(richness, group=="West" & Year<2020),aes(Year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+r<-ggplot()+geom_line(data=subset(richness, group=="West" & Year<2020),aes(Year, avg_richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-s<-ggplot()+geom_line(data=subset(shannon, group=="West" & Year<2020),aes(Year, shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+s<-ggplot()+geom_line(data=subset(shannon, group=="West" & Year<2020),aes(Year, avg_shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-e<-ggplot()+geom_line(data=subset(simpson, group=="West" & Year<2020),aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+e<-ggplot()+geom_line(data=subset(simpson, group=="West" & Year<2020),aes(Year, avg_simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-t<-ggplot()+geom_line(data = subset(west_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+t<-ggplot()+geom_line(data = subset(west_d, Year<2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
 
 grid.arrange(r,s,e,t, nrow=4)
 ```
@@ -649,13 +678,361 @@ grid.arrange(r,s,e,t, nrow=4)
 ### Penobscot Bay
 ```{r }
 #pen bay
-r<-ggplot()+geom_line(data=subset(richness, group=="Penobscot" & Year<2020),aes(Year, richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
+r<-ggplot()+geom_line(data=subset(richness, group=="Penobscot" & Year<2020),aes(Year, avg_richness))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-s<-ggplot()+geom_line(data=subset(shannon, group=="Penobscot"& Year<2020),aes(Year, shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
+s<-ggplot()+geom_line(data=subset(shannon, group=="Penobscot"& Year<2020),aes(Year, avg_shannon))+theme_classic()+ylab(expression(paste("Shannon-Weiner\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-e<-ggplot()+geom_line(data=subset(simpson, group=="Penobscot"& Year<2020),aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
+e<-ggplot()+geom_line(data=subset(simpson, group=="Penobscot"& Year<2020),aes(Year, avg_simpsonE))+theme_classic()+ ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 20))
 
-t<-ggplot()+geom_line(data = subset(pen_d, year<2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxinomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+t<-ggplot()+geom_line(data = subset(pen_d, Year<2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
 
 grid.arrange(r,s,e,t, nrow=4)
 ```
+
+
+## MA DMF Inshore Trawl Survey biodiversity metrics
+```{r}
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/MDMF")
+ma_spring_inds <- read.csv("MDMF_spring_div_ind_by_tow.csv")%>%
+  group_by(YEAR)%>%
+  summarise(avg_N_species=mean(N_species), avg_H_index=mean(H_index), avg_D_index=mean(D_index), avg_E_index=mean(E_index), avg_delta=mean(delta), avg_delta_star=mean(delta_star), avg_delta_plus=mean(delta_plus), avg_delta_var=mean(delta_var))
+
+ma_fall_inds <- read.csv("MDMF_fall_div_ind_by_tow.csv")%>%
+  group_by(YEAR)%>%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+```
+
+### Species richness
+```{r}
+ma_sp_richness<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_richness<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_richness
+ma_fl_richness
+```
+
+### Shannon-Weiner diversity
+```{r}
+ma_sp_shannon<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_shannon<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_shannon
+ma_fl_shannon
+```
+
+### Simpson's diversity
+```{r}
+ma_sp_simpson.d<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste("Simpson's\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_simpson.d<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste("Simpson's\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_simpson.d
+ma_fl_simpson.d
+```
+
+### Simpson's evenness
+```{r}
+ma_sp_simpson.e<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_simpson.e<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_simpson.e
+ma_fl_simpson.e
+```
+
+### Taxonomic diversity
+```{r}
+ma_sp_tax.diversity<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste("Taxonomic\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_tax.diversity<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste("Taxonomic\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_tax.diversity
+ma_fl_tax.diversity
+```
+
+### Taxonomic distinctness
+```{r}
+ma_sp_tax.distinct<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste("Taxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_tax.distinct<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste("Taxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_tax.distinct
+ma_fl_tax.distinct
+```
+
+### Average taxonomic distinctness
+```{r}
+ma_sp_avg.tax.distinct<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_avg.tax.distinct<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_avg.tax.distinct
+ma_fl_avg.tax.distinct
+```
+
+### Variation in taxonomic distinctness
+```{r}
+
+ma_sp_var.tax.distinct<-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste("Variation\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_var.tax.distinct<-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste("Variation\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_var.tax.distinct
+ma_fl_var.tax.distinct
+```
+
+
+## NEFSC Bottom Trawl survey biodiversity metrics
+```{r}
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/NEFSC")
+nefsc_spring_inds<-read.csv("NEFSC_all_metrics_SP.csv")%>%
+  rename(YEAR=EST_YEAR)%>%
+  group_by(YEAR)%>%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+
+nefsc_fall_inds<-read.csv("NEFSC_all_metrics_FL.csv")%>%
+  rename(YEAR=EST_YEAR)%>%
+  group_by(YEAR)%>%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+
+```
+
+### Species richness
+```{r}
+nefsc_sp_richness<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_richness<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_richness
+nefsc_fl_richness
+```
+
+### Shannon-Weiner diversity
+```{r}
+nefsc_sp_shannon<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_shannon<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_shannon
+nefsc_fl_shannon
+```
+
+### Simpson's diversity
+```{r}
+nefsc_sp_simpson.d<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste("Simpson's\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_simpson.d<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste("Simpson's\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_simpson.d
+nefsc_fl_simpson.d
+```
+
+### Simpson's evenness
+```{r}
+nefsc_sp_simpson.e<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_simpson.e<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_simpson.e
+nefsc_fl_simpson.e
+```
+
+### Taxonomic diversity
+```{r}
+nefsc_sp_tax.diversity<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste("Taxonomic\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_tax.diversity<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste("Taxonomic\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_tax.diversity
+nefsc_fl_tax.diversity
+```
+
+### Taxonomic distinctness
+```{r}
+nefsc_sp_tax.distinct<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste("Taxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_tax.distinct<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste("Taxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_tax.distinct
+nefsc_fl_tax.distinct
+```
+
+### Average taxonomic distinctness
+```{r}
+nefsc_sp_avg.tax.distinct<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_avg.tax.distinct<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_avg.tax.distinct
+nefsc_fl_avg.tax.distinct
+```
+
+### Variation in taxonomic distinctness
+```{r}
+
+nefsc_sp_var.tax.distinct<-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste("Variation\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_var.tax.distinct<-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste("Variation\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_var.tax.distinct
+nefsc_fl_var.tax.distinct
+```
+
+
+## GOM/GB NEFSC Trawl Survey biodiversity metrics
+```{r}
+setwd("C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/NEFSC")
+gom_spring_inds<-read.csv("GOM_spring.csv")%>%
+  rename(YEAR=EST_YEAR)%>%
+  group_by(YEAR)%>%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+
+gom_fall_inds<-read.csv("GOM_fall.csv")%>%
+  rename(YEAR=EST_YEAR)%>%
+  group_by(YEAR)%>%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+
+```
+
+### Species richness
+```{r}
+gom_sp_richness<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_richness<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste("Species\nRichness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_richness
+gom_fl_richness
+```
+
+### Shannon-Weiner diversity
+```{r}
+gom_sp_shannon<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_shannon<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_shannon
+gom_fl_shannon
+```
+
+### Simpson's diversity
+```{r}
+gom_sp_simpson.d<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste("Simpson's\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_simpson.d<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste("Simpson's\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_simpson.d
+gom_fl_simpson.d
+```
+
+### Simpson's evenness
+```{r}
+gom_sp_simpson.e<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_simpson.e<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste("Simpson's\nEvenness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_simpson.e
+gom_fl_simpson.e
+```
+
+### Taxonomic diversity
+```{r}
+gom_sp_tax.diversity<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste("Taxonomic\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_tax.diversity<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste("Taxonomic\nDiversity")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_tax.diversity
+gom_fl_tax.diversity
+```
+
+### Taxonomic distinctness
+```{r}
+gom_sp_tax.distinct<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste("Taxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_tax.distinct<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste("Taxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_tax.distinct
+gom_fl_tax.distinct
+```
+
+### Average taxonomic distinctness
+```{r}
+gom_sp_avg.tax.distinct<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_avg.tax.distinct<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste("Average\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_avg.tax.distinct
+gom_fl_avg.tax.distinct
+```
+
+### Variation in taxonomic distinctness
+```{r}
+
+gom_sp_var.tax.distinct<-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste("Variation\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_var.tax.distinct<-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste("Variation\nTaxonomic\nDistinctness")))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_var.tax.distinct
+gom_fl_var.tax.distinct
+```
+
+## Comparison plots
+```{r}
+library(ggthemes)
+#combine indices from different surveys
+me_inds<-full_join(me_richness,me_shannon )%>%
+  full_join(me_simpson)%>%
+  full_join(d_season)%>%
+  rename(avg_N_species=avg_richness, avg_H_index= avg_shannon, avg_D_index=avg_simpsonD, avg_E_index=avg_simpsonE, YEAR=Year)
+
+me_fall_inds<-filter(me_inds, Season=="Fall")
+me_spring_inds<-filter(me_inds, Season=="Spring")
+
+me_fall_inds$Survey<-"ME"
+me_spring_inds$Survey<-"ME"
+
+ma_fall_inds$Survey<-"MA"
+ma_spring_inds$Survey<-"MA"
+
+nefsc_fall_inds$Survey<-"NEFSC"
+nefsc_spring_inds$Survey<-"NEFSC"
+
+gom_fall_inds$Survey<-"GOM"
+gom_spring_inds$Survey<-"GOM"
+
+fall_inds<-full_join(me_fall_inds, ma_fall_inds)%>%
+  full_join(nefsc_fall_inds)%>%
+  full_join(gom_fall_inds)
+
+spring_inds<-full_join(me_spring_inds, ma_spring_inds)%>%
+  full_join(nefsc_spring_inds)%>%
+  full_join(gom_spring_inds)
+
+#plot
+all_rich<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_N_species, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_shannon<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_H_index, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_simpsonD<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_D_index, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+allSimpsonE<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_E_index, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_taxdiversity<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_taxdistinct<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_plus, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_avgtaxdistinct<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_star, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_vartaxdistinct<-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_var, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+```
+

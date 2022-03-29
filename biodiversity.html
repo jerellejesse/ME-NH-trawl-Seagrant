@@ -322,7 +322,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Seagrant: ME-NH inshore trawl survey</a>
+      <a class="navbar-brand" href="index.html">Seagrant: ME-NH Inshore Trawl Survey</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -574,7 +574,9 @@ a {
 <pre class="r"><code>library(here)
 library(ggplot2)
 library(dplyr)
-new_data&lt;-read.csv(here(&quot;Data/MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv&quot;))
+
+setwd(&quot;C:/Users/jjesse/Desktop/GMRI/ME-NH-Trawl-Seagrant/Data&quot;)
+new_data&lt;-read.csv(&quot;MaineDMR_Trawl_Survey_Catch_Data_2021-05-14.csv&quot;)
 
 #remove unnecessary species by getting scientific name from old data
 setwd(&quot;C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/ME NH data for GMRI&quot;)
@@ -621,53 +623,63 @@ trawl_2 &lt;- trawl_2[!trawl_2$Expanded_Catch == 0,]
 data&lt;-trawl_2</code></pre>
 <div id="species-richness" class="section level3">
 <h3>Species richness</h3>
-<pre class="r"><code>richness&lt;-group_by(data, Year,Season)%&gt;%
-  summarise(richness=length(unique(COMMON_NAME)))
+<pre class="r"><code>me_richness&lt;-group_by(data, Year,Season, Tow_Number)%&gt;%
+  summarise(richness=length(unique(COMMON_NAME)))%&gt;%
+  group_by(Year, Season)%&gt;%
+  summarise(avg_richness=mean(richness))
 
-ggplot()+ geom_line(data=richness, aes(Year, richness))+facet_grid(rows = vars(Season))+theme_bw()</code></pre>
+ggplot()+ geom_line(data=me_richness, aes(Year, avg_richness))+facet_grid(rows = vars(Season))+theme_bw()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<pre class="r"><code>richness&lt;-group_by(data, Year)%&gt;%
-  summarise(richness=length(unique(COMMON_NAME)))
+<pre class="r"><code>richness&lt;-group_by(data, Year, Season, Tow_Number)%&gt;%
+  summarise(richness=length(unique(COMMON_NAME)))%&gt;%
+  group_by(Year)%&gt;%
+  summarise(avg_richness=mean(richness))
 
-rich&lt;-ggplot()+ geom_line(data=subset(richness,Year&gt;2005 &amp; Year&lt;2020), aes(Year, richness))+ theme_classic()+ ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+rich&lt;-ggplot()+ geom_line(data=subset(richness,Year&gt;2005 &amp; Year&lt;2020), aes(Year, avg_richness))+ theme_classic()+ ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
 rich</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
 </div>
 <div id="shannon-weiner-diversity" class="section level3">
 <h3>Shannon-Weiner diversity</h3>
-<pre class="r"><code>shannon&lt;-group_by(data, Year,Season,COMMON_NAME)%&gt;%
+<pre class="r"><code>me_shannon&lt;-group_by(data, Year,Season, Tow_Number, COMMON_NAME)%&gt;%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%&gt;%
-  group_by(Year, Season)%&gt;%
+  group_by(Year, Season, Tow_Number)%&gt;%
   mutate(total=sum(species_total), prop=(species_total/total))%&gt;%
-  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))
+  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))%&gt;%
+  group_by(Year, Season)%&gt;%
+  summarise(avg_shannon=mean(shannon))
 
-ggplot()+geom_line(data=shannon, aes(Year, shannon))+ 
+ggplot()+geom_line(data=me_shannon, aes(Year, avg_shannon))+ 
   facet_grid(rows=vars(Season))+theme_bw()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>shannon&lt;-group_by(data, Year,COMMON_NAME)%&gt;%
+<pre class="r"><code>shannon&lt;-group_by(data, Year,Tow_Number,COMMON_NAME)%&gt;%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%&gt;%
-  group_by(Year)%&gt;%
+  group_by(Year, Tow_Number)%&gt;%
   mutate(total=sum(species_total),prop=(species_total/total))%&gt;%
-  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))
+  summarise(shannon=-1*(sum(prop*log(prop),na.rm=TRUE)))%&gt;%
+  group_by(Year)%&gt;%
+  summarise(avg_shannon=mean(shannon))
 
-diversity&lt;-ggplot()+geom_line(data=subset(shannon,Year&gt;2005 &amp; Year &lt;2020), aes(Year, shannon))+theme_classic()+ ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+diversity&lt;-ggplot()+geom_line(data=subset(shannon,Year&gt;2005 &amp; Year &lt;2020), aes(Year, avg_shannon))+theme_classic()+ ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
 diversity</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
 </div>
 <div id="simpsons-diversity-and-evenness" class="section level3">
 <h3>Simpson’s diversity and evenness</h3>
-<pre class="r"><code>simpson&lt;-group_by(data, Year, Season, COMMON_NAME)%&gt;%
+<pre class="r"><code>me_simpson&lt;- group_by(data, Year, COMMON_NAME, Season, Tow_Number)%&gt;%
   mutate(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%&gt;%
-  group_by(Year, Season)%&gt;%
+  group_by(Year, Season, Tow_Number)%&gt;%
   mutate(richness=length(unique(COMMON_NAME)))%&gt;%
   mutate(total=sum(species_total))%&gt;%
   mutate(prop=(species_total/total))%&gt;%
-  summarise(simpsonD=1/(sum(prop^2)), simpsonE=simpsonD*(1/richness))
+  summarise(simpsonD=1/(sum(prop^2)), simpsonE=simpsonD*(1/richness))%&gt;%
+  group_by(Year, Season)%&gt;%
+  summarise(avg_simpsonD=mean(simpsonD), avg_simpsonE=mean(simpsonE))
 # this code is not working properly, very high simpson&#39;s d and e??
 
-ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
+ggplot()+geom_line(data=me_simpson, aes(Year, avg_simpsonE))+
   facet_grid(rows=vars(Season))+theme_bw()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>simpson&lt;-group_by(data, Year,COMMON_NAME)%&gt;%
@@ -676,11 +688,13 @@ ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
   mutate(richness=length(unique(COMMON_NAME)))%&gt;%
   mutate(total=sum(species_total))%&gt;%
   mutate(prop=(species_total/total))%&gt;%
-  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+  summarise(simpsonD=1/(sum(prop^2)), simpsonE=simpsonD*(1/richness))%&gt;%
+  group_by(Year)%&gt;%
+  summarise(avg_simpsonD=mean(simpsonD), avg_simpsonE=mean(simpsonE))
    
-ggplot()+geom_line(data=simpson, aes(Year, simpsonD))+theme_classic()</code></pre>
+ggplot()+geom_line(data=simpson, aes(Year, avg_simpsonD))+theme_classic()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
-<pre class="r"><code>evenness&lt;-ggplot()+geom_line(data=subset(simpson,Year&gt;2005 &amp; Year &lt;2020), aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+<pre class="r"><code>evenness&lt;-ggplot()+geom_line(data=subset(simpson,Year&gt;2005 &amp; Year &lt;2020), aes(Year, avg_simpsonE))+theme_classic()+ ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
 evenness</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
@@ -872,7 +886,7 @@ merge&lt;-left_join(species,phylo, by=&quot;Species&quot;)
 data_tax&lt;-merge%&gt;%
   filter(!is.na(Species))
 
-data_tax_groups&lt;-group_by(data_tax, Year,Species)%&gt;%
+data_tax_groups&lt;-group_by(data_tax, Year, Season, Tow_Number, Species)%&gt;%
   summarise(catch=sum(Expanded_Weight_kg, na.rm=TRUE))%&gt;%
   mutate(indicator=cur_group_id())%&gt;%
   left_join(phylo)
@@ -935,21 +949,33 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
   delta_var &lt;- (2*weight_var)/(N_species*sub_species) #double check that this equation is correct
 }
 }
-years&lt;-2006:2020
-delta&lt;-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star&lt;-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus&lt;-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var&lt;-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+tow &lt;- group_by(data,Year, Season, Tow_Number)%&gt;%
+  summarise()
+tax_indices &lt;- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul &lt;- cbind(tow, tax_indices)
 
-d&lt;-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(d)&lt;-c(&quot;Year&quot;, &quot;delta&quot;, &quot;delta_star&quot;, &quot;delta_plus&quot;,&quot;delta_var&quot;)
+# delta# taxonomic diversity
+# delta_star # taxonomic distinctness
+# delta_plus # average taxonomic distinctness
+# delta_var # variation in taxonomic distinctness
+
+
+d_season&lt;-group_by(ind_by_haul,Year, Season)%&gt;%
+  summarise(avg_delta=mean(delta), avg_delta_star=mean(delta_star), avg_delta_plus=mean(delta_plus), avg_delta_var=mean(delta_var))
 
 #write.csv(d, here(&quot;Data/tax_metrics.csv&quot;))
 
-tax.distinct&lt;-ggplot()+geom_line(data=subset(d,Year&gt;2005 &amp; Year &lt;2020), aes(Year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+tax.distinct_season&lt;-ggplot()+geom_line(data=subset(d_season,Year&gt;2005 &amp; Year &lt;2020), aes(Year, avg_delta_plus))+theme_bw()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))+ facet_grid(rows=vars(Season))
                                                                                      
-tax.distinct</code></pre>
+tax.distinct_season</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>d&lt;-group_by(ind_by_haul,Year)%&gt;%
+  summarise(avg_delta=mean(delta), avg_delta_star=mean(delta_star), avg_delta_plus=mean(delta_plus), avg_delta_var=mean(delta_var))
+
+tax.distinct&lt;-ggplot()+geom_line(data=subset(d,Year&gt;2005 &amp; Year &lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+
+tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 <p>Combo plot</p>
 <pre class="r"><code>library(reshape2)
 library(gridExtra)
@@ -983,34 +1009,40 @@ data_regions&lt;-filter(data_regions,!is.na(group))%&gt;%
   filter(Expanded_Weight_kg!=0)</code></pre>
 <div id="species-richness-1" class="section level3">
 <h3>Species richness</h3>
-<pre class="r"><code>richness&lt;-group_by(data_regions, group, Year)%&gt;%
-  summarise(richness=length(unique(SCIENTIFIC_NAME)))
+<pre class="r"><code>richness&lt;-group_by(data_regions, group, Year, Tow_Number)%&gt;%
+  summarise(richness=length(unique(SCIENTIFIC_NAME)))%&gt;%
+  group_by(Year, group)%&gt;%
+  summarise(avg_richness=mean(richness, na.rm=TRUE))
 
-ggplot()+ geom_line(data=richness, aes(Year, richness))+
+ggplot()+ geom_line(data=richness, aes(Year, avg_richness))+
   facet_grid(rows=vars(group))+theme_bw()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 <div id="shannon-weiner-diversity-1" class="section level3">
 <h3>Shannon-Weiner diversity</h3>
-<pre class="r"><code>shannon&lt;-group_by(data_regions, Year,group)%&gt;%
+<pre class="r"><code>shannon&lt;-group_by(data_regions, Year,group, Tow_Number)%&gt;%
   mutate(total=sum(Expanded_Weight_kg, na.rm=TRUE), prop=(Expanded_Weight_kg/total))%&gt;%
-  summarise(shannon=-1*(sum(prop*log(prop))))
+  summarise(shannon=-1*(sum(prop*log(prop))))%&gt;%
+  group_by(Year, group)%&gt;%
+  summarise(avg_shannon=mean(shannon, na.rm=TRUE))
 
-ggplot()+geom_line(data=shannon, aes(Year, shannon))+
+ggplot()+geom_line(data=shannon, aes(Year, avg_shannon))+
   facet_grid(rows=vars(group))+theme_bw()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="simpsons-diversity-and-evenness-1" class="section level3">
 <h3>Simpson’s diversity and evenness</h3>
-<pre class="r"><code>simpson&lt;-group_by(data_regions, Year,group,SCIENTIFIC_NAME)%&gt;%
+<pre class="r"><code>simpson&lt;-group_by(data_regions, Year,group, Tow_Number,SCIENTIFIC_NAME)%&gt;%
   summarise(species_total=sum(Expanded_Weight_kg, na.rm=TRUE))%&gt;% #aggregate 
-  group_by(Year, group)%&gt;%
+  group_by(Year, group, Tow_Number)%&gt;%
   mutate(richness=length(unique(SCIENTIFIC_NAME)))%&gt;%
   mutate(total=sum(species_total))%&gt;%
   mutate(prop=species_total/total)%&gt;%
-  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))
+  summarise(simpsonD=1/(sum(prop^2)),simpsonE=simpsonD*(1/richness))%&gt;%
+  group_by(Year, group)%&gt;%
+  summarise(avg_simpsonE=mean(simpsonE, na.rm=TRUE))
 
-ggplot()+geom_line(data=simpson, aes(Year, simpsonE))+
+ggplot()+geom_line(data=simpson, aes(Year, avg_simpsonE))+
   facet_grid(rows=vars(group))+theme_bw()</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
@@ -1196,19 +1228,19 @@ landings_tax&lt;-rename(data_regions, Species=SCIENTIFIC_NAME)
 
 #break into groups
 east_species&lt;-filter(landings_tax, group==&quot;East&quot;)%&gt;%
-  group_by(Year,group,Species)%&gt;%
+  group_by(Year,group,Season,Tow_Number,Species)%&gt;%
   summarise(weight=sum(weight))%&gt;%
   mutate(indicator=cur_group_id())%&gt;%
   left_join(phylo)
   
 west_species&lt;-filter(landings_tax, group==&quot;West&quot;)%&gt;%
-  group_by(Year,group,Species)%&gt;%
+  group_by(Year,group,Season, Tow_Number,Species)%&gt;%
   summarise(weight=sum(weight))%&gt;%
   mutate(indicator=cur_group_id())%&gt;%
   left_join(phylo)
 
 pen_species&lt;-filter(landings_tax, group==&quot;Penobscot&quot;)%&gt;%
-  group_by(Year,group,Species)%&gt;%
+  group_by(Year,group,Season,Tow_Number,Species)%&gt;%
   summarise(weight=sum(weight))%&gt;%
   mutate(indicator=cur_group_id())%&gt;%
   left_join(phylo)
@@ -1273,21 +1305,19 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
 }
 }
 
-years&lt;-2006:2020
-delta&lt;-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star&lt;-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus&lt;-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var&lt;-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+tow &lt;- group_by(east_species,Year, Season, Tow_Number)%&gt;%
+  summarise()
+tax_indices &lt;- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul &lt;- cbind(tow, tax_indices)
 
-east_d&lt;-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(east_d)&lt;-c(&quot;year&quot;, &quot;delta&quot;, &quot;delta_star&quot;, &quot;delta_plus&quot;,&quot;delta_var&quot;)
+east_d&lt;-group_by(ind_by_haul,Year, Season)%&gt;%
+  summarise(avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
 
 #write.csv(d, here(&quot;Data/tax_metrics.csv&quot;))
 
-east_tax.distinct&lt;-ggplot()+geom_line(data=subset(east_d, year&lt;2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;East\nAverage\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 35))
+east_tax.distinct&lt;-ggplot()+geom_line(data=subset(east_d, Year&lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;East\nAverage\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 35))
                                                                         
-
-                                                                        #west
+#west
 hauls &lt;- unique(west_species$indicator)   
 N_hauls &lt;- length(hauls) # number of hauls
 N_species &lt;- NULL #N species
@@ -1347,21 +1377,20 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
 }
 }
 
-years&lt;-2006:2020
-delta&lt;-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star&lt;-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus&lt;-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var&lt;-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
+tow &lt;- group_by(west_species,Year, Season, Tow_Number)%&gt;%
+  summarise()
+tax_indices &lt;- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul &lt;- cbind(tow, tax_indices)
 
-west_d&lt;-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(west_d)&lt;-c(&quot;year&quot;, &quot;delta&quot;, &quot;delta_star&quot;, &quot;delta_plus&quot;,&quot;delta_var&quot;)
+west_d&lt;-group_by(ind_by_haul,Year, Season)%&gt;%
+  summarise(avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
 
 #write.csv(d, here(&quot;Data/tax_metrics.csv&quot;))
 
-west_tax.distinct&lt;-ggplot()+geom_line(data=subset(west_d, year&lt;2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;West\nAverage\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 35))
+west_tax.distinct&lt;-ggplot()+geom_line(data=subset(west_d, Year&lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;West\nAverage\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 35))
                                                                          
-                                                                        
-                                                                        #Penobscot
+
+#Penobscot
 hauls &lt;- unique(pen_species$indicator)   
 N_hauls &lt;- length(hauls) # number of hauls
 N_species &lt;- NULL #N species
@@ -1421,20 +1450,21 @@ for (i in 1:ncol(combos)) { # for each unique combination count the number of ea
 }
 }
 
-years&lt;-2006:2020
-delta&lt;-as.data.frame(delta[1:15]) # taxonomic diversity
-delta_star&lt;-as.data.frame(delta_star[1:15]) # taxonomic distinctness
-delta_plus&lt;-as.data.frame(delta_plus[1:15]) # average taxonomic distinctness
-delta_var&lt;-as.data.frame(delta_var[1:15]) # variation in taxonomic distinctness
 
-pen_d&lt;-bind_cols(years,delta, delta_star,delta_plus,delta_var)
-colnames(pen_d)&lt;-c(&quot;year&quot;, &quot;delta&quot;, &quot;delta_star&quot;, &quot;delta_plus&quot;,&quot;delta_var&quot;)
+
+tow &lt;- group_by(pen_species,Year, Season, Tow_Number)%&gt;%
+  summarise()
+tax_indices &lt;- cbind(delta, delta_star, delta_plus, delta_var)
+ind_by_haul &lt;- cbind(tow, tax_indices)
+
+pen_d&lt;-group_by(ind_by_haul, Year, Season)%&gt;%
+  summarise(avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
 
 #write.csv(d, here(&quot;Data/tax_metrics.csv&quot;))
 
-pen_tax.distinct&lt;-ggplot()+geom_line(data=subset(pen_d, year&lt;2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;Penobscot\nAverage\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 35))
+pen_tax.distinct&lt;-ggplot()+geom_line(data=subset(pen_d, Year&lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Penobscot\nAverage\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 35))
 
-                                                                        grid.arrange(east_tax.distinct, west_tax.distinct, pen_tax.distinct, nrow=3)                                                                        </code></pre>
+grid.arrange(east_tax.distinct, west_tax.distinct, pen_tax.distinct, nrow=3)                                                                        </code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 <div id="east-of-penobscot-bay" class="section level3">
@@ -1442,13 +1472,13 @@ pen_tax.distinct&lt;-ggplot()+geom_line(data=subset(pen_d, year&lt;2020), aes(ye
 <pre class="r"><code>#combo plots
 
 #east
-r&lt;-ggplot()+geom_line(data=subset(richness, group==&quot;East&quot; &amp; Year&lt;2020),aes(Year, richness))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+r&lt;-ggplot()+geom_line(data=subset(richness, group==&quot;East&quot; &amp; Year&lt;2020),aes(Year, avg_richness))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-s&lt;-ggplot()+geom_line(data=subset(shannon, group==&quot;East&quot; &amp; Year&lt;2020),aes(Year, shannon))+theme_classic()+ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+s&lt;-ggplot()+geom_line(data=subset(shannon, group==&quot;East&quot; &amp; Year&lt;2020),aes(Year, avg_shannon))+theme_classic()+ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-e&lt;-ggplot()+geom_line(data=subset(simpson, group==&quot;East&quot; &amp; Year&lt;2020),aes(Year, simpsonE))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+e&lt;-ggplot()+geom_line(data=subset(simpson, group==&quot;East&quot; &amp; Year&lt;2020),aes(Year, avg_simpsonE))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-t&lt;-ggplot()+geom_line(data = subset(east_d, year&lt;2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+t&lt;-ggplot()+geom_line(data = subset(east_d, Year&lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
 
 grid.arrange(r,s,e,t, nrow=4)</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
@@ -1456,13 +1486,13 @@ grid.arrange(r,s,e,t, nrow=4)</code></pre>
 <div id="west-of-penobscot-bay" class="section level3">
 <h3>West of Penobscot Bay</h3>
 <pre class="r"><code>#west
-r&lt;-ggplot()+geom_line(data=subset(richness, group==&quot;West&quot; &amp; Year&lt;2020),aes(Year, richness))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+r&lt;-ggplot()+geom_line(data=subset(richness, group==&quot;West&quot; &amp; Year&lt;2020),aes(Year, avg_richness))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-s&lt;-ggplot()+geom_line(data=subset(shannon, group==&quot;West&quot; &amp; Year&lt;2020),aes(Year, shannon))+theme_classic()+ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+s&lt;-ggplot()+geom_line(data=subset(shannon, group==&quot;West&quot; &amp; Year&lt;2020),aes(Year, avg_shannon))+theme_classic()+ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-e&lt;-ggplot()+geom_line(data=subset(simpson, group==&quot;West&quot; &amp; Year&lt;2020),aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+e&lt;-ggplot()+geom_line(data=subset(simpson, group==&quot;West&quot; &amp; Year&lt;2020),aes(Year, avg_simpsonE))+theme_classic()+ ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-t&lt;-ggplot()+geom_line(data = subset(west_d, year&lt;2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+t&lt;-ggplot()+geom_line(data = subset(west_d, Year&lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
 
 grid.arrange(r,s,e,t, nrow=4)</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
@@ -1470,17 +1500,375 @@ grid.arrange(r,s,e,t, nrow=4)</code></pre>
 <div id="penobscot-bay" class="section level3">
 <h3>Penobscot Bay</h3>
 <pre class="r"><code>#pen bay
-r&lt;-ggplot()+geom_line(data=subset(richness, group==&quot;Penobscot&quot; &amp; Year&lt;2020),aes(Year, richness))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+r&lt;-ggplot()+geom_line(data=subset(richness, group==&quot;Penobscot&quot; &amp; Year&lt;2020),aes(Year, avg_richness))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-s&lt;-ggplot()+geom_line(data=subset(shannon, group==&quot;Penobscot&quot;&amp; Year&lt;2020),aes(Year, shannon))+theme_classic()+ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+s&lt;-ggplot()+geom_line(data=subset(shannon, group==&quot;Penobscot&quot;&amp; Year&lt;2020),aes(Year, avg_shannon))+theme_classic()+ylab(expression(paste(&quot;Shannon-Weiner\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-e&lt;-ggplot()+geom_line(data=subset(simpson, group==&quot;Penobscot&quot;&amp; Year&lt;2020),aes(Year, simpsonE))+theme_classic()+ ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
+e&lt;-ggplot()+geom_line(data=subset(simpson, group==&quot;Penobscot&quot;&amp; Year&lt;2020),aes(Year, avg_simpsonE))+theme_classic()+ ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 20))
 
-t&lt;-ggplot()+geom_line(data = subset(pen_d, year&lt;2020), aes(year, delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxinomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+t&lt;-ggplot()+geom_line(data = subset(pen_d, Year&lt;2020), aes(Year, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
 
 grid.arrange(r,s,e,t, nrow=4)</code></pre>
 <p><img src="biodiversity_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
+</div>
+<div id="ma-dmf-inshore-trawl-survey-biodiversity-metrics" class="section level2">
+<h2>MA DMF Inshore Trawl Survey biodiversity metrics</h2>
+<pre class="r"><code>setwd(&quot;C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/MDMF&quot;)
+ma_spring_inds &lt;- read.csv(&quot;MDMF_spring_div_ind_by_tow.csv&quot;)%&gt;%
+  group_by(YEAR)%&gt;%
+  summarise(avg_N_species=mean(N_species), avg_H_index=mean(H_index), avg_D_index=mean(D_index), avg_E_index=mean(E_index), avg_delta=mean(delta), avg_delta_star=mean(delta_star), avg_delta_plus=mean(delta_plus), avg_delta_var=mean(delta_var))
+
+ma_fall_inds &lt;- read.csv(&quot;MDMF_fall_div_ind_by_tow.csv&quot;)%&gt;%
+  group_by(YEAR)%&gt;%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))</code></pre>
+<div id="species-richness-2" class="section level3">
+<h3>Species richness</h3>
+<pre class="r"><code>ma_sp_richness&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_richness&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_richness</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_richness</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
+</div>
+<div id="shannon-weiner-diversity-2" class="section level3">
+<h3>Shannon-Weiner diversity</h3>
+<pre class="r"><code>ma_sp_shannon&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_shannon&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_shannon</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_shannon</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
+</div>
+<div id="simpsons-diversity" class="section level3">
+<h3>Simpson’s diversity</h3>
+<pre class="r"><code>ma_sp_simpson.d&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_simpson.d&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_simpson.d</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_simpson.d</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+</div>
+<div id="simpsons-evenness" class="section level3">
+<h3>Simpson’s evenness</h3>
+<pre class="r"><code>ma_sp_simpson.e&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_simpson.e&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_simpson.e</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_simpson.e</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+</div>
+<div id="taxonomic-diversity" class="section level3">
+<h3>Taxonomic diversity</h3>
+<pre class="r"><code>ma_sp_tax.diversity&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_tax.diversity&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_tax.diversity</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_tax.diversity</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
+</div>
+<div id="taxonomic-distinctness" class="section level3">
+<h3>Taxonomic distinctness</h3>
+<pre class="r"><code>ma_sp_tax.distinct&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_tax.distinct&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
+</div>
+<div id="average-taxonomic-distinctness" class="section level3">
+<h3>Average taxonomic distinctness</h3>
+<pre class="r"><code>ma_sp_avg.tax.distinct&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_avg.tax.distinct&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_avg.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_avg.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-23-2.png" width="672" /></p>
+</div>
+<div id="variation-in-taxonomic-distinctness" class="section level3">
+<h3>Variation in taxonomic distinctness</h3>
+<pre class="r"><code>ma_sp_var.tax.distinct&lt;-ggplot()+geom_line(data=ma_spring_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste(&quot;Variation\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+ma_fl_var.tax.distinct&lt;-ggplot()+geom_line(data=ma_fall_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste(&quot;Variation\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+ma_sp_var.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<pre class="r"><code>ma_fl_var.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-24-2.png" width="672" /></p>
+</div>
+</div>
+<div id="nefsc-bottom-trawl-survey-biodiversity-metrics" class="section level2">
+<h2>NEFSC Bottom Trawl survey biodiversity metrics</h2>
+<pre class="r"><code>setwd(&quot;C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/NEFSC&quot;)
+nefsc_spring_inds&lt;-read.csv(&quot;NEFSC_all_metrics_SP.csv&quot;)%&gt;%
+  rename(YEAR=EST_YEAR)%&gt;%
+  group_by(YEAR)%&gt;%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+
+nefsc_fall_inds&lt;-read.csv(&quot;NEFSC_all_metrics_FL.csv&quot;)%&gt;%
+  rename(YEAR=EST_YEAR)%&gt;%
+  group_by(YEAR)%&gt;%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))</code></pre>
+<div id="species-richness-3" class="section level3">
+<h3>Species richness</h3>
+<pre class="r"><code>nefsc_sp_richness&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_richness&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_richness</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_richness</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-26-2.png" width="672" /></p>
+</div>
+<div id="shannon-weiner-diversity-3" class="section level3">
+<h3>Shannon-Weiner diversity</h3>
+<pre class="r"><code>nefsc_sp_shannon&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_shannon&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_shannon</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_shannon</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-27-2.png" width="672" /></p>
+</div>
+<div id="simpsons-diversity-1" class="section level3">
+<h3>Simpson’s diversity</h3>
+<pre class="r"><code>nefsc_sp_simpson.d&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_simpson.d&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_simpson.d</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_simpson.d</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-28-2.png" width="672" /></p>
+</div>
+<div id="simpsons-evenness-1" class="section level3">
+<h3>Simpson’s evenness</h3>
+<pre class="r"><code>nefsc_sp_simpson.e&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_simpson.e&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_simpson.e</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_simpson.e</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-29-2.png" width="672" /></p>
+</div>
+<div id="taxonomic-diversity-1" class="section level3">
+<h3>Taxonomic diversity</h3>
+<pre class="r"><code>nefsc_sp_tax.diversity&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_tax.diversity&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_tax.diversity</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_tax.diversity</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-30-2.png" width="672" /></p>
+</div>
+<div id="taxonomic-distinctness-1" class="section level3">
+<h3>Taxonomic distinctness</h3>
+<pre class="r"><code>nefsc_sp_tax.distinct&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_tax.distinct&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-31-2.png" width="672" /></p>
+</div>
+<div id="average-taxonomic-distinctness-1" class="section level3">
+<h3>Average taxonomic distinctness</h3>
+<pre class="r"><code>nefsc_sp_avg.tax.distinct&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_avg.tax.distinct&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_avg.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_avg.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-32-2.png" width="672" /></p>
+</div>
+<div id="variation-in-taxonomic-distinctness-1" class="section level3">
+<h3>Variation in taxonomic distinctness</h3>
+<pre class="r"><code>nefsc_sp_var.tax.distinct&lt;-ggplot()+geom_line(data=nefsc_spring_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste(&quot;Variation\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+nefsc_fl_var.tax.distinct&lt;-ggplot()+geom_line(data=nefsc_fall_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste(&quot;Variation\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+nefsc_sp_var.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<pre class="r"><code>nefsc_fl_var.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-33-2.png" width="672" /></p>
+</div>
+</div>
+<div id="gomgb-nefsc-trawl-survey-biodiversity-metrics" class="section level2">
+<h2>GOM/GB NEFSC Trawl Survey biodiversity metrics</h2>
+<pre class="r"><code>setwd(&quot;C:/Users/jjesse/Box/Kerr Lab/Fisheries Science Lab/ME NH Trawl- Seagrant/Seagrant-AEW/NEFSC&quot;)
+gom_spring_inds&lt;-read.csv(&quot;GOM_spring.csv&quot;)%&gt;%
+  rename(YEAR=EST_YEAR)%&gt;%
+  group_by(YEAR)%&gt;%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))
+
+gom_fall_inds&lt;-read.csv(&quot;GOM_fall.csv&quot;)%&gt;%
+  rename(YEAR=EST_YEAR)%&gt;%
+  group_by(YEAR)%&gt;%
+  summarise(avg_N_species=mean(N_species, na.rm=TRUE), avg_H_index=mean(H_index, na.rm=TRUE), avg_D_index=mean(D_index, na.rm=TRUE), avg_E_index=mean(E_index, na.rm=TRUE), avg_delta=mean(delta, na.rm=TRUE), avg_delta_star=mean(delta_star, na.rm=TRUE), avg_delta_plus=mean(delta_plus, na.rm=TRUE), avg_delta_var=mean(delta_var, na.rm=TRUE))</code></pre>
+<div id="species-richness-4" class="section level3">
+<h3>Species richness</h3>
+<pre class="r"><code>gom_sp_richness&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_richness&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_N_species))+theme_classic()+ylab(expression(paste(&quot;Species\nRichness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_richness</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_richness</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-35-2.png" width="672" /></p>
+</div>
+<div id="shannon-weiner-diversity-4" class="section level3">
+<h3>Shannon-Weiner diversity</h3>
+<pre class="r"><code>gom_sp_shannon&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_shannon&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_H_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_shannon</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_shannon</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-36-2.png" width="672" /></p>
+</div>
+<div id="simpsons-diversity-2" class="section level3">
+<h3>Simpson’s diversity</h3>
+<pre class="r"><code>gom_sp_simpson.d&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_simpson.d&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_D_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_simpson.d</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_simpson.d</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-37-2.png" width="672" /></p>
+</div>
+<div id="simpsons-evenness-2" class="section level3">
+<h3>Simpson’s evenness</h3>
+<pre class="r"><code>gom_sp_simpson.e&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_simpson.e&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_E_index))+theme_classic()+ylab(expression(paste(&quot;Simpson&#39;s\nEvenness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_simpson.e</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_simpson.e</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-38-2.png" width="672" /></p>
+</div>
+<div id="taxonomic-diversity-2" class="section level3">
+<h3>Taxonomic diversity</h3>
+<pre class="r"><code>gom_sp_tax.diversity&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_tax.diversity&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDiversity&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_tax.diversity</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_tax.diversity</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-39-2.png" width="672" /></p>
+</div>
+<div id="taxonomic-distinctness-2" class="section level3">
+<h3>Taxonomic distinctness</h3>
+<pre class="r"><code>gom_sp_tax.distinct&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_tax.distinct&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta_star))+theme_classic()+ylab(expression(paste(&quot;Taxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-40-2.png" width="672" /></p>
+</div>
+<div id="average-taxonomic-distinctness-2" class="section level3">
+<h3>Average taxonomic distinctness</h3>
+<pre class="r"><code>gom_sp_avg.tax.distinct&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_avg.tax.distinct&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta_plus))+theme_classic()+ylab(expression(paste(&quot;Average\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_avg.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_avg.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-41-2.png" width="672" /></p>
+</div>
+<div id="variation-in-taxonomic-distinctness-2" class="section level3">
+<h3>Variation in taxonomic distinctness</h3>
+<pre class="r"><code>gom_sp_var.tax.distinct&lt;-ggplot()+geom_line(data=gom_spring_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste(&quot;Variation\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25))
+                                   
+gom_fl_var.tax.distinct&lt;-ggplot()+geom_line(data=gom_fall_inds, aes(YEAR, avg_delta_var))+theme_classic()+ylab(expression(paste(&quot;Variation\nTaxonomic\nDistinctness&quot;)))+theme(plot.margin = margin(10, 10, 10, 25)) 
+
+gom_sp_var.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre class="r"><code>gom_fl_var.tax.distinct</code></pre>
+<p><img src="biodiversity_files/figure-html/unnamed-chunk-42-2.png" width="672" /></p>
+</div>
+</div>
+<div id="comparison-plots" class="section level2">
+<h2>Comparison plots</h2>
+<pre class="r"><code>library(ggthemes)
+#combine indices from different surveys
+me_inds&lt;-full_join(me_richness,me_shannon )%&gt;%
+  full_join(me_simpson)%&gt;%
+  full_join(d_season)%&gt;%
+  rename(avg_N_species=avg_richness, avg_H_index= avg_shannon, avg_D_index=avg_simpsonD, avg_E_index=avg_simpsonE, YEAR=Year)
+
+me_fall_inds&lt;-filter(me_inds, Season==&quot;Fall&quot;)
+me_spring_inds&lt;-filter(me_inds, Season==&quot;Spring&quot;)
+
+me_fall_inds$Survey&lt;-&quot;ME&quot;
+me_spring_inds$Survey&lt;-&quot;ME&quot;
+
+ma_fall_inds$Survey&lt;-&quot;MA&quot;
+ma_spring_inds$Survey&lt;-&quot;MA&quot;
+
+nefsc_fall_inds$Survey&lt;-&quot;NEFSC&quot;
+nefsc_spring_inds$Survey&lt;-&quot;NEFSC&quot;
+
+gom_fall_inds$Survey&lt;-&quot;GOM&quot;
+gom_spring_inds$Survey&lt;-&quot;GOM&quot;
+
+fall_inds&lt;-full_join(me_fall_inds, ma_fall_inds)%&gt;%
+  full_join(nefsc_fall_inds)%&gt;%
+  full_join(gom_fall_inds)
+
+spring_inds&lt;-full_join(me_spring_inds, ma_spring_inds)%&gt;%
+  full_join(nefsc_spring_inds)%&gt;%
+  full_join(gom_spring_inds)
+
+#plot
+all_rich&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_N_species, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_shannon&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_H_index, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_simpsonD&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_D_index, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+allSimpsonE&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_E_index, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_taxdiversity&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_taxdistinct&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_plus, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_avgtaxdistinct&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_star, color=Survey))+
+  scale_color_colorblind()+theme_classic()
+
+all_vartaxdistinct&lt;-ggplot()+geom_line(data=fall_inds, aes(x=YEAR, y=avg_delta_var, color=Survey))+
+  scale_color_colorblind()+theme_classic()</code></pre>
 </div>
 
 

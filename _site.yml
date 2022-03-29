@@ -2,7 +2,7 @@
 name: "Seagrant Website"
 output_dir: "."
 navbar:
-  title: "Seagrant: ME-NH inshore trawl survey"
+  title: "Seagrant: ME-NH Inshore Trawl Survey"
   left:
     - text: "Home"
       href: index.html
